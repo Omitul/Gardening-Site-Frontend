@@ -1,5 +1,5 @@
 "use client";
-
+import { Button } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import {
   Dropdown,
@@ -12,13 +12,20 @@ import { getAccessToken } from "@/src/services/authService/getCookie";
 import { useRouter } from "next/navigation";
 import { logout } from "@/src/services/authService";
 
-export default function Button() {
+export default function UserLoginButtonOrProfile() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
   useEffect(() => {
-    const token = getAccessToken();
-    setIsLoggedIn(token !== undefined);
+    const checkToken = async () => {
+      const token = await getAccessToken();
+      console.log("Access Token:", token);
+      setIsLoggedIn(!!token);
+      setLoading(false);
+    };
+
+    checkToken();
   }, []);
 
   const handleLogin = () => {
@@ -32,6 +39,11 @@ export default function Button() {
     setIsLoggedIn(false);
     logout();
   };
+
+  if (loading) {
+    setTimeout(() => {}, 1000);
+    return null;
+  }
 
   return (
     <div className="flex items-center gap-4">
@@ -62,12 +74,12 @@ export default function Button() {
           </DropdownMenu>
         </Dropdown>
       ) : (
-        <button
+        <Button
           onClick={handleLogin}
-          className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded-lg"
+          className="flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md transition-transform transform hover:bg-blue-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
         >
           Login
-        </button>
+        </Button>
       )}
     </div>
   );

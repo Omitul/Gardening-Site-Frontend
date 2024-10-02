@@ -15,51 +15,62 @@ import clsx from "clsx";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
 import { siteConfig } from "@/src/config/site";
-import Button from "./Button";
+import UserLoginButtonOrProfile from "./UserLoginButtonOrProfile";
 
 export const Navbar = () => {
   return (
-    <NextUINavbar position="sticky" className="bg-green-400 w-full z-10">
-      <NavbarContent>
-        <NavbarBrand as="li" className="gap-3 max-w-fit">
-          <NextLink className="flex items-center justify-start gap-1" href="/">
-            <Logo />
-            <p className="font-bold text-inherit">Gardening Site</p>
-          </NextLink>
-        </NavbarBrand>
-      </NavbarContent>
+    <NextUINavbar position="sticky" className="bg-green-400 w-full z-10 flex">
+      <div className="flex justify-end items-center gap-x-96">
+        <div className="flex justify-around items-center gap-x-48">
+          <div className="flex justify-evenly items-center gap-x-48">
+            <NavbarContent className="">
+              <NavbarBrand as="li" className="gap-3 max-w-fit">
+                <NextLink
+                  className="flex items-center justify-start gap-1"
+                  href="/"
+                >
+                  <Logo />
+                  <p className="font-bold text-inherit">Gardening Site</p>
+                </NextLink>
+              </NavbarBrand>
+            </NavbarContent>
 
-      <NavbarContent className="flex-1" justify="center">
-        <ul className="hidden lg:flex gap-12">
-          {siteConfig.navItems.map((item: any) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-sans font-semibold"
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
-        </ul>
-      </NavbarContent>
+            <NavbarContent className="flex-1" justify="center">
+              <ul className="hidden lg:flex gap-12">
+                {siteConfig.navItems.map((item: any) => (
+                  <NavbarItem key={item.href}>
+                    <NextLink
+                      className={clsx(
+                        linkStyles({ color: "foreground" }),
+                        "data-[active=true]:text-primary data-[active=true]:font-sans font-semibold"
+                      )}
+                      color="foreground"
+                      href={item.href}
+                    >
+                      {item.label}
+                    </NextLink>
+                  </NavbarItem>
+                ))}
+              </ul>
+            </NavbarContent>
+          </div>
 
-      <NavbarContent className="flex justify-end">
-        <NavbarItem className="flex gap-2">
-          <ThemeSwitch />
-        </NavbarItem>
-      </NavbarContent>
+          <NavbarContent className="flex justify-end">
+            <NavbarItem className="flex gap-2"></NavbarItem>
+          </NavbarContent>
 
-      <NavbarContent className="sm:hidden pl-4" justify="end">
-        <NavbarMenuToggle />
-      </NavbarContent>
-      <NavbarContent className="" justify="end">
-        <Button />
-      </NavbarContent>
+          <NavbarContent className="sm:hidden pl-4" justify="end">
+            <NavbarMenuToggle />
+          </NavbarContent>
+        </div>
+
+        <div className="flex justify-end">
+          <NavbarContent className="flex gap-x-8">
+            <ThemeSwitch />
+            <UserLoginButtonOrProfile />
+          </NavbarContent>
+        </div>
+      </div>
 
       <NavbarMenu>
         <div className="mx-4 mt-2 flex flex-col gap-2">
