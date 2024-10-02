@@ -19,7 +19,7 @@ import UserLoginButtonOrProfile from "./UserLoginButtonOrProfile";
 
 export const Navbar = () => {
   return (
-    <NextUINavbar position="sticky" className="bg-green-400 w-full z-10 flex">
+    <NextUINavbar position="sticky" className="bg-green-400 w-full z-50 flex">
       <div className="flex justify-end items-center gap-x-96">
         <div className="flex justify-around items-center gap-x-32">
           <div className="flex justify-evenly items-center gap-x-48">

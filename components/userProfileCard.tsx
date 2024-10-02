@@ -30,7 +30,7 @@ export default function UserProfileCard() {
 
   return (
     <div className="flex justify-center">
-      <Card className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
+      <Card className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 mt-10">
         <Image
           alt="Profile background"
           className="object-cover rounded-lg mb-4"
