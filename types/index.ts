@@ -14,3 +14,16 @@ export type registerData = {
   email: string;
   password: string;
 };
+
+export type TUser = {
+  username: string;
+  email: string;
+  password: string;
+  profilePicture: string;
+  role: "user" | "admin";
+  following?: string[];
+  followers?: string[];
+  verified?: boolean;
+  posts?: string[];
+  accountType?: "basic" | "premium";
+};

@@ -46,6 +46,7 @@ export default function UserLoginButtonOrProfile() {
     logout();
     setIsLoggedIn(false);
     setRole(null);
+    router.push("/");
   };
 
   if (loading) {
