@@ -1,7 +1,6 @@
 "use server";
-
-import { cookies } from "next/headers";
 import axiosInstance from "@/src/lib/AxiosInstance";
+import { cookies } from "next/headers";
 type LoginData = {
   email: string;
   password: string;

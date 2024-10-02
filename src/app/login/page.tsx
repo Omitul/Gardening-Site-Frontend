@@ -1,6 +1,8 @@
 "use client";
 
 import { loginUser } from "@/src/services/authService";
+import { delay } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +11,8 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -21,6 +25,9 @@ export default function LoginForm() {
           position: "top-center",
         });
         console.log("Login successful!", response);
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
       } else {
         toast.error(response.message || "Login failed", {
           position: "top-center",

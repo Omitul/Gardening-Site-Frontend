@@ -1,3 +1,5 @@
+import { logout } from "../services/authService";
+
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
@@ -20,11 +22,8 @@ export const siteConfig = {
       label: "Contact Us",
       href: "/contact",
     },
-    {
-      label: "Login",
-      href: "/login",
-    },
   ],
+
   navMenuItems: [
     {
       label: "Profile",
@@ -59,6 +58,7 @@ export const siteConfig = {
       href: "/logout",
     },
   ],
+
   links: {
     github: "https://github.com/nextui-org/nextui",
     twitter: "https://twitter.com/getnextui",
