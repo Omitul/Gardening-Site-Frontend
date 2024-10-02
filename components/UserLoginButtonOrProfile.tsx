@@ -10,13 +10,15 @@ import {
 } from "@nextui-org/react";
 import { getAccessToken } from "@/src/services/authService/getCookie";
 import { useRouter } from "next/navigation";
-import { logout } from "@/src/services/authService";
+import { getUser, logout } from "@/src/services/authService";
 import { getDecodedData } from "@/src/lib/jwtDecode";
 
 export default function UserLoginButtonOrProfile() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [role, setRole] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -28,6 +30,8 @@ export default function UserLoginButtonOrProfile() {
       if (token) {
         const decodedData = await getDecodedData();
         setRole(decodedData?.role || null); ///important to manage dropdown
+        const { email } = await getUser();
+        setEmail(email);
       }
     };
 
@@ -68,7 +72,7 @@ export default function UserLoginButtonOrProfile() {
                 className="h-14 gap-2"
               >
                 <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">zoey@example.com</p>
+                <p className="font-semibold">{email}</p>
               </DropdownItem>
 
               <DropdownItem key="Profile" textValue="Profile">
@@ -130,7 +134,7 @@ export default function UserLoginButtonOrProfile() {
                 className="h-14 gap-2"
               >
                 <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">zoey@example.com</p>
+                <p className="font-semibold">{email}</p>
               </DropdownItem>
 
               <DropdownItem key="Profile" textValue="Profile">

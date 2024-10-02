@@ -1,5 +1,6 @@
 "use server";
 import axiosInstance from "@/src/lib/AxiosInstance";
+import { getDecodedData } from "@/src/lib/jwtDecode";
 import { LoginData, registerData } from "@/types";
 import { cookies } from "next/headers";
 
@@ -36,6 +37,14 @@ export const registerUser = async (userData: registerData) => {
     console.log("hoinai");
     throw new Error(error);
   }
+};
+
+export const getUser = async () => {
+  const { userId } = await getDecodedData();
+  console.log("UserId", userId);
+  const { data } = await axiosInstance.get(`api/user/${userId}`);
+  console.log("data:", data?.data);
+  return data?.data;
 };
 
 export const logout = () => {
