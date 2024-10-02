@@ -43,7 +43,7 @@ export const getUser = async () => {
   const { userId } = await getDecodedData();
   console.log("UserId", userId);
   const { data } = await axiosInstance.get(`api/user/${userId}`);
-  console.log("data:", data?.data);
+  console.log("data etai:", data?.data);
   return data?.data;
 };
 

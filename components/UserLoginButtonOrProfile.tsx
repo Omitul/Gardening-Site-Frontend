@@ -75,19 +75,18 @@ export default function UserLoginButtonOrProfile() {
                 <p className="font-semibold">{email}</p>
               </DropdownItem>
 
-              <DropdownItem key="Profile" textValue="Profile">
+              <DropdownItem key="Profile" textValue="My Profile">
                 Profile
+                {/* <DropdownItem key="followers" textValue="Followers">
+                  Followers
+                </DropdownItem>
+                <DropdownItem key="following" textValue="Following">
+                  Following
+                </DropdownItem> */}
               </DropdownItem>
 
               <DropdownItem key="dashboard" textValue="Dashboard">
                 Dashboard
-              </DropdownItem>
-
-              <DropdownItem key="followers" textValue="Followers">
-                Followers
-              </DropdownItem>
-              <DropdownItem key="following" textValue="Following">
-                Following
               </DropdownItem>
 
               <DropdownItem key="setting" textValue="Settings">
