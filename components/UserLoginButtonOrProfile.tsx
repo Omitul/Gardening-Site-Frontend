@@ -62,12 +62,10 @@ export default function UserLoginButtonOrProfile() {
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">zoey@example.com</p>
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
+            <DropdownItem key="Profile">Profile</DropdownItem>
+            <DropdownItem key="Followers">Followers</DropdownItem>
+            <DropdownItem key="Following">Following</DropdownItem>
+            <DropdownItem key="Setting">Setting</DropdownItem>
             <DropdownItem key="logout" color="danger" onClick={handleLogout}>
               Log Out
             </DropdownItem>

@@ -21,7 +21,7 @@ export const Navbar = () => {
   return (
     <NextUINavbar position="sticky" className="bg-green-400 w-full z-10 flex">
       <div className="flex justify-end items-center gap-x-96">
-        <div className="flex justify-around items-center gap-x-48">
+        <div className="flex justify-around items-center gap-x-32">
           <div className="flex justify-evenly items-center gap-x-48">
             <NavbarContent className="">
               <NavbarBrand as="li" className="gap-3 max-w-fit">
