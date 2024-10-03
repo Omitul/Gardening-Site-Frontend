@@ -48,6 +48,8 @@ export default function PostCard({ post }: { post: Tpost }) {
         setAuthorname(Author?.username);
         setAuthoremail(Author?.email);
         setUserId(_id);
+        setFollowers(User.followers);
+        setFollowing(User.followers);
         console.log("USERID", _id);
         console.log("AUTHORID", author);
         console.log("EMAIL", email);
@@ -74,6 +76,9 @@ export default function PostCard({ post }: { post: Tpost }) {
         updatedFollowers = followers.filter((f) => f !== userId);
       }
 
+      console.log("Updated Following:", updatedFollowing);
+      console.log("Updated Followers:", updatedFollowers);
+
       try {
         await updateUser(userId, {
           following: updatedFollowing,
@@ -84,7 +89,7 @@ export default function PostCard({ post }: { post: Tpost }) {
 
       try {
         await updateAuthor(author, {
-          following: updatedFollowing,
+          followers: updatedFollowers,
         });
       } catch (error) {
         console.error("Failed to update Author:", error);
