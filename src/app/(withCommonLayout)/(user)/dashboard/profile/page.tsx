@@ -1,6 +1,6 @@
 "use client";
 
-import PostModal from "@/components/modal";
+import PostModal from "@/components/modal_and_post";
 import UserProfileCard from "@/components/userProfileCard";
 import { Button, useDisclosure } from "@nextui-org/react";
 

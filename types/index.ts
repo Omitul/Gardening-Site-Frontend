@@ -27,3 +27,16 @@ export type TUser = {
   posts?: string[];
   accountType?: "basic" | "premium";
 };
+
+export type Tpost = {
+  title: string;
+  content: string;
+  author: string;
+  category: string;
+  votes: number;
+  createdAt: Date;
+  isPremium: boolean;
+  images: string[];
+  videos: string[];
+  comments: string[];
+};

@@ -11,7 +11,7 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Posts",
+      label: "Newsfeed",
       href: "/post",
     },
     {

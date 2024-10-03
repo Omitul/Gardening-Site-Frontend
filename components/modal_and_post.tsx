@@ -14,6 +14,9 @@ import {
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import uploadImage from "@/src/lib/imageUpload";
+import { getDecodedData } from "@/src/lib/jwtDecode";
+import { Post } from "@/src/services/postService";
+import { toast } from "react-toastify";
 
 interface PostModalProps {
   isOpen: boolean;
@@ -24,6 +27,7 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
   const [images, setImages] = useState<string[]>([]);
+  const [title, setTitle] = useState("");
 
   const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -55,22 +59,49 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    const parser = new DOMParser();
-    const parsedContent =
-      parser.parseFromString(content, "text/html").body.textContent || "";
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const postData = {
-      content: parsedContent,
-      category,
-      images,
-    };
-    console.log("Post Data: ", postData);
 
-    setContent("");
-    setCategory("");
-    setImages([]);
-    onOpenChange(false);
+    try {
+      const data = await getDecodedData();
+      if (!data || !data.userId) {
+        throw new Error("Failed to retrieve user data");
+      }
+
+      const parser = new DOMParser();
+      const parsedContent =
+        parser.parseFromString(content, "text/html").body.textContent || "";
+
+      const postData = {
+        title, // Assuming this is set somewhere in your state
+        content: parsedContent,
+        images: images,
+        videos: [], // Initialize videos as an empty array
+        author: data.userId,
+        votes: 0,
+        createdAt: new Date(),
+        category: category,
+        comments: [], // Initialize comments as an empty array
+        isPremium: false,
+      };
+
+      console.log("Post Data: ", postData);
+
+      // Move the API call inside the try block
+      const res = await Post(postData); // Assuming Post is your API call
+
+      console.log(res);
+      toast.success("Post created successfully!");
+
+      // Reset form fields
+      setContent("");
+      setCategory("");
+      setImages([]);
+      onOpenChange(false);
+    } catch (error) {
+      console.error("Error during submission:", error);
+      toast.error("Error creating post. Please try again.");
+    }
   };
 
   useEffect(() => {
@@ -85,6 +116,13 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
             <form onSubmit={handleSubmit}>
               <ModalHeader>Create a New Post</ModalHeader>
               <ModalBody>
+                <input
+                  type="text"
+                  placeholder="Enter Post Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full mt-2 mb-4 border border-gray-300 rounded-lg p-2"
+                />
                 <Select
                   placeholder="Select a category"
                   value={category}
