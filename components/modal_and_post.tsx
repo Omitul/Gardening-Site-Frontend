@@ -32,17 +32,17 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
   const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      console.log("Selected files for upload:", files);
+      console.log("Selected files:", files);
 
       const uploadedURLs = await Promise.all(
         files.map(async (file) => {
           console.log(`Uploading file: ${file.name}`);
           try {
-            const uploadedUrl = await uploadImage(file); // uploadImage function imgbb te upload
-            console.log("Uploaded image URL:", uploadedUrl);
+            const uploadedUrl = await uploadImage(file);
+            console.log("Uploaded image URL:", uploadedUrl); // checking url asche kina
             return uploadedUrl;
           } catch (error) {
-            console.error("Error uploading image to ImgBB:", error);
+            console.error("Error uploading to ImgBB:", error);
             return null;
           }
         })
@@ -52,10 +52,10 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
         (url): url is string => url !== null
       );
 
-      console.log("Successful uploads:", successfulUploads);
+      console.log("uploads:", successfulUploads);
       setImages((prevImages) => [...prevImages, ...successfulUploads]);
     } else {
-      console.log("No files selected.");
+      console.log("No files selected man!");
     }
   };
 
@@ -65,7 +65,7 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
     try {
       const data = await getDecodedData();
       if (!data || !data.userId) {
-        throw new Error("Failed to retrieve user data");
+        throw new Error("Failed to fetch user data");
       }
 
       const parser = new DOMParser();
@@ -73,27 +73,28 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
         parser.parseFromString(content, "text/html").body.textContent || "";
 
       const postData = {
-        title, // Assuming this is set somewhere in your state
+        title,
         content: parsedContent,
         images: images,
-        videos: [], // Initialize videos as an empty array
+        videos: [],
         author: data.userId,
         votes: 0,
         createdAt: new Date(),
         category: category,
-        comments: [], // Initialize comments as an empty array
+        comments: [],
         isPremium: false,
       };
 
       console.log("Post Data: ", postData);
 
-      // Move the API call inside the try block
-      const res = await Post(postData); // Assuming Post is your API call
-
+      const res = await Post(postData);
       console.log(res);
-      toast.success("Post created successfully!");
+      if (res.success) toast.success("Post created successfully!");
+      else {
+        console.log("there was a problem craeting post");
+      }
 
-      // Reset form fields
+      // Reset form fields.........
       setContent("");
       setCategory("");
       setImages([]);
