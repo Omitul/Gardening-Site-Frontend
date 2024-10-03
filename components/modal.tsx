@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import {
   Modal,
   ModalContent,
@@ -13,6 +13,7 @@ import {
 } from "@nextui-org/react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import uploadImage from "@/src/lib/imageUpload";
 
 interface PostModalProps {
   isOpen: boolean;
@@ -22,11 +23,35 @@ interface PostModalProps {
 const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
-  const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<string[]>([]);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setImages([...images, ...Array.from(e.target.files)]);
+      const files = Array.from(e.target.files);
+      console.log("Selected files for upload:", files);
+
+      const uploadedURLs = await Promise.all(
+        files.map(async (file) => {
+          console.log(`Uploading file: ${file.name}`);
+          try {
+            const uploadedUrl = await uploadImage(file); // uploadImage function imgbb te upload
+            console.log("Uploaded image URL:", uploadedUrl);
+            return uploadedUrl;
+          } catch (error) {
+            console.error("Error uploading image to ImgBB:", error);
+            return null;
+          }
+        })
+      );
+
+      const successfulUploads = uploadedURLs.filter(
+        (url): url is string => url !== null
+      );
+
+      console.log("Successful uploads:", successfulUploads);
+      setImages((prevImages) => [...prevImages, ...successfulUploads]);
+    } else {
+      console.log("No files selected.");
     }
   };
 
@@ -45,6 +70,10 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
     onOpenChange(false);
   };
 
+  useEffect(() => {
+    console.log("Images state updated:", images);
+  }, [images]);
+
   return (
     <div>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -56,7 +85,7 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
                 <Select
                   placeholder="Select a category"
                   value={category}
-                  onChange={(value: any) => setCategory(value)}
+                  onChange={(event) => setCategory(event.target.value)}
                 >
                   <SelectItem value="Vegetables" key="1">
                     Vegetables

@@ -12,6 +12,7 @@ import { getAccessToken } from "@/src/services/authService/getCookie";
 import { useRouter } from "next/navigation";
 import { getUser, logout } from "@/src/services/authService";
 import { getDecodedData } from "@/src/lib/jwtDecode";
+import Link from "next/link";
 
 export default function UserLoginButtonOrProfile() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -77,13 +78,15 @@ export default function UserLoginButtonOrProfile() {
               </DropdownItem>
 
               <DropdownItem key="Profile" textValue="My Profile">
-                Profile
                 {/* <DropdownItem key="followers" textValue="Followers">
                   Followers
                 </DropdownItem>
                 <DropdownItem key="following" textValue="Following">
                   Following
                 </DropdownItem> */}
+                <Link href="/dashboard/profile" passHref>
+                  Profile
+                </Link>
               </DropdownItem>
 
               <DropdownItem key="dashboard" textValue="Dashboard">

@@ -40,16 +40,16 @@ export default function UserProfileCard() {
         />
         <h4 className="font-bold text-xl mb-2">{user.username}</h4>{" "}
         {/* Display username */}
-        <p className="text-fuchsia-600 font-bold mt-2">
+        <p className="text-white-600 font-bold mt-2 bg-amber-400 p-2 rounded-md">
           Followers: {user.followers?.length || 0}
         </p>
-        <p className="text-fuchsia-600 font-bold mt-2">
-          Followers: {user.following?.length || 0}
+        <p className="text-white-600 font-bold mt-2 bg-amber-400 p-2 rounded-md">
+          Following: {user.following?.length || 0}
         </p>
-        <p className="text-fuchsia-600 font-bold mt-2">
+        <p className="text-white-600 font-bold mt-2 bg-amber-400 p-2 rounded-md">
           Verified: {user.verified ? "Yes" : "No"}
         </p>
-        <p className="text-fuchsia-600 mt-2 font-bold">
+        <p className="text-white-600 font-bold mt-2 bg-amber-400 p-2 rounded-md">
           Account Type:{" "}
           <span
             className={
