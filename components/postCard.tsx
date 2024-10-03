@@ -10,7 +10,12 @@ import {
   Button,
 } from "@nextui-org/react";
 import { Tpost } from "@/types";
-import { getAuthor, getUser } from "@/src/services/authService";
+import {
+  getAuthor,
+  getUser,
+  updateAuthor,
+  updateUser,
+} from "@/src/services/authService";
 import axios from "axios";
 
 export default function PostCard({ post }: { post: Tpost }) {
@@ -30,6 +35,8 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [Authorname, setAuthorname] = useState("");
   const [Authoremail, setAuthoremail] = useState("");
   const [currentVotes, setCurrentVotes] = useState(votes);
+  const [following, setFollowing] = useState<string[]>([]);
+  const [followers, setFollowers] = useState<string[]>([]);
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
@@ -51,6 +58,45 @@ export default function PostCard({ post }: { post: Tpost }) {
     };
     setUser();
   }, []);
+
+  const handleFollow = async () => {
+    if (userId && userId !== author) {
+      const FollowOrNot = !isFollowed;
+      setIsFollowed(FollowOrNot);
+
+      let updatedFollowing;
+      let updatedFollowers;
+
+      if (FollowOrNot) {
+        updatedFollowing = [...following, author]; // author added to user's following list
+        updatedFollowers = [...followers, userId]; // user added to author's followers list
+      } else {
+        updatedFollowing = following.filter((f) => f !== author); // author removed from user's following list
+        updatedFollowers = followers.filter((f) => f !== userId); // user removed from author's followers list
+      }
+
+      try {
+        await updateUser(userId, {
+          following: updatedFollowing,
+        });
+      } catch (error) {
+        console.error("Failed to update user:", error);
+      }
+
+      try {
+        await updateAuthor(userId, {
+          following: updatedFollowing,
+        });
+      } catch (error) {
+        console.error("Failed to update Author:", error);
+      }
+
+      setFollowing(updatedFollowing);
+      setFollowers(updatedFollowers);
+    } else {
+      console.log("You cannot follow yourself."); //actually don't need this karon nijer post e user button e dekhbena
+    }
+  };
 
   const handleUpvote = () => {
     setCurrentVotes((prev) => prev + 1);
@@ -83,15 +129,15 @@ export default function PostCard({ post }: { post: Tpost }) {
           <div>
             <Button
               className={
-                isFollowed
-                  ? "bg-blue-700 text-foreground border-default-200"
-                  : ""
+                !isFollowed
+                  ? "bg-blue-500 text-foreground border-default-200"
+                  : "bg-gray-500 text-foreground border-default-200"
               }
               color="primary"
               radius="full"
               size="sm"
               variant={isFollowed ? "bordered" : "solid"}
-              //   onPress={handleFollow}
+              onPress={handleFollow}
             >
               {isFollowed ? "Unfollow" : "Follow"}
             </Button>
