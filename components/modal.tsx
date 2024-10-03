@@ -56,9 +56,12 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+    const parser = new DOMParser();
+    const parsedContent =
+      parser.parseFromString(content, "text/html").body.textContent || "";
     e.preventDefault();
     const postData = {
-      content,
+      content: parsedContent,
       category,
       images,
     };
