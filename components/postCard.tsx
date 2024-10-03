@@ -16,7 +16,6 @@ import {
   updateAuthor,
   updateUser,
 } from "@/src/services/authService";
-import axios from "axios";
 
 export default function PostCard({ post }: { post: Tpost }) {
   const {
@@ -68,11 +67,11 @@ export default function PostCard({ post }: { post: Tpost }) {
       let updatedFollowers;
 
       if (FollowOrNot) {
-        updatedFollowing = [...following, author]; // author added to user's following list
-        updatedFollowers = [...followers, userId]; // user added to author's followers list
+        updatedFollowing = [...following, author];
+        updatedFollowers = [...followers, userId];
       } else {
-        updatedFollowing = following.filter((f) => f !== author); // author removed from user's following list
-        updatedFollowers = followers.filter((f) => f !== userId); // user removed from author's followers list
+        updatedFollowing = following.filter((f) => f !== author);
+        updatedFollowers = followers.filter((f) => f !== userId);
       }
 
       try {
@@ -84,7 +83,7 @@ export default function PostCard({ post }: { post: Tpost }) {
       }
 
       try {
-        await updateAuthor(userId, {
+        await updateAuthor(author, {
           following: updatedFollowing,
         });
       } catch (error) {
