@@ -47,6 +47,12 @@ export const getUser = async () => {
   return data?.data;
 };
 
+export const getAuthor = async (id: string) => {
+  const { data } = await axiosInstance.get(`api/user/${id}`);
+  console.log("Aauthor etai:", data?.data);
+  return data?.data;
+};
+
 export const logout = () => {
   cookies().delete("accessToken");
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -10,10 +10,12 @@ import {
   Button,
 } from "@nextui-org/react";
 import { Tpost } from "@/types";
-import { getUser } from "@/src/services/authService";
+import { getAuthor, getUser } from "@/src/services/authService";
+import axios from "axios";
 
 export default function PostCard({ post }: { post: Tpost }) {
   const {
+    _id,
     title,
     content,
     author,
@@ -24,17 +26,25 @@ export default function PostCard({ post }: { post: Tpost }) {
     comments,
   } = post;
 
-  const [isFollowed, setIsFollowed] = React.useState(false);
-  const [username, setUsername] = React.useState("");
-  const [useremail, setUseremail] = React.useState("");
-  const [currentVotes, setCurrentVotes] = React.useState(votes);
+  const [isFollowed, setIsFollowed] = useState(false);
+  const [Authorname, setAuthorname] = useState("");
+  const [Authoremail, setAuthoremail] = useState("");
+  const [currentVotes, setCurrentVotes] = useState(votes);
+  const [userId, setUserId] = useState("");
+
   useEffect(() => {
     const setUser = async () => {
       try {
         const User = await getUser();
-        const { email, username } = User;
-        setUsername(username);
-        setUseremail(email);
+        const Author = await getAuthor(author);
+        console.log("Author", Author.username);
+        const { email, _id } = User;
+        setAuthorname(Author?.username);
+        setAuthoremail(Author?.email);
+        setUserId(_id);
+        console.log("USERID", _id);
+        console.log("AUTHORID", author);
+        console.log("EMAIL", email);
       } catch (error) {
         console.error("Failed fetching user:", error);
       }
@@ -62,27 +72,31 @@ export default function PostCard({ post }: { post: Tpost }) {
           />
           <div className="flex flex-col gap-1 items-start justify-center">
             <h4 className="text-small font-semibold leading-none text-default-600">
-              {username}
+              {Authorname}
             </h4>
             <h5 className="text-small tracking-tight text-default-400">
-              @{useremail}
+              @{Authoremail}
             </h5>
           </div>
         </div>
-        <Button
-          className={
-            isFollowed
-              ? "bg-transparent text-foreground border-default-200"
-              : ""
-          }
-          color="primary"
-          radius="full"
-          size="sm"
-          variant={isFollowed ? "bordered" : "solid"}
-          onPress={() => setIsFollowed(!isFollowed)}
-        >
-          {isFollowed ? "Unfollow" : "Follow"}
-        </Button>
+        {userId && author && userId.toString() !== author.toString() && (
+          <div>
+            <Button
+              className={
+                isFollowed
+                  ? "bg-blue-700 text-foreground border-default-200"
+                  : ""
+              }
+              color="primary"
+              radius="full"
+              size="sm"
+              variant={isFollowed ? "bordered" : "solid"}
+              //   onPress={handleFollow}
+            >
+              {isFollowed ? "Unfollow" : "Follow"}
+            </Button>
+          </div>
+        )}
       </CardHeader>
       <CardBody className="px-3 py-0 text-small text-default-400">
         <h4 className="font-semibold text-default-600">{title}</h4>
