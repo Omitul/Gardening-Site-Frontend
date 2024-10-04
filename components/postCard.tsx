@@ -8,18 +8,19 @@ import {
   CardFooter,
   Avatar,
   Button,
+  Input,
 } from "@nextui-org/react";
-import { Tpost } from "@/types";
+import { TComment, Tpost } from "@/types";
 import {
   getAuthor,
   getUser,
   updateAuthor,
   updateUser,
 } from "@/src/services/authService";
+import { CommentCard } from "./commentCard";
 
 export default function PostCard({ post }: { post: Tpost }) {
   const {
-    _id,
     title,
     content,
     author,
@@ -37,6 +38,9 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [following, setFollowing] = useState<string[]>([]);
   const [followers, setFollowers] = useState<string[]>([]);
   const [userId, setUserId] = useState("");
+  const [visibleComments, setVisibleComments] = useState(false);
+
+  console.log("comment", comments);
 
   useEffect(() => {
     const setUser = async () => {
@@ -52,7 +56,6 @@ export default function PostCard({ post }: { post: Tpost }) {
         setFollowing(User.followers);
         console.log("USERID", _id);
         console.log("AUTHORID", author);
-        console.log("EMAIL", email);
       } catch (error) {
         console.error("Failed fetching user:", error);
       }
@@ -102,6 +105,10 @@ export default function PostCard({ post }: { post: Tpost }) {
     }
   };
 
+  const toggleCommentsVisibility = () => {
+    setVisibleComments((prev) => !prev);
+  };
+
   const handleUpvote = () => {
     setCurrentVotes((prev) => prev + 1);
   };
@@ -111,85 +118,112 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   return (
-    <Card className="mx-auto max-w-[1000px] mt-10 p-8">
-      <CardHeader className="justify-between">
-        <div className="flex gap-5">
-          <Avatar
-            isBordered
-            radius="full"
-            size="md"
-            src="https://nextui.org/avatars/avatar-1.png"
-          />
-          <div className="flex flex-col gap-1 items-start justify-center">
-            <h4 className="text-small font-semibold leading-none text-default-600">
-              {Authorname}
-            </h4>
-            <h5 className="text-small tracking-tight text-default-400">
-              @{Authoremail}
-            </h5>
-          </div>
-        </div>
-        {userId && author && userId.toString() !== author.toString() && (
-          <div>
-            <Button
-              className={
-                !isFollowed
-                  ? "bg-blue-500 text-foreground border-default-200"
-                  : "bg-gray-500 text-foreground border-default-200"
-              }
-              color="primary"
+    <div>
+      <Card className="mx-auto max-w-[1000px] mt-10 p-8">
+        <CardHeader className="justify-between">
+          <div className="flex gap-5">
+            <Avatar
+              isBordered
               radius="full"
-              size="sm"
-              variant={isFollowed ? "bordered" : "solid"}
-              onPress={handleFollow}
+              size="md"
+              src="https://nextui.org/avatars/avatar-1.png"
+            />
+            <div className="flex flex-col gap-1 items-start justify-center">
+              <h4 className="text-small font-semibold leading-none text-default-600">
+                {Authorname}
+              </h4>
+              <h5 className="text-small tracking-tight text-default-400">
+                {Authoremail}
+              </h5>
+            </div>
+          </div>
+          {userId && author && userId.toString() !== author.toString() && (
+            <div>
+              <Button
+                className={
+                  !isFollowed
+                    ? "bg-blue-500 text-foreground border-default-200"
+                    : "bg-gray-500 text-foreground border-default-200"
+                }
+                color="primary"
+                radius="full"
+                size="sm"
+                variant={isFollowed ? "bordered" : "solid"}
+                onPress={handleFollow}
+              >
+                {isFollowed ? "Unfollow" : "Follow"}
+              </Button>
+            </div>
+          )}
+        </CardHeader>
+        <CardBody className="px-3 py-0 text-small text-default-400">
+          <h4 className="font-semibold text-default-600">{title}</h4>
+          <p>{content}</p>
+          {images.length > 0 && (
+            <div className="my-4">
+              {images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`Post image ${index + 1}`}
+                  className="w-full h-auto"
+                />
+              ))}
+            </div>
+          )}
+          <span className="pt-2">{category}</span>
+        </CardBody>
+        <CardFooter className="gap-3">
+          <div className="flex gap-1 items-center justify-center">
+            <p className="font-semibold text-default-500 text-small">
+              {comments.length}
+            </p>
+            <span
+              className="text-default-500 cursor-pointer"
+              onClick={() => toggleCommentsVisibility()}
             >
-              {isFollowed ? "Unfollow" : "Follow"}
+              comments
+            </span>
+          </div>
+          <div className="flex gap-1">
+            <p className="font-semibold text-default-500 text-small">
+              {currentVotes}
+            </p>
+            <p className="text-default-500 text-small">votes</p>
+          </div>
+          {isPremium && (
+            <span className="text-red-600 font-semibold">Premium Post</span>
+          )}
+          <div className="flex gap-2">
+            <Button size="sm" variant="bordered" onPress={handleUpvote}>
+              Upvote
+            </Button>
+            <Button size="sm" variant="bordered" onPress={handleDownvote}>
+              Downvote
             </Button>
           </div>
-        )}
-      </CardHeader>
-      <CardBody className="px-3 py-0 text-small text-default-400">
-        <h4 className="font-semibold text-default-600">{title}</h4>
-        <p>{content}</p>
-        {images.length > 0 && (
-          <div className="my-4">
-            {images.map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                alt={`Post image ${index + 1}`}
-                className="w-full h-auto"
-              />
-            ))}
-          </div>
-        )}
-        <span className="pt-2">#{category}</span>
-      </CardBody>
-      <CardFooter className="gap-3">
-        <div className="flex gap-1">
-          <p className="font-semibold text-default-400 text-small">
-            {comments.length}
-          </p>
-          <p className="text-default-400 text-small">comments</p>
-        </div>
-        <div className="flex gap-1">
-          <p className="font-semibold text-default-400 text-small">
-            {currentVotes}
-          </p>
-          <p className="text-default-400 text-small">votes</p>
-        </div>
-        {isPremium && (
-          <span className="text-red-600 font-semibold">Premium Post</span>
-        )}
-        <div className="flex gap-2">
-          <Button size="sm" variant="bordered" onPress={handleUpvote}>
-            Upvote
-          </Button>
-          <Button size="sm" variant="bordered" onPress={handleDownvote}>
-            Downvote
-          </Button>
-        </div>
-      </CardFooter>
-    </Card>
+        </CardFooter>
+      </Card>
+      {comments.length > 0 ? (
+        comments.map((comment: TComment) => (
+          <CommentCard
+            key={comment._id}
+            comment={comment}
+            visibleComments={visibleComments}
+          />
+        ))
+      ) : (
+        <CommentCard
+          comment={{
+            _id: "",
+            content: "",
+            author: "",
+            post: "",
+            createdAt: new Date(),
+          }}
+          visibleComments={visibleComments}
+        />
+      )}
+    </div>
   );
 }

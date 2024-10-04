@@ -39,5 +39,13 @@ export type Tpost = {
   isPremium: boolean;
   images: string[];
   videos: string[];
-  comments: string[];
+  comments: TComment[];
+};
+
+export type TComment = {
+  _id?: string;
+  content: string;
+  author: string;
+  post: string;
+  createdAt?: Date;
 };
