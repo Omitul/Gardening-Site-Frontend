@@ -3,10 +3,10 @@ import axiosInstance from "@/src/lib/AxiosInstance";
 import { Tpost } from "@/types";
 import { revalidateTag } from "next/cache";
 
-export const Post = async (userData: Tpost) => {
-  console.log(userData);
+export const Post = async (Postdata: Tpost) => {
+  console.log(Postdata);
   try {
-    const { data } = await axiosInstance.post("api/post", userData);
+    const { data } = await axiosInstance.post("api/post", Postdata);
     console.log(data);
 
     if (data.success) {

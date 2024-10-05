@@ -8,7 +8,6 @@ import {
   CardFooter,
   Avatar,
   Button,
-  Input,
 } from "@nextui-org/react";
 import { TComment, Tpost } from "@/types";
 import {
@@ -18,9 +17,12 @@ import {
   updateUser,
 } from "@/src/services/authService";
 import { CommentCard } from "./commentCard";
+import { getComments } from "@/src/services/commentService";
+import CommentPostCard from "./commentPostCard";
 
 export default function PostCard({ post }: { post: Tpost }) {
   const {
+    _id: postId,
     title,
     content,
     author,
@@ -28,7 +30,6 @@ export default function PostCard({ post }: { post: Tpost }) {
     votes,
     isPremium,
     images,
-    comments,
   } = post;
 
   const [isFollowed, setIsFollowed] = useState(false);
@@ -39,14 +40,16 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [followers, setFollowers] = useState<string[]>([]);
   const [userId, setUserId] = useState("");
   const [visibleComments, setVisibleComments] = useState(false);
-
-  console.log("comment", comments);
+  const [comments, setComments] = useState<TComment[]>([]);
 
   useEffect(() => {
     const setUser = async () => {
       try {
         const User = await getUser();
         const Author = await getAuthor(author);
+        const res = await getComments(postId as string);
+        setComments(res.data);
+        console.log("asche comments:", res);
         console.log("Author", Author.username);
         const { email, _id } = User;
         setAuthorname(Author?.username);
@@ -104,8 +107,9 @@ export default function PostCard({ post }: { post: Tpost }) {
       console.log("You cannot follow yourself."); //actually don't need this karon nijer post e user button e dekhbena
     }
   };
-
-  const toggleCommentsVisibility = () => {
+  const toggleCommentsVisibility = async () => {
+    const res = await getComments(postId as string);
+    console.log("asche comment?", res);
     setVisibleComments((prev) => !prev);
   };
 
@@ -213,7 +217,7 @@ export default function PostCard({ post }: { post: Tpost }) {
           />
         ))
       ) : (
-        <CommentCard
+        <CommentCard ///no comments
           comment={{
             _id: "",
             content: "",
@@ -223,6 +227,9 @@ export default function PostCard({ post }: { post: Tpost }) {
           }}
           visibleComments={visibleComments}
         />
+      )}
+      {visibleComments && (
+        <CommentPostCard userId={userId} postId={postId as string} />
       )}
     </div>
   );
