@@ -22,9 +22,6 @@ export const postComments = async (commentData: TComment) => {
 
     const newComment = await response.json();
     console.log("newcomment", newComment);
-    if (newComment && newComment.success) {
-      revalidateTag("comments");
-    }
 
     console.log("new comment:", newComment);
     if (newComment.success) {
