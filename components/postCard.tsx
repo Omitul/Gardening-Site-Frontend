@@ -127,10 +127,10 @@ export default function PostCard({ post }: { post: Tpost }) {
 
   const handleDownvote = () => {
     if (Downvoted) {
-      setCurrentVotes((prev) => Math.max(0, prev + 1));
+      setCurrentVotes((prev) => Math.max(prev + 1));
       setDownvoted(false);
     } else {
-      setCurrentVotes((prev) => Math.max(0, prev - 1));
+      setCurrentVotes((prev) => Math.max(prev - 1));
       setDownvoted(true);
     }
   };
