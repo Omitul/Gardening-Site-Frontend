@@ -41,6 +41,8 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [userId, setUserId] = useState("");
   const [visibleComments, setVisibleComments] = useState(false);
   const [comments, setComments] = useState<TComment[]>([]);
+  const [Upvoted, setUpvoted] = useState(false);
+  const [Downvoted, setDownvoted] = useState(false);
 
   useEffect(() => {
     const setUser = async () => {
@@ -114,11 +116,23 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   const handleUpvote = () => {
-    setCurrentVotes((prev) => prev + 1);
+    if (Upvoted) {
+      setCurrentVotes((prev) => Math.max(0, prev - 1));
+      setUpvoted(false);
+    } else {
+      setCurrentVotes((prev) => Math.max(0, prev + 1));
+      setUpvoted(true);
+    }
   };
 
   const handleDownvote = () => {
-    setCurrentVotes((prev) => Math.max(0, prev - 1));
+    if (Downvoted) {
+      setCurrentVotes((prev) => Math.max(0, prev + 1));
+      setDownvoted(false);
+    } else {
+      setCurrentVotes((prev) => Math.max(0, prev - 1));
+      setDownvoted(true);
+    }
   };
 
   return (
@@ -199,10 +213,20 @@ export default function PostCard({ post }: { post: Tpost }) {
             <span className="text-red-600 font-semibold">Premium Post</span>
           )}
           <div className="flex gap-2">
-            <Button size="sm" variant="bordered" onPress={handleUpvote}>
+            <Button
+              size="sm"
+              variant="bordered"
+              onPress={handleUpvote}
+              className={Upvoted ? "bg-blue-500" : ""}
+            >
               Upvote
             </Button>
-            <Button size="sm" variant="bordered" onPress={handleDownvote}>
+            <Button
+              size="sm"
+              variant="bordered"
+              onPress={handleDownvote}
+              className={Downvoted ? "bg-blue-500" : ""}
+            >
               Downvote
             </Button>
           </div>
