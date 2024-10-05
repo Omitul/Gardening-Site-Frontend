@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { postComments } from "@/src/services/commentService";
+import { startTransition, useEffect, useState } from "react";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, Input } from "@nextui-org/react";
 import { TComment } from "@/types";
-
+import { handleCommentSubmit } from "./handleCommentSubmit";
+import { useRouter } from "next/navigation";
 const CommentPostCard = ({
   postId,
   userId,
@@ -12,8 +12,7 @@ const CommentPostCard = ({
   userId: string;
 }) => {
   const [newComment, setNewComment] = useState("");
-
-  const handleCommentSubmit = async () => {
+  const handleSubmit = async () => {
     if (newComment.trim()) {
       const commentData: TComment = {
         content: newComment,
@@ -22,13 +21,13 @@ const CommentPostCard = ({
         createdAt: new Date(),
       };
       setNewComment("");
-      try {
-        const res = await postComments(commentData);
-        console.log("Comment posted ?????:", res);
-      } catch (error) {
-        console.error("Error posting:", error);
-        throw new Error("Failed to post comment");
-      }
+      startTransition(async () => {
+        const res = await handleCommentSubmit(commentData);
+        if (res.success) {
+          window.location.reload(); ///finally its working!
+        }
+        console.log("hmm", res);
+      });
 
       console.log("commentData", commentData);
     }
@@ -47,7 +46,7 @@ const CommentPostCard = ({
           <Button
             size="sm"
             variant="solid"
-            onPress={handleCommentSubmit}
+            onPress={handleSubmit}
             className="mx-auto w-24 bg-yellow-400"
           >
             POST

@@ -1,9 +1,6 @@
 "use client";
-import { useState } from "react";
-import { Button } from "@nextui-org/button";
-import { Card, CardBody, Input } from "@nextui-org/react";
+import { Card, CardBody } from "@nextui-org/react";
 import { TComment } from "@/types";
-import { postComments } from "@/src/services/commentService";
 
 interface CommentCardProps {
   comment: TComment;

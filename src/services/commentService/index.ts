@@ -1,4 +1,4 @@
-import axiosInstance from "@/src/lib/AxiosInstance";
+"use client";
 import { TComment } from "@/types";
 import { revalidateTag } from "next/cache";
 
@@ -21,22 +21,14 @@ export const postComments = async (commentData: TComment) => {
     // console.log(`${process.env.NEXT_PUBLIC_BASE_API}/api/comment`);
 
     const newComment = await response.json();
-    console.log("newcomment", newComment);
 
     console.log("new comment:", newComment);
-    if (newComment.success) {
-      console.log("Revalidating...");
-      try {
-        revalidateTag("comments");
-        console.log("Revalidation successful.");
-      } catch (revalidateError) {
-        console.error("Error revalidation:", revalidateError);
-      }
-    }
+    // if (newComment.success) {
+    //   revalidateTag("comments");
+    //   console.log("Revalidating...");
+    // }
     return newComment;
-  } catch (error) {
-    throw new Error("Failed to post comment");
-  }
+  } catch (error) {}
 };
 
 export const getComments = async (id: string) => {
