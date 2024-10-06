@@ -20,11 +20,7 @@ import {
 import { CommentCard } from "./commentCard";
 import { getComments } from "@/src/services/commentService";
 import CommentPostCard from "./commentPostCard";
-import {
-  getPosts,
-  getSinglePost,
-  UpdatePost,
-} from "@/src/services/postService";
+import { getPostById, UpdatePost } from "@/src/services/postService";
 
 export default function PostCard({ post }: { post: Tpost }) {
   const {
@@ -56,7 +52,7 @@ export default function PostCard({ post }: { post: Tpost }) {
         const User = await getUser();
         const Author = await getAuthor(author);
         const res = await getComments(postId as string);
-        const data = await getSinglePost(author as string);
+        const data = await getPostById(author as string);
         console.log("voter jnno", data.data[0]); // data te array wise data ache tai
         setCurrentVotes(data?.data[0].votes);
         setDownvoted(data?.data[0].downvoted);

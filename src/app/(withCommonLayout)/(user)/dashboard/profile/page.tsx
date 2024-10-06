@@ -14,17 +14,6 @@ const PostCreation = () => {
       </div>
 
       <div>
-        <div className="bg-gray-600 rounded-lg shadow-lg p-6 px-64 w-full max-w-md flex justify-center mb-24">
-          <Button
-            className="mt-4 w-full px-20 bg-gray-800 text-white font-semibold"
-            variant="bordered"
-            onPress={onOpen}
-            style={{ width: "100%" }}
-          >
-            Create Post
-          </Button>
-        </div>
-
         {/* to post */}
         <PostModal isOpen={isOpen} onOpenChange={onOpenChange} />
       </div>

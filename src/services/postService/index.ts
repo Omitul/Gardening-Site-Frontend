@@ -55,10 +55,10 @@ export async function getPosts() {
   return data;
 }
 
-export async function getSinglePost(postId: string) {
+export async function getPostById(id: string) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/api/post/${postId}`,
+      `${process.env.NEXT_PUBLIC_BASE_API}/api/post/${id}`,
       {
         next: {
           tags: ["posts"],

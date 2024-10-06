@@ -17,6 +17,7 @@ import uploadImage from "@/src/lib/imageUpload";
 import { getDecodedData } from "@/src/lib/jwtDecode";
 import { Post } from "@/src/services/postService";
 import { toast } from "react-toastify";
+import { Tpost } from "@/types";
 
 interface PostModalProps {
   isOpen: boolean;
@@ -82,12 +83,14 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
         createdAt: new Date(),
         category: category,
         comments: [],
+        upvoted: false,
+        downvoted: false,
         isPremium: false,
       };
 
       console.log("Post Data: ", postData);
 
-      const res = await Post(postData);
+      const res = await Post(postData as Tpost);
       console.log(res);
       if (res.success) toast.success("Post created successfully!");
       else {
