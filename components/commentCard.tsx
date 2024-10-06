@@ -10,7 +10,7 @@ interface CommentCardProps {
 export const CommentCard = ({ comment, visibleComments }: CommentCardProps) => {
   return (
     <>
-      {visibleComments && (
+      {visibleComments && comment.content ? (
         <Card className="mx-auto max-w-[1000px] mt-5">
           <CardBody>
             <div className="border-b py-2">
@@ -18,7 +18,7 @@ export const CommentCard = ({ comment, visibleComments }: CommentCardProps) => {
             </div>
           </CardBody>
         </Card>
-      )}
+      ) : null}
     </>
   );
 };

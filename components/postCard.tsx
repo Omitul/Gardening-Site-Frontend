@@ -19,6 +19,11 @@ import {
 import { CommentCard } from "./commentCard";
 import { getComments } from "@/src/services/commentService";
 import CommentPostCard from "./commentPostCard";
+import {
+  getPosts,
+  getSinglePost,
+  UpdatePost,
+} from "@/src/services/postService";
 
 export default function PostCard({ post }: { post: Tpost }) {
   const {
@@ -35,7 +40,7 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [isFollowed, setIsFollowed] = useState(false);
   const [Authorname, setAuthorname] = useState("");
   const [Authoremail, setAuthoremail] = useState("");
-  const [currentVotes, setCurrentVotes] = useState(votes);
+  const [currentVotes, setCurrentVotes] = useState<number>(votes | 0);
   const [following, setFollowing] = useState<string[]>([]);
   const [followers, setFollowers] = useState<string[]>([]);
   const [userId, setUserId] = useState("");
@@ -50,8 +55,14 @@ export default function PostCard({ post }: { post: Tpost }) {
         const User = await getUser();
         const Author = await getAuthor(author);
         const res = await getComments(postId as string);
+        const data = await getSinglePost(author as string);
+        console.log("voter jnno", data.data[0]); // data te array wise data ache tai
+        setCurrentVotes(data?.data[0].votes);
+        setDownvoted(data?.data[0].downvoted);
+        setUpvoted(data?.data[0].upvoted);
         setComments(res.data);
         console.log("asche comments:", res);
+        console.log("upvoted", Upvoted);
         console.log("Author", Author.username);
         const { email, _id } = User;
         setAuthorname(Author?.username);
@@ -65,6 +76,7 @@ export default function PostCard({ post }: { post: Tpost }) {
         console.error("Failed fetching user:", error);
       }
     };
+
     setUser();
   }, []);
 
@@ -115,23 +127,35 @@ export default function PostCard({ post }: { post: Tpost }) {
     setVisibleComments((prev) => !prev);
   };
 
-  const handleUpvote = () => {
-    if (Upvoted) {
-      setCurrentVotes((prev) => Math.max(0, prev - 1));
-      setUpvoted(false);
-    } else {
-      setCurrentVotes((prev) => Math.max(0, prev + 1));
-      setUpvoted(true);
+  const handleUpvote = async () => {
+    const newVoteCount = Upvoted ? currentVotes - 1 : currentVotes + 1;
+    const updatedVoteCount = newVoteCount;
+    setCurrentVotes(updatedVoteCount);
+    setUpvoted(!Upvoted);
+
+    try {
+      await UpdatePost(
+        { votes: updatedVoteCount, upvoted: !Upvoted },
+        postId as string
+      );
+    } catch (error) {
+      console.error("Failed to update:", error);
     }
   };
 
-  const handleDownvote = () => {
-    if (Downvoted) {
-      setCurrentVotes((prev) => Math.max(prev + 1));
-      setDownvoted(false);
-    } else {
-      setCurrentVotes((prev) => Math.max(prev - 1));
-      setDownvoted(true);
+  const handleDownvote = async () => {
+    const newVoteCount = Downvoted ? currentVotes + 1 : currentVotes - 1;
+    const updatedVoteCount = newVoteCount;
+    setCurrentVotes(updatedVoteCount);
+    setDownvoted(!Downvoted);
+
+    try {
+      await UpdatePost(
+        { votes: updatedVoteCount, downvoted: !Downvoted },
+        postId as string
+      );
+    } catch (error) {
+      console.error("Failed to update:", error);
     }
   };
 

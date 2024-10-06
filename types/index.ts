@@ -39,6 +39,8 @@ export type Tpost = {
   isPremium: boolean;
   images: string[];
   videos: string[];
+  upvoted: boolean;
+  downvoted: boolean;
   comments: TComment[];
 };
 

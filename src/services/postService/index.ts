@@ -26,6 +26,19 @@ export const Post = async (Postdata: Tpost) => {
   }
 };
 
+export const UpdatePost = async (Postdata: Partial<Tpost>, postId: string) => {
+  console.log(Postdata);
+  try {
+    const { data } = await axiosInstance.put(`api/post/${postId}`, Postdata);
+    console.log("updated:------", data);
+
+    return data;
+  } catch (error: any) {
+    console.log("Error occurred:", error.message || error);
+    throw new Error(error);
+  }
+};
+
 export async function getPosts() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/post`, {
     next: {
@@ -40,4 +53,22 @@ export async function getPosts() {
   );
 
   return data;
+}
+
+export async function getSinglePost(postId: string) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/api/post/${postId}`,
+      {
+        next: {
+          tags: ["posts"],
+        },
+      }
+    );
+    const data = await res.json();
+    return data;
+  } catch (error: any) {
+    console.log("Error occurred:", error.message || error);
+    throw new Error(error);
+  }
 }

@@ -35,7 +35,7 @@ const CommentPostCard = ({
 
   return (
     <div>
-      <Card className="mx-auto max-w-[1000px] mt-5">
+      <Card className="mx-auto max-w-[1000px] mt-5 mb-5">
         <CardBody>
           <Input
             label="Add a comment"
