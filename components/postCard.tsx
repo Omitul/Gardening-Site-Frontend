@@ -129,13 +129,18 @@ export default function PostCard({ post }: { post: Tpost }) {
 
   const handleUpvote = async () => {
     const newVoteCount = Upvoted ? currentVotes - 1 : currentVotes + 1;
-    const updatedVoteCount = newVoteCount;
+    let updatedVoteCount = Math.max(newVoteCount, 0);
     setCurrentVotes(updatedVoteCount);
     setUpvoted(!Upvoted);
+    if (Downvoted) {
+      setDownvoted(false);
+      updatedVoteCount += 1;
+      setCurrentVotes(updatedVoteCount);
+    }
 
     try {
       await UpdatePost(
-        { votes: updatedVoteCount, upvoted: !Upvoted },
+        { votes: updatedVoteCount, upvoted: !Upvoted, downvoted: false },
         postId as string
       );
     } catch (error) {
@@ -145,13 +150,18 @@ export default function PostCard({ post }: { post: Tpost }) {
 
   const handleDownvote = async () => {
     const newVoteCount = Downvoted ? currentVotes + 1 : currentVotes - 1;
-    const updatedVoteCount = newVoteCount;
+    let updatedVoteCount = newVoteCount;
     setCurrentVotes(updatedVoteCount);
     setDownvoted(!Downvoted);
+    if (Upvoted) {
+      setUpvoted(false);
+      updatedVoteCount -= 1;
+      setCurrentVotes(updatedVoteCount);
+    }
 
     try {
       await UpdatePost(
-        { votes: updatedVoteCount, downvoted: !Downvoted },
+        { votes: updatedVoteCount, downvoted: !Downvoted, upvoted: false },
         postId as string
       );
     } catch (error) {
