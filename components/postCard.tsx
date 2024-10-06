@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import {
   Card,
   CardHeader,
@@ -246,14 +247,14 @@ export default function PostCard({ post }: { post: Tpost }) {
           {isPremium && (
             <span className="text-red-600 font-semibold">Premium Post</span>
           )}
-          <div className="flex gap-2">
+          <div className="flex">
             <Button
               size="sm"
               variant="bordered"
               onPress={handleUpvote}
-              className={Upvoted ? "bg-blue-500" : ""}
+              className={Upvoted ? "bg-orange-500" : ""}
             >
-              Upvote
+              <FaArrowUp />
             </Button>
             <Button
               size="sm"
@@ -261,7 +262,7 @@ export default function PostCard({ post }: { post: Tpost }) {
               onPress={handleDownvote}
               className={Downvoted ? "bg-blue-500" : ""}
             >
-              Downvote
+              <FaArrowDown />
             </Button>
           </div>
         </CardFooter>
