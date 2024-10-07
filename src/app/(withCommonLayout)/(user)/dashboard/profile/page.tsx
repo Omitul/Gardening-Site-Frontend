@@ -13,10 +13,7 @@ const PostCreation = () => {
         <UserProfileCard />
       </div>
 
-      <div>
-        {/* to post */}
-        <PostModal isOpen={isOpen} onOpenChange={onOpenChange} />
-      </div>
+      <div>{/* to post */}</div>
     </div>
   );
 };

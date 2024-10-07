@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { getUser } from "@/src/services/authService";
-import { Card, Image } from "@nextui-org/react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { getUser, updateUser } from "@/src/services/authService";
+import { Button, Card, Image } from "@nextui-org/react";
 import { Tpost, TUser } from "@/types";
 import { getPostById } from "@/src/services/postService";
 import PostCard from "./postCard";
@@ -9,10 +9,17 @@ import MyFollowers from "./MyFollowers";
 import MyFollowings from "./MyFollowings";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import uploadImage from "@/src/lib/imageUpload";
 
 export type FetchedUserData = Pick<
   TUser,
-  "username" | "followers" | "verified" | "accountType" | "following" | "_id"
+  | "username"
+  | "followers"
+  | "verified"
+  | "accountType"
+  | "following"
+  | "_id"
+  | "profilePicture"
 >;
 
 export default function UserProfileCard() {
@@ -21,6 +28,7 @@ export default function UserProfileCard() {
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowings, setShowFollowings] = useState(false);
   const [followingCount, setFollowingCount] = useState(0);
+  const [profilePic, setProfilePic] = useState<File | null>(null);
 
   useEffect(() => {
     const loader = async () => {
@@ -43,6 +51,65 @@ export default function UserProfileCard() {
 
     loader();
   }, []);
+
+  const handleProfilePicUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      const uploadedURLs = await Promise.all(
+        files.map(async (file) => {
+          try {
+            return await uploadImage(file);
+          } catch (error) {
+            console.error("Error:--", error);
+            return null;
+          }
+        })
+      );
+
+      const successfulUploads = uploadedURLs.filter(
+        (url): url is string => url !== null
+      );
+
+      if (successfulUploads.length > 0) {
+        const newProfilePicUrl = successfulUploads[0];
+        await updateUser(user?._id as string, {
+          profilePicture: newProfilePicUrl,
+        });
+        setUser((prev) =>
+          prev ? { ...prev, profilePicture: newProfilePicUrl } : null
+        );
+        setProfilePic(null);
+      }
+    }
+  };
+
+  const uploadProfilePic = async () => {
+    if (profilePic && user) {
+      const uploadedUrl = await uploadImage(profilePic);
+      if (uploadedUrl) {
+        try {
+          await updateUser(user._id as string, {
+            profilePicture: uploadedUrl,
+          });
+          setUser((prev) =>
+            prev ? { ...prev, profilePicture: uploadedUrl } : null
+          );
+          Swal.fire({
+            icon: "success",
+            title: "Profile picture updated!",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+        } catch (error) {
+          console.error("Failed to upload profile picture:", error);
+        }
+      } else {
+        toast.error("Failed to upload image.");
+      }
+    } else {
+      toast.error("No profile picture selected.");
+    }
+  };
 
   const handleShowFollowers = () => {
     setShowFollowers(!showFollowers);
@@ -74,10 +141,24 @@ export default function UserProfileCard() {
           <Image
             alt="Profile background"
             className="object-cover rounded-lg mb-4"
-            src="https://nextui.org/images/hero-card-complete.jpeg"
+            src={user.profilePicture}
             width={600}
             height={350}
           />
+          <input
+            type="file"
+            onChange={(e) => {
+              if (e.target.files) {
+                setProfilePic(e.target.files[0]);
+              }
+            }}
+          ></input>
+          <Button
+            onClick={uploadProfilePic}
+            className="mt-2 bg-blue-500 text-white p-2 rounded-md"
+          >
+            Upload Profile Picture
+          </Button>
           <h4 className="font-bold text-xl mb-2">{user.username}</h4>{" "}
           <p className="text-white-600 font-bold mt-2 bg-amber-400 p-2 rounded-md">
             Followers: {user.followers?.length || 0}
@@ -101,18 +182,18 @@ export default function UserProfileCard() {
             </span>
           </p>
           <div className="flex flex-row gap-x-2">
-            <span
+            <Button
               className="bg-slate-900 text-white rounded-lg border-dotted w-1/2 text-center mt-2 p-2 cursor-pointer"
               onClick={handleShowFollowers}
             >
               My Followers
-            </span>
-            <span
+            </Button>
+            <Button
               className="bg-slate-900 text-white rounded-lg border-dotted w-1/2 text-center mt-2 p-2 cursor-pointer"
               onClick={handleShowFollowings}
             >
               My Followings
-            </span>
+            </Button>
           </div>
           {showFollowers && (
             <MyFollowers
