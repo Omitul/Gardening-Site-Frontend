@@ -13,6 +13,7 @@ import {
 import { getAuthor, getUser, updateUser } from "@/src/services/authService";
 import { TUser } from "@/types";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 interface FollowingModalProps {
   isOpen: boolean;
@@ -97,6 +98,8 @@ const MyFollowings: React.FC<FollowingModalProps> = ({
       handleFollowingCount(); ///following   count update
 
       setUnfollowed(!unFollowed);
+
+      toast.success("You unfollowed this person!");
     } catch (error) {
       console.error("Error unfollowing user:", error);
     }
