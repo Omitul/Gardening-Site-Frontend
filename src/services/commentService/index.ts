@@ -43,11 +43,11 @@ export const getComments = async (id: string) => {
     );
     const res = await response.json();
     console.log("REEEEEEEEEEEEEEEEEES", res);
-    res?.data?.sort(
-      (a: TComment, b: TComment) =>
-        new Date(b.createdAt as Date).getTime() -
-        new Date(a.createdAt as Date).getTime()
-    );
+    // res?.data?.sort((a: TComment, b: TComment) => {
+    //   const dateA = new Date(a.createdAt as Date);
+    //   const dateB = new Date(b.createdAt as Date);
+    //   dateA.getTime() - dateB.getTime();
+    // });
     return res;
   } catch (error) {
     console.error("Failed to fetch comments:", error);

@@ -4,6 +4,8 @@ import { Card, CardBody, Input } from "@nextui-org/react";
 import { TComment } from "@/types";
 import { handleCommentSubmit } from "./handleCommentSubmit";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 const CommentPostCard = ({
   postId,
   userId,
@@ -32,6 +34,13 @@ const CommentPostCard = ({
           setComments((prev) => [...prev, commentData]);
           setVisibleComments(true);
           router.refresh();
+
+          Swal.fire({
+            icon: "success",
+            title: "Comment Posted!",
+            text: "",
+            confirmButtonText: "OK",
+          });
         }
         console.log("hmm", res);
       });
