@@ -52,37 +52,6 @@ export default function UserProfileCard() {
     loader();
   }, []);
 
-  const handleProfilePicUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      const uploadedURLs = await Promise.all(
-        files.map(async (file) => {
-          try {
-            return await uploadImage(file);
-          } catch (error) {
-            console.error("Error:--", error);
-            return null;
-          }
-        })
-      );
-
-      const successfulUploads = uploadedURLs.filter(
-        (url): url is string => url !== null
-      );
-
-      if (successfulUploads.length > 0) {
-        const newProfilePicUrl = successfulUploads[0];
-        await updateUser(user?._id as string, {
-          profilePicture: newProfilePicUrl,
-        });
-        setUser((prev) =>
-          prev ? { ...prev, profilePicture: newProfilePicUrl } : null
-        );
-        setProfilePic(null);
-      }
-    }
-  };
-
   const uploadProfilePic = async () => {
     if (profilePic && user) {
       const uploadedUrl = await uploadImage(profilePic);
@@ -96,10 +65,11 @@ export default function UserProfileCard() {
           );
           Swal.fire({
             icon: "success",
-            title: "Profile picture updated!",
+            title: "Profile picture uploaded!",
             showConfirmButton: false,
             timer: 2000,
           });
+          setProfilePic(null);
         } catch (error) {
           console.error("Failed to upload profile picture:", error);
         }
