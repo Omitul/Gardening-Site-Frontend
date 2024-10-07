@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { getUser, updateUser } from "@/src/services/authService";
 import { Button, Card, Image } from "@nextui-org/react";
 import { Tpost, TUser } from "@/types";
@@ -29,6 +29,7 @@ export default function UserProfileCard() {
   const [showFollowings, setShowFollowings] = useState(false);
   const [followingCount, setFollowingCount] = useState(0);
   const [profilePic, setProfilePic] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loader = async () => {
@@ -70,6 +71,9 @@ export default function UserProfileCard() {
             timer: 2000,
           });
           setProfilePic(null);
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
         } catch (error) {
           console.error("Failed to upload profile picture:", error);
         }
@@ -117,6 +121,7 @@ export default function UserProfileCard() {
           />
           <input
             type="file"
+            ref={fileInputRef}
             onChange={(e) => {
               if (e.target.files) {
                 setProfilePic(e.target.files[0]);
