@@ -7,6 +7,8 @@ import PostCard from "./postCard";
 import CreatePostSection from "./createPostSection";
 import MyFollowers from "./MyFollowers";
 import MyFollowings from "./MyFollowings";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 export type FetchedUserData = Pick<
   TUser,
@@ -51,6 +53,12 @@ export default function UserProfileCard() {
 
   const handleFollowingCount = () => {
     setFollowingCount((prev) => prev - 1);
+    Swal.fire({
+      icon: "success",
+      title: "You unfollowed this person!",
+      showConfirmButton: false,
+      timer: 2000,
+    });
   };
 
   console.log("posts", posts);

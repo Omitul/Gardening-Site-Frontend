@@ -98,8 +98,6 @@ const MyFollowings: React.FC<FollowingModalProps> = ({
       handleFollowingCount(); ///following   count update
 
       setUnfollowed(!unFollowed);
-
-      toast.success("You unfollowed this person!");
     } catch (error) {
       console.error("Error unfollowing user:", error);
     }
