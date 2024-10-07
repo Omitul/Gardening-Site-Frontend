@@ -5,6 +5,8 @@ import { Tpost, TUser } from "@/types";
 import { getPostById } from "@/src/services/postService";
 import PostCard from "./postCard";
 import CreatePostSection from "./createPostSection";
+import MyFollowers from "./MyFollowers";
+import MyFollowings from "./MyFollowings";
 
 export type FetchedUserData = Pick<
   TUser,
@@ -14,6 +16,9 @@ export type FetchedUserData = Pick<
 export default function UserProfileCard() {
   const [user, setUser] = useState<FetchedUserData | null>(null);
   const [posts, setPosts] = useState<Tpost[]>([]);
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowings, setShowFollowings] = useState(false);
+  const [followingCount, setFollowingCount] = useState(0);
 
   useEffect(() => {
     const loader = async () => {
@@ -27,6 +32,7 @@ export default function UserProfileCard() {
           // console.log("user", user?._id);
           console.log("MYPOSTSSSSSS", MyPosts);
           setPosts(MyPosts.data);
+          setFollowingCount(fetchedUser.following?.length as number);
         }
       } catch (error) {
         console.error("Failed to fetch user:", error);
@@ -35,6 +41,17 @@ export default function UserProfileCard() {
 
     loader();
   }, []);
+
+  const handleShowFollowers = () => {
+    setShowFollowers(!showFollowers);
+  };
+  const handleShowFollowings = () => {
+    setShowFollowings(!showFollowings);
+  };
+
+  const handleFollowingCount = () => {
+    setFollowingCount((prev) => prev - 1);
+  };
 
   console.log("posts", posts);
 
@@ -54,12 +71,11 @@ export default function UserProfileCard() {
             height={350}
           />
           <h4 className="font-bold text-xl mb-2">{user.username}</h4>{" "}
-          {/* Display username */}
           <p className="text-white-600 font-bold mt-2 bg-amber-400 p-2 rounded-md">
             Followers: {user.followers?.length || 0}
           </p>
           <p className="text-white-600 font-bold mt-2 bg-amber-400 p-2 rounded-md">
-            Following: {user.following?.length || 0}
+            Following: {followingCount || 0}
           </p>
           <p className="text-white-600 font-bold mt-2 bg-amber-400 p-2 rounded-md">
             Verified: {user.verified ? "Yes" : "No"}
@@ -76,6 +92,37 @@ export default function UserProfileCard() {
               {user.accountType}
             </span>
           </p>
+          <div className="flex flex-row gap-x-2">
+            <span
+              className="bg-slate-900 text-white rounded-lg border-dotted w-1/2 text-center mt-2 p-2 cursor-pointer"
+              onClick={handleShowFollowers}
+            >
+              My Followers
+            </span>
+            <span
+              className="bg-slate-900 text-white rounded-lg border-dotted w-1/2 text-center mt-2 p-2 cursor-pointer"
+              onClick={handleShowFollowings}
+            >
+              My Followings
+            </span>
+          </div>
+          {showFollowers && (
+            <MyFollowers
+              // key={user?.followers[0]}
+              isOpen={showFollowers}
+              onOpenChange={setShowFollowers}
+              Propfollowers={(user.followers as unknown as TUser[]) || []}
+            />
+          )}
+          {showFollowings && (
+            <MyFollowings
+              // key={}
+              isOpen={showFollowings}
+              onOpenChange={setShowFollowings}
+              Propfollowings={(user.following as unknown as TUser[]) || []}
+              handleFollowingCount={handleFollowingCount}
+            />
+          )}
         </Card>
       </div>
       <div>
