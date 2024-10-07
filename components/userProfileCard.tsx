@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getUser, updateUser } from "@/src/services/authService";
 import { Button, Card, Image } from "@nextui-org/react";
 import { Tpost, TUser } from "@/types";

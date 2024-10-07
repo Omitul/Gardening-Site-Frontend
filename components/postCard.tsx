@@ -284,7 +284,15 @@ export default function PostCard({ post }: { post: Tpost }) {
         />
       )}
       {visibleComments && (
-        <CommentPostCard userId={userId} postId={postId as string} />
+        <CommentPostCard
+          userId={userId}
+          postId={postId as string}
+          setVisibleComments={(visible: boolean) => {
+            setVisibleComments(visible);
+            return visible;
+          }}
+          setComments={setComments}
+        />
       )}
     </div>
   );

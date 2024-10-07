@@ -1,12 +1,15 @@
+"use client";
+
 import "@/styles/globals.css";
-import { Metadata, Viewport } from "next";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
 import { siteConfig } from "../config/site";
 import { fontSans } from "../config/fonts";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Metadata, Viewport } from "next";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: {
     default: "Gardening Site",
     template: `%s - ${siteConfig.name}`,
@@ -17,12 +20,15 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
+// Define viewport settings
+const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" },
   ],
 };
+
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
@@ -39,9 +45,10 @@ export default function RootLayout({
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="relative flex flex-col h-screen">
-            <main>{children}</main>
-            {/* <footer className="w-full flex items-center justify-center py-3">
+          <QueryClientProvider client={queryClient}>
+            <div className="relative flex flex-col h-screen">
+              <main>{children}</main>
+              {/* <footer className="w-full flex items-center justify-center py-3">
               <Link
                 isExternal
                 className="flex items-center gap-1 text-current"
@@ -52,7 +59,8 @@ export default function RootLayout({
                 <p className="text-primary">NextUI</p>
               </Link>
             </footer> */}
-          </div>
+            </div>
+          </QueryClientProvider>
         </Providers>
       </body>
     </html>

@@ -7,10 +7,15 @@ import { useRouter } from "next/navigation";
 const CommentPostCard = ({
   postId,
   userId,
+  setVisibleComments,
+  setComments,
 }: {
   postId: string;
   userId: string;
+  setVisibleComments: (visible: boolean) => boolean;
+  setComments: (comments: (prev: TComment[]) => TComment[]) => void;
 }) => {
+  const router = useRouter();
   const [newComment, setNewComment] = useState("");
   const handleSubmit = async () => {
     if (newComment.trim()) {
@@ -24,7 +29,9 @@ const CommentPostCard = ({
       startTransition(async () => {
         const res = await handleCommentSubmit(commentData);
         if (res.success) {
-          window.location.reload(); ///finally its working!
+          setComments((prev) => [...prev, commentData]);
+          setVisibleComments(true);
+          router.refresh();
         }
         console.log("hmm", res);
       });
