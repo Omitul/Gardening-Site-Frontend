@@ -53,3 +53,42 @@ export const getComments = async (id: string) => {
     console.error("Failed to fetch comments:", error);
   }
 };
+
+export const deleteComment = async (id: string) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/api/comment/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const res = await response.json();
+    console.log("response of delete", res);
+    return res;
+  } catch (error) {
+    console.error("Failed to delete comment:", error);
+  }
+};
+
+export const updateComment = async (id: string, payload: Partial<TComment>) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/api/comment/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+    const res = await response.json();
+    console.log("response of update", res);
+    return res;
+  } catch (error) {
+    console.error("Failed to delete comment:", error);
+  }
+};

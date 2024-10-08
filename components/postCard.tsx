@@ -18,9 +18,14 @@ import {
   updateUser,
 } from "@/src/services/authService";
 import { CommentCard } from "./commentCard";
-import { getComments } from "@/src/services/commentService";
+import {
+  deleteComment,
+  getComments,
+  updateComment,
+} from "@/src/services/commentService";
 import CommentPostCard from "./commentPostCard";
 import { getPostById, UpdatePost } from "@/src/services/postService";
+import Swal from "sweetalert2";
 
 export default function PostCard({ post }: { post: Tpost }) {
   const {
@@ -122,6 +127,43 @@ export default function PostCard({ post }: { post: Tpost }) {
     const res = await getComments(postId as string);
     console.log("asche comment?", res);
     setVisibleComments((prev) => !prev);
+  };
+
+  const handleEdit = async (commentId: string, newContent: string) => {
+    const res = await updateComment(commentId, { content: newContent });
+    console.log(res);
+
+    if (res.success)
+      ///setting newly added comment, id check kore
+      setComments((prevComments) =>
+        prevComments.map((comment: TComment) =>
+          comment._id === commentId
+            ? { ...comment, content: newContent }
+            : comment
+        )
+      );
+  };
+
+  const handleDelete = (commentId: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await deleteComment(commentId);
+        if (res.success) {
+          setComments(
+            (prev) => prev.filter((comment) => comment._id !== commentId) //state update kore dicchi
+          );
+        } else {
+          Swal.fire("Error", "Failed to delete the comment.", "error");
+        }
+      }
+    });
   };
 
   const handleUpvote = async () => {
@@ -269,6 +311,10 @@ export default function PostCard({ post }: { post: Tpost }) {
             key={comment._id}
             comment={comment}
             visibleComments={visibleComments}
+            onEdit={(newContent) =>
+              handleEdit(comment._id as string, newContent)
+            }
+            onDelete={() => handleDelete(comment._id as string)}
           />
         ))
       ) : (
@@ -280,6 +326,8 @@ export default function PostCard({ post }: { post: Tpost }) {
             post: "",
             createdAt: new Date(),
           }}
+          onEdit={() => {}}
+          onDelete={() => {}}
           visibleComments={visibleComments}
         />
       )}
