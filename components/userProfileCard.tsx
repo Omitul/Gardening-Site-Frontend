@@ -20,6 +20,7 @@ export type FetchedUserData = Pick<
   | "following"
   | "_id"
   | "profilePicture"
+  | "email"
 >;
 
 export default function UserProfileCard() {
@@ -29,6 +30,10 @@ export default function UserProfileCard() {
   const [showFollowings, setShowFollowings] = useState(false);
   const [followingCount, setFollowingCount] = useState(0);
   const [profilePic, setProfilePic] = useState<File | null>(null);
+  const [isNameModalOpen, setIsNameModalOpen] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -52,6 +57,42 @@ export default function UserProfileCard() {
 
     loader();
   }, []);
+
+  const handleUpdateName = async () => {
+    if (user && newName.trim()) {
+      try {
+        await updateUser(user._id as string, { username: newName });
+        setUser((prev) => (prev ? { ...prev, username: newName } : null));
+        setIsNameModalOpen(false);
+        Swal.fire({
+          icon: "success",
+          title: "Name updated successfully!",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      } catch (error) {
+        console.error("Error updating name:", error);
+      }
+    }
+  };
+
+  const handleUpdateEmail = async () => {
+    if (user && newEmail.trim()) {
+      try {
+        await updateUser(user._id as string, { email: newEmail });
+        setUser((prev) => (prev ? { ...prev, email: newEmail } : null));
+        setIsEmailModalOpen(false);
+        Swal.fire({
+          icon: "success",
+          title: "Email updated successfully!",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      } catch (error) {
+        console.error("Error updating email:", error);
+      }
+    }
+  };
 
   const uploadProfilePic = async () => {
     if (profilePic && user) {
@@ -134,7 +175,24 @@ export default function UserProfileCard() {
           >
             Upload Profile Picture
           </Button>
-          <h4 className="font-bold text-xl mb-2">{user.username}</h4>{" "}
+          <h4 className="font-bold text-xl mb-2">
+            {user?.username}
+            <Button
+              onClick={() => setIsNameModalOpen(true)}
+              className="ml-10 text-sm w-13 h-7 bg-black text-white mt-5"
+            >
+              Change Name
+            </Button>
+          </h4>
+          <h4 className="font-bold text-xl mb-2">
+            {user?.email}
+            <Button
+              onClick={() => setIsEmailModalOpen(true)}
+              className="ml-10 text-sm w-13 h-7 bg-black text-white"
+            >
+              Change Email
+            </Button>
+          </h4>
           <p className="text-white-600 font-bold mt-2 bg-amber-400 p-2 rounded-md">
             Followers: {user.followers?.length || 0}
           </p>
@@ -196,6 +254,53 @@ export default function UserProfileCard() {
         {posts.map((post: any) => (
           <PostCard key={post._id} post={post} />
         ))}
+      </div>
+
+      {/*adding modals, name and email change er jnno*/}
+      <div>
+        {isNameModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-30">
+            <div className="bg-white p-6 rounded-lg">
+              <h4 className="font-bold text-xl mb-4">Change Name</h4>
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                className="border p-2 rounded mb-4 w-full"
+                placeholder="Enter new name"
+              />
+              <Button
+                onClick={() => setIsNameModalOpen(false)}
+                className="mr-2"
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleUpdateName}>Confirm</Button>
+            </div>
+          </div>
+        )}
+
+        {isEmailModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-30">
+            <div className="bg-white p-6 rounded-lg">
+              <h4 className="font-bold text-xl mb-4">Change Email</h4>
+              <input
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                className="border p-2 rounded mb-4 w-full"
+                placeholder="Enter new email"
+              />
+              <Button
+                onClick={() => setIsEmailModalOpen(false)}
+                className="mr-2"
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleUpdateEmail}>Confirm</Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
