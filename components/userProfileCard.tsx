@@ -10,6 +10,8 @@ import MyFollowings from "./MyFollowings";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import uploadImage from "@/src/lib/imageUpload";
+import { TiStarFullOutline } from "react-icons/ti";
+import Link from "next/link";
 
 export type FetchedUserData = Pick<
   TUser,
@@ -228,6 +230,7 @@ export default function UserProfileCard() {
               My Followings
             </Button>
           </div>
+
           {showFollowers && (
             <MyFollowers
               // key={user?.followers[0]}
@@ -245,6 +248,17 @@ export default function UserProfileCard() {
               handleFollowingCount={handleFollowingCount}
             />
           )}
+
+          <Link
+            href="/favourite"
+            className="flex flex-row  items-center mt-5 gap-x-1"
+            passHref
+          >
+            <p className="text-yellow-500 font-bold">
+              <TiStarFullOutline />
+            </p>
+            <p className="text-xl">Favourites</p>
+          </Link>
         </Card>
       </div>
       <div>

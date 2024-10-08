@@ -1,7 +1,7 @@
 import Footer from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 
-export default function adminLayout({
+export default function PostsLayout({
   children,
 }: {
   children: React.ReactNode;
