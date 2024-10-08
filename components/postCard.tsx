@@ -237,10 +237,23 @@ export default function PostCard({ post }: { post: Tpost }) {
   const handleEditPost = async () => {
     console.log(newContent);
     try {
-      Swal.fire("Success", "Post updated successfully", "success");
+      const res = await UpdatePost({ content: newContent }, postId as string);
+      console.log("res ekhanei?", res);
+
+      if (res?.success) {
+        Swal.fire({
+          title: "Success",
+          text: "Post updated successfully!",
+          icon: "success",
+        });
+      }
       onOpenChange();
     } catch (error) {
-      Swal.fire("Error", "Failed to update post", "error");
+      Swal.fire({
+        title: "Error",
+        text: "Error updating post!",
+        icon: "error",
+      });
     }
   };
   const handleDeletePost = async () => {
@@ -314,10 +327,12 @@ export default function PostCard({ post }: { post: Tpost }) {
           )}
         </CardHeader>
         <CardBody className="px-3 py-0 text-small text-default-400">
-          <h4 className="font-semibold text-gray-500">{newTitle}</h4>
-          <span className="pt-2 text-gray-900">{newCategory}</span>
+          <h4 className="text-black font-semi-bold text-3xl">{newTitle}</h4>
+          <h5 className="pt-2 text-gray-500 text-2xl font-semibold">
+            {newCategory}
+          </h5>
 
-          <p className="mt-8 text-black ">{newContent}</p>
+          <p className="mt-8 text-black text-xl">{newContent}</p>
           {images.length > 0 && (
             <div className="my-4">
               {images.map((image, index) => (
