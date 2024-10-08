@@ -72,3 +72,23 @@ export async function getPostById(id: string) {
     throw new Error(error);
   }
 }
+
+export async function deletePost(id: string) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/api/post/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    console.log("post deleted resposne", data);
+    return data;
+  } catch (error: any) {
+    console.log("Error occurred:", error.message || error);
+    throw new Error(error);
+  }
+}

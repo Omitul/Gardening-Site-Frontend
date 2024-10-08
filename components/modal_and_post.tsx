@@ -18,6 +18,7 @@ import { getDecodedData } from "@/src/lib/jwtDecode";
 import { Post } from "@/src/services/postService";
 import { toast } from "react-toastify";
 import { Tpost } from "@/types";
+import Swal from "sweetalert2";
 
 interface PostModalProps {
   isOpen: boolean;
@@ -92,9 +93,23 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
 
       const res = await Post(postData as Tpost);
       console.log(res);
-      if (res.success) toast.success("Post created successfully!");
-      else {
+      if (res.success) {
+        Swal.fire({
+          title: "Success",
+          text: "Post uploaded successfully!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 2000,
+        }).then(() => {
+          window.location.reload();
+        });
+      } else {
         console.log("there was a problem craeting post");
+        Swal.fire({
+          title: "Error",
+          text: "Error creating post!",
+          icon: "error",
+        });
       }
 
       // Reset form fields.........
@@ -132,13 +147,13 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
                   value={category}
                   onChange={(event) => setCategory(event.target.value)}
                 >
-                  <SelectItem value="Vegetables" key="1">
+                  <SelectItem value="Vegetables" key="Vegetables">
                     Vegetables
                   </SelectItem>
-                  <SelectItem value="Flowers" key="2">
+                  <SelectItem value="Flowers" key="Flowers">
                     Flowers
                   </SelectItem>
-                  <SelectItem value="Landscaping" key="3">
+                  <SelectItem value="Landscaping" key="Landscaping">
                     Landscaping
                   </SelectItem>
                 </Select>

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { FaArrowUp, FaArrowDown, FaEllipsisV } from "react-icons/fa";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Card,
   CardHeader,
@@ -31,7 +32,11 @@ import {
   updateComment,
 } from "@/src/services/commentService";
 import CommentPostCard from "./commentPostCard";
-import { getPostById, UpdatePost } from "@/src/services/postService";
+import {
+  deletePost,
+  getPostById,
+  UpdatePost,
+} from "@/src/services/postService";
 import Swal from "sweetalert2";
 
 export default function PostCard({ post }: { post: Tpost }) {
@@ -61,7 +66,7 @@ export default function PostCard({ post }: { post: Tpost }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [newContent, setNewContent] = useState(post.content);
   const [newTitle, setnewTitle] = useState(post.title);
-  const [newCategory, setnewCategory] = useState(post.category);
+  const [newCategory, setnewCategory] = useState(category);
 
   useEffect(() => {
     const setUser = async () => {
@@ -168,11 +173,20 @@ export default function PostCard({ post }: { post: Tpost }) {
       if (result.isConfirmed) {
         const res = await deleteComment(commentId);
         if (res.success) {
+          Swal.fire({
+            title: "Success",
+            text: "Comment deleted successfully!",
+            icon: "success",
+          });
           setComments(
             (prev) => prev.filter((comment) => comment._id !== commentId) //state update kore dicchi
           );
         } else {
-          Swal.fire("Error", "Failed to delete the comment.", "error");
+          Swal.fire({
+            title: "Error",
+            text: "Error deleting comment!",
+            icon: "error",
+          });
         }
       }
     });
@@ -238,14 +252,25 @@ export default function PostCard({ post }: { post: Tpost }) {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
-      // if (result.isConfirmed) {
-      //   try {
-      //     await deletePost(postId);
-      //     Swal.fire("Deleted!", "Post has been deleted.", "success");
-      //   } catch (error) {
-      //     Swal.fire("Error", "Failed to delete post", "error");
-      //   }
-      // }
+      if (result.isConfirmed) {
+        const res = await deletePost(postId as string);
+        console.log(res);
+        if (res.success) {
+          Swal.fire({
+            title: "Success",
+            text: "Post deleted successfully!",
+            icon: "success",
+          }).then(() => {
+            window.location.reload();
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Error deleting post!",
+            icon: "error",
+          });
+        }
+      }
     });
   };
 
