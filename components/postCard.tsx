@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { FaArrowUp, FaArrowDown, FaEllipsisV } from "react-icons/fa";
 import {
   Card,
   CardHeader,
@@ -9,6 +9,13 @@ import {
   CardFooter,
   Avatar,
   Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  Input,
+  ModalFooter,
+  useDisclosure,
 } from "@nextui-org/react";
 import { TComment, Tpost } from "@/types";
 import {
@@ -50,6 +57,11 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [comments, setComments] = useState<TComment[]>([]);
   const [Upvoted, setUpvoted] = useState(false);
   const [Downvoted, setDownvoted] = useState(false);
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [newContent, setNewContent] = useState(post.content);
+  const [newTitle, setnewTitle] = useState(post.title);
+  const [newCategory, setnewCategory] = useState(post.category);
 
   useEffect(() => {
     const setUser = async () => {
@@ -208,6 +220,35 @@ export default function PostCard({ post }: { post: Tpost }) {
     }
   };
 
+  const handleEditPost = async () => {
+    console.log(newContent);
+    try {
+      Swal.fire("Success", "Post updated successfully", "success");
+      onOpenChange();
+    } catch (error) {
+      Swal.fire("Error", "Failed to update post", "error");
+    }
+  };
+  const handleDeletePost = async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      // if (result.isConfirmed) {
+      //   try {
+      //     await deletePost(postId);
+      //     Swal.fire("Deleted!", "Post has been deleted.", "success");
+      //   } catch (error) {
+      //     Swal.fire("Error", "Failed to delete post", "error");
+      //   }
+      // }
+    });
+  };
+
   return (
     <div>
       <Card className="mx-auto max-w-[1000px] mt-10 p-8">
@@ -248,8 +289,10 @@ export default function PostCard({ post }: { post: Tpost }) {
           )}
         </CardHeader>
         <CardBody className="px-3 py-0 text-small text-default-400">
-          <h4 className="font-semibold text-default-600">{title}</h4>
-          <p>{content}</p>
+          <h4 className="font-semibold text-gray-500">{newTitle}</h4>
+          <span className="pt-2 text-gray-900">{newCategory}</span>
+
+          <p className="mt-8 text-black ">{newContent}</p>
           {images.length > 0 && (
             <div className="my-4">
               {images.map((image, index) => (
@@ -262,7 +305,6 @@ export default function PostCard({ post }: { post: Tpost }) {
               ))}
             </div>
           )}
-          <span className="pt-2">{category}</span>
         </CardBody>
         <CardFooter className="gap-3">
           <div className="flex gap-1 items-center justify-center">
@@ -303,6 +345,17 @@ export default function PostCard({ post }: { post: Tpost }) {
               <FaArrowDown />
             </Button>
           </div>
+
+          {userId === author && (
+            <div className="relative">
+              <button
+                className="p-2 rounded-full text-gray-600 hover:bg-gray-100 ml-auto"
+                onClick={onOpen}
+              >
+                <FaEllipsisV />
+              </button>
+            </div>
+          )}
         </CardFooter>
       </Card>
       {comments.length > 0 ? (
@@ -342,6 +395,46 @@ export default function PostCard({ post }: { post: Tpost }) {
           setComments={setComments}
         />
       )}
+
+      <div className="max-w-6 mx-auto z-50">
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            <ModalHeader>Edit Post</ModalHeader>
+            <ModalBody>
+              <Input
+                value={newTitle}
+                onChange={(e) => setnewTitle(e.target.value)}
+                label="Title"
+                placeholder="Enter post title"
+              />
+            </ModalBody>
+
+            <ModalBody>
+              <Input
+                value={newCategory}
+                onChange={(e) => setnewCategory(e.target.value)}
+                label="Category"
+                placeholder="Enter post category"
+              />
+            </ModalBody>
+
+            <ModalBody>
+              <Input
+                value={newContent}
+                onChange={(e) => setNewContent(e.target.value)}
+                label="Content"
+                placeholder="Enter post content"
+              />
+            </ModalBody>
+
+            <ModalFooter>
+              <Button onPress={onOpenChange}>Cancel</Button>
+              <Button onPress={handleEditPost}>Save Changes</Button>
+              <Button onPress={handleDeletePost}>Delete</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </div>
     </div>
   );
 }
