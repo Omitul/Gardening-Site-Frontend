@@ -13,8 +13,9 @@ import {
   Avatar,
 } from "@nextui-org/react";
 import { TComment } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { getAuthor, getUser } from "@/src/services/authService";
 
 interface CommentCardProps {
   comment: TComment;
@@ -29,12 +30,15 @@ export const CommentCard = ({
   onEdit,
   onDelete,
 }: CommentCardProps) => {
+  // console.log("username", username);
+  const author: any = comment?.author;
+  // console.log("commentauthor", comment.author);
+
+  const { profilePicture, username } = author;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [newContent, setNewContent] = useState(comment.content);
-
-  console.log("commentauthor", comment.author);
-  const author: any = comment.author;
-  const { profilePicture, username } = author;
+  const [profilePic, setProfilePic] = useState(profilePicture);
+  const [usernameAuthor, setUsernameAuthor] = useState(username);
 
   const handleEdit = (id: string) => {
     /////calling  postcard edit function
@@ -43,6 +47,26 @@ export const CommentCard = ({
     }
     onOpenChange();
   };
+
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      let commentAuthor;
+      //the thing is that: sometimes its not populating and sometimes not!!
+      if (typeof comment.author === "object") {
+        commentAuthor = comment.author;
+      } else {
+        try {
+          commentAuthor = await getAuthor(comment.author);
+        } catch (error) {
+          console.error("Failed to fetch author:", error);
+          return;
+        }
+      }
+      setUsernameAuthor(commentAuthor?.username);
+      setProfilePic(commentAuthor?.profilePicture);
+    };
+    fetchAuthor();
+  }, [comment]);
 
   const handleDelete = (id: string) => {
     /////calling in postcard delete function
@@ -56,13 +80,8 @@ export const CommentCard = ({
           <CardBody onClick={onOpen} className="cursor-pointer">
             <div>
               <div className="flex flex-row gap-x-3 items-center mb-2">
-                <Avatar
-                  isBordered
-                  radius="full"
-                  size="md"
-                  src={profilePicture}
-                />
-                <div>{username}</div>
+                <Avatar isBordered radius="full" size="md" src={profilePic} />
+                <div>{usernameAuthor}</div>
               </div>
             </div>
             <div className="border-b py-2">
