@@ -471,6 +471,7 @@ export default function PostCard({ post }: { post: Tpost }) {
             key={comment._id}
             comment={comment}
             visibleComments={visibleComments}
+            userId={userId}
             onEdit={(newContent) =>
               handleEdit(comment._id as string, newContent)
             }
@@ -489,6 +490,7 @@ export default function PostCard({ post }: { post: Tpost }) {
           onEdit={() => {}}
           onDelete={() => {}}
           visibleComments={visibleComments}
+          userId={userId}
         />
       )}
       {visibleComments && (

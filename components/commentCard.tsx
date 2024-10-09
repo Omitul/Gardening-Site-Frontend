@@ -1,4 +1,3 @@
-"use client";
 import {
   Card,
   CardBody,
@@ -19,6 +18,7 @@ import { getAuthor, getUser } from "@/src/services/authService";
 
 interface CommentCardProps {
   comment: TComment;
+  userId: string;
   visibleComments: boolean;
   onEdit: (newContent: string, id: string) => void;
   onDelete: (id: string) => void;
@@ -29,16 +29,20 @@ export const CommentCard = ({
   visibleComments,
   onEdit,
   onDelete,
+  userId,
 }: CommentCardProps) => {
   // console.log("username", username);
   const author: any = comment?.author;
   // console.log("commentauthor", comment.author);
+
+  const isAuthor = userId === author._id;
 
   const { profilePicture, username } = author;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [newContent, setNewContent] = useState(comment.content);
   const [profilePic, setProfilePic] = useState(profilePicture);
   const [usernameAuthor, setUsernameAuthor] = useState(username);
+  // const [userId, setUserId] = useState("");
 
   const handleEdit = (id: string) => {
     /////calling  postcard edit function
@@ -49,7 +53,7 @@ export const CommentCard = ({
   };
 
   useEffect(() => {
-    const fetchAuthor = async () => {
+    const fetch = async () => {
       let commentAuthor;
       //the thing is that: sometimes its not populating and sometimes not!!
       if (typeof comment.author === "object") {
@@ -65,7 +69,7 @@ export const CommentCard = ({
       setUsernameAuthor(commentAuthor?.username);
       setProfilePic(commentAuthor?.profilePicture);
     };
-    fetchAuthor();
+    fetch();
   }, [comment]);
 
   const handleDelete = (id: string) => {
@@ -89,46 +93,48 @@ export const CommentCard = ({
             </div>
           </CardBody>
 
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-            <ModalContent>
-              {() => (
-                <>
-                  <ModalHeader className="flex flex-col gap-1">
-                    Edit Comment
-                  </ModalHeader>
-                  <ModalBody>
-                    <Input
-                      label="Comment"
-                      value={newContent}
-                      onChange={(e) => setNewContent(e.target.value)}
-                    />
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button
-                      color="danger"
-                      variant="light"
-                      onPress={() => onOpenChange()}
-                    >
-                      Close
-                    </Button>
-                    <Button
-                      color="primary"
-                      onPress={() => handleEdit(comment._id as string)}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      color="warning"
-                      variant="light"
-                      onPress={() => handleDelete(comment._id as string)}
-                    >
-                      Delete
-                    </Button>
-                  </ModalFooter>
-                </>
-              )}
-            </ModalContent>
-          </Modal>
+          {isAuthor && (
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+              <ModalContent>
+                {() => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1">
+                      Edit Comment
+                    </ModalHeader>
+                    <ModalBody>
+                      <Input
+                        label="Comment"
+                        value={newContent}
+                        onChange={(e) => setNewContent(e.target.value)}
+                      />
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button
+                        color="danger"
+                        variant="light"
+                        onPress={() => onOpenChange()}
+                      >
+                        Close
+                      </Button>
+                      <Button
+                        color="primary"
+                        onPress={() => handleEdit(comment._id as string)}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        color="warning"
+                        variant="light"
+                        onPress={() => handleDelete(comment._id as string)}
+                      >
+                        Delete
+                      </Button>
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
+          )}
         </Card>
       ) : null}
     </>
