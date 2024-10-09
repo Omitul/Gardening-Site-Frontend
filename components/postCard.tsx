@@ -74,20 +74,20 @@ export default function PostCard({ post }: { post: Tpost }) {
         const Author = await getAuthor(author._id as string);
         const res = await getComments(postId as string);
         const data = await getPostById(author._id as string);
-        console.log("voter jnno", data.data[0]); // data te array wise data ache tai
+        // console.log("voter jnno", data.data[0]); // data te array wise data ache tai
         setCurrentVotes(data?.data[0].votes);
         setDownvoted(data?.data[0].downvoted);
         setUpvoted(data?.data[0].upvoted);
         setComments(res.data);
-        console.log("asche comments:", res);
-        console.log("upvoted", Upvoted);
-        console.log("Author", Author.username);
+        // console.log("asche comments:", res);
+        // console.log("upvoted", Upvoted);
+        // console.log("Author", Author.username);
         const { email, _id } = User;
         setUserId(_id);
         setFollowers(User.followers);
         setFollowing(User.followers);
-        console.log("USERID", _id);
-        console.log("AUTHORID", author);
+        // console.log("USERID", _id);
+        // console.log("AUTHORID", author);
       } catch (error) {
         console.error("Failed fetching user:", error);
       }
@@ -112,8 +112,8 @@ export default function PostCard({ post }: { post: Tpost }) {
         updatedFollowers = followers.filter((f) => f !== userId);
       }
 
-      console.log("Updated Following:", updatedFollowing);
-      console.log("Updated Followers:", updatedFollowers);
+      // console.log("Updated Following:", updatedFollowing);
+      // console.log("Updated Followers:", updatedFollowers);
 
       try {
         await updateUser(userId as string, {
@@ -471,7 +471,6 @@ export default function PostCard({ post }: { post: Tpost }) {
             key={comment._id}
             comment={comment}
             visibleComments={visibleComments}
-            userId={userId}
             onEdit={(newContent) =>
               handleEdit(comment._id as string, newContent)
             }
@@ -490,7 +489,6 @@ export default function PostCard({ post }: { post: Tpost }) {
           onEdit={() => {}}
           onDelete={() => {}}
           visibleComments={visibleComments}
-          userId={userId}
         />
       )}
       {visibleComments && (

@@ -43,12 +43,12 @@ export default function UserProfileCard() {
       try {
         const fetchedUser: FetchedUserData = await getUser();
         setUser(fetchedUser);
-        console.log("Fetched user", fetchedUser);
+        // console.log("Fetched user", fetchedUser);
         const userId = fetchedUser?._id;
         if (userId) {
           const MyPosts = await getPostById(userId);
           // console.log("user", user?._id);
-          console.log("MYPOSTSSSSSS", MyPosts);
+          // console.log("MYPOSTSSSSSS", MyPosts);
           setPosts(MyPosts.data);
           setFollowingCount(fetchedUser.following?.length as number);
         }
@@ -145,7 +145,7 @@ export default function UserProfileCard() {
     });
   };
 
-  console.log("posts", posts);
+  // console.log("posts", posts);
 
   if (!user) {
     return <div>Loading...</div>;

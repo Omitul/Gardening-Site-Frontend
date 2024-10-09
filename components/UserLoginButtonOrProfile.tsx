@@ -48,9 +48,11 @@ export default function UserLoginButtonOrProfile() {
     setIsLoggedIn(false);
     setRole(null);
     router.push("/");
-    window.location.reload();
-  };
 
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000); // 2000 milliseconds = 2 seconds
+  };
   if (loading) {
     return null;
   }

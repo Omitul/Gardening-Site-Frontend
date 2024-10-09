@@ -5,7 +5,6 @@ import { TComment } from "@/types";
 import { handleCommentSubmit } from "./handleCommentSubmit";
 import { useRouter } from "next/navigation";
 import { FaLocationArrow } from "react-icons/fa";
-import { getUser } from "@/src/services/authService";
 import { getDecodedData } from "@/src/lib/jwtDecode";
 const CommentPostCard = ({
   postId,
@@ -47,6 +46,9 @@ const CommentPostCard = ({
           setComments((prev) => [...prev, commentData]); //just Add a new comment to the list
           setVisibleComments(true);
           router.refresh();
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         }
         console.log("hmm", res);
       });

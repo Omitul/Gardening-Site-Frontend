@@ -12,13 +12,12 @@ import {
   Avatar,
 } from "@nextui-org/react";
 import { TComment } from "@/types";
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { getAuthor, getUser } from "@/src/services/authService";
+import { useRouter } from "next/navigation";
 
 interface CommentCardProps {
   comment: TComment;
-  userId: string;
   visibleComments: boolean;
   onEdit: (newContent: string, id: string) => void;
   onDelete: (id: string) => void;
@@ -29,31 +28,36 @@ export const CommentCard = ({
   visibleComments,
   onEdit,
   onDelete,
-  userId,
 }: CommentCardProps) => {
   // console.log("username", username);
   const author: any = comment?.author;
   // console.log("commentauthor", comment.author);
 
-  const isAuthor = userId === author._id;
+  // const isAuthor = userId === author._id;
 
   const { profilePicture, username } = author;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [newContent, setNewContent] = useState(comment.content);
   const [profilePic, setProfilePic] = useState(profilePicture);
   const [usernameAuthor, setUsernameAuthor] = useState(username);
-  // const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState("");
 
   const handleEdit = (id: string) => {
     /////calling  postcard edit function
     if (newContent.trim()) {
       onEdit(newContent, id);
+      onOpen();
     }
     onOpenChange();
   };
 
   useEffect(() => {
     const fetch = async () => {
+      const user = await getUser();
+      if (user) {
+        setUserId(user._id);
+      }
+
       let commentAuthor;
       //the thing is that: sometimes its not populating and sometimes not!!
       if (typeof comment.author === "object") {
@@ -70,7 +74,9 @@ export const CommentCard = ({
       setProfilePic(commentAuthor?.profilePicture);
     };
     fetch();
-  }, [comment]);
+  }, []);
+
+  const isAuthor = userId === author._id;
 
   const handleDelete = (id: string) => {
     /////calling in postcard delete function

@@ -84,12 +84,12 @@ const MyFollowings: React.FC<FollowingModalProps> = ({
         following: updateFollowingFromUser,
       });
 
-      const updatedPerson = await updateUser(followingId, {
+      await updateUser(followingId, {
         followers: updateFollowers,
       });
 
-      console.log(updatedPerson);
-      console.log(updatedUser);
+      // console.log(updatedPerson);
+      // console.log(updatedUser);
 
       setFollowings((prev) =>
         prev.filter((following) => following._id !== followingId)

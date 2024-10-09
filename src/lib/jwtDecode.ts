@@ -6,7 +6,7 @@ import { getAccessToken } from "../services/authService/getCookie";
 
 export const getDecodedData = async () => {
   const token = (await getAccessToken()) as string;
-  console.log("TOKEN:", token);
+  // console.log("TOKEN:", token);
 
   if (!token) {
     return null;
