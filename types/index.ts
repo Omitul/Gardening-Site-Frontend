@@ -20,7 +20,7 @@ export type TUser = {
   username: string;
   email: string;
   password: string;
-  profilePicture: string;
+  profilePicture?: string;
   role: "user" | "admin";
   following?: string[];
   followers?: string[];
@@ -34,7 +34,7 @@ export type Tpost = {
   _id?: string;
   title: string;
   content: string;
-  author: string;
+  author: TUser;
   category: string;
   votes: number;
   createdAt: Date;

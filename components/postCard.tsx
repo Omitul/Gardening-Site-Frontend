@@ -18,7 +18,7 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
-import { TComment, Tpost } from "@/types";
+import { TComment, Tpost, TUser } from "@/types";
 import {
   getAuthor,
   getUser,
@@ -52,14 +52,11 @@ export default function PostCard({ post }: { post: Tpost }) {
   } = post;
 
   const [isFollowed, setIsFollowed] = useState(false);
-  const [Authorname, setAuthorname] = useState("");
-  const [Authoremail, setAuthoremail] = useState("");
   const [AuthorId, setAuthorId] = useState("");
   const [currentVotes, setCurrentVotes] = useState<number>(votes | 0);
   const [following, setFollowing] = useState<string[]>([]);
   const [followers, setFollowers] = useState<string[]>([]);
   const [userId, setUserId] = useState("");
-  const [userProfilePic, setuserProfilePic] = useState("");
   const [visibleComments, setVisibleComments] = useState(false);
   const [comments, setComments] = useState<TComment[]>([]);
   const [Upvoted, setUpvoted] = useState(false);
@@ -74,10 +71,9 @@ export default function PostCard({ post }: { post: Tpost }) {
     const SetStates = async () => {
       try {
         const User = await getUser();
-        setuserProfilePic(User.profilePicture);
-        const Author = await getAuthor(author);
+        const Author = await getAuthor(author._id as string);
         const res = await getComments(postId as string);
-        const data = await getPostById(author as string);
+        const data = await getPostById(author._id as string);
         console.log("voter jnno", data.data[0]); // data te array wise data ache tai
         setCurrentVotes(data?.data[0].votes);
         setDownvoted(data?.data[0].downvoted);
@@ -87,9 +83,6 @@ export default function PostCard({ post }: { post: Tpost }) {
         console.log("upvoted", Upvoted);
         console.log("Author", Author.username);
         const { email, _id } = User;
-        setAuthorname(Author?.username);
-        setAuthoremail(Author?.email);
-        setAuthorId(Author?._id);
         setUserId(_id);
         setFollowers(User.followers);
         setFollowing(User.followers);
@@ -104,18 +97,18 @@ export default function PostCard({ post }: { post: Tpost }) {
   }, []);
 
   const handleFollow = async () => {
-    if (userId && userId !== author) {
+    if (userId && userId !== author._id) {
       const FollowOrNot = !isFollowed;
       setIsFollowed(FollowOrNot);
 
-      let updatedFollowing;
-      let updatedFollowers;
+      let updatedFollowing: string[];
+      let updatedFollowers: string[];
 
       if (FollowOrNot) {
-        updatedFollowing = [...following, author];
+        updatedFollowing = [...following, ...(author?._id ? [author._id] : [])];
         updatedFollowers = [...followers, userId];
       } else {
-        updatedFollowing = following.filter((f) => f !== author);
+        updatedFollowing = following.filter((f) => f !== author?._id);
         updatedFollowers = followers.filter((f) => f !== userId);
       }
 
@@ -123,7 +116,7 @@ export default function PostCard({ post }: { post: Tpost }) {
       console.log("Updated Followers:", updatedFollowers);
 
       try {
-        await updateUser(userId, {
+        await updateUser(userId as string, {
           following: updatedFollowing,
         });
       } catch (error) {
@@ -131,7 +124,7 @@ export default function PostCard({ post }: { post: Tpost }) {
       }
 
       try {
-        await updateAuthor(author, {
+        await updateAuthor(author._id as string, {
           followers: updatedFollowers,
         });
       } catch (error) {
@@ -225,6 +218,13 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   const handleDownvote = async () => {
+    if (!userId) {
+      Swal.fire({
+        text: "You can't downvote! login first!",
+        icon: "error",
+      });
+      return;
+    }
     if (userId === AuthorId) {
       Swal.fire({
         text: "You can't downvote your post!",
@@ -253,6 +253,13 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   const handleAddtoFavourite = async () => {
+    if (!userId) {
+      Swal.fire({
+        text: `Login first or Get registered!`,
+        icon: "error",
+      });
+      return;
+    }
     const User = await getUser();
     console.log("User", User);
 
@@ -343,13 +350,18 @@ export default function PostCard({ post }: { post: Tpost }) {
       <Card className="mx-auto max-w-[1000px] mt-10 p-8">
         <CardHeader className="justify-between">
           <div className="flex gap-5">
-            <Avatar isBordered radius="full" size="md" src={userProfilePic} />
+            <Avatar
+              isBordered
+              radius="full"
+              size="md"
+              src={post.author?.profilePicture}
+            />
             <div className="flex flex-col gap-1 items-start justify-center">
               <h4 className="text-small font-semibold leading-none text-default-600">
-                {Authorname}
+                {post.author?.username}
               </h4>
               <h5 className="text-small tracking-tight text-default-400">
-                {Authoremail}
+                {post.author?.email}
               </h5>
             </div>
           </div>
@@ -432,7 +444,7 @@ export default function PostCard({ post }: { post: Tpost }) {
             </Button>
           </div>
 
-          {userId === author && (
+          {userId === author._id && (
             <div className="relative">
               <button
                 className="p-2 rounded-full text-gray-600 hover:bg-gray-100 ml-auto"

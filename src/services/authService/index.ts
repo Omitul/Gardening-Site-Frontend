@@ -40,9 +40,15 @@ export const registerUser = async (userData: registerData) => {
 };
 
 export const getUser = async () => {
-  const { userId } = await getDecodedData();
-  console.log("UserId", userId);
-  const { data } = await axiosInstance.get(`api/user/${userId}`);
+  const user = await getDecodedData();
+  let userid;
+  console.log("usergetdecoded", user);
+  if (user) {
+    const { userId } = user;
+    userid = userId;
+  }
+  console.log("UserId", userid);
+  const { data } = await axiosInstance.get(`api/user/${userid}`);
   console.log("data etai:", data?.data);
   return data?.data;
 };
