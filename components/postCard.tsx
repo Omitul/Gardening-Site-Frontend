@@ -54,6 +54,7 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [isFollowed, setIsFollowed] = useState(false);
   const [Authorname, setAuthorname] = useState("");
   const [Authoremail, setAuthoremail] = useState("");
+  const [AuthorId, setAuthorId] = useState("");
   const [currentVotes, setCurrentVotes] = useState<number>(votes | 0);
   const [following, setFollowing] = useState<string[]>([]);
   const [followers, setFollowers] = useState<string[]>([]);
@@ -88,6 +89,7 @@ export default function PostCard({ post }: { post: Tpost }) {
         const { email, _id } = User;
         setAuthorname(Author?.username);
         setAuthoremail(Author?.email);
+        setAuthorId(Author?._id);
         setUserId(_id);
         setFollowers(User.followers);
         setFollowing(User.followers);
@@ -195,6 +197,13 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   const handleUpvote = async () => {
+    if (userId === AuthorId) {
+      Swal.fire({
+        text: "You can't upvote your post!",
+        icon: "error",
+      });
+      return;
+    }
     const newVoteCount = Upvoted ? currentVotes - 1 : currentVotes + 1;
     let updatedVoteCount = Math.max(newVoteCount, 0);
     setCurrentVotes(updatedVoteCount);
@@ -216,6 +225,13 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   const handleDownvote = async () => {
+    if (userId === AuthorId) {
+      Swal.fire({
+        text: "You can't downvote your post!",
+        icon: "error",
+      });
+      return;
+    }
     const newVoteCount = Downvoted ? currentVotes + 1 : currentVotes - 1;
     let updatedVoteCount = newVoteCount;
     setCurrentVotes(updatedVoteCount);
