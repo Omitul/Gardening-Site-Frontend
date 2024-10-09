@@ -82,8 +82,12 @@ export default function PostCard({ post }: { post: Tpost }) {
         // console.log("asche comments:", res);
         // console.log("upvoted", Upvoted);
         // console.log("Author", Author.username);
-        const { email, _id } = User;
-        setUserId(_id);
+        let userId;
+        if (User !== undefined) {
+          userId = User._id;
+        }
+        console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", userId);
+        setUserId(userId);
         setFollowers(User.followers);
         setFollowing(User.followers);
         // console.log("USERID", _id);

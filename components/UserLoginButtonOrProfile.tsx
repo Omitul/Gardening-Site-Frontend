@@ -28,7 +28,7 @@ export default function UserLoginButtonOrProfile() {
       setIsLoggedIn(!!token);
       setLoading(false);
 
-      if (token) {
+      if (token !== undefined) {
         const decodedData = await getDecodedData();
         setRole(decodedData?.role || null); ///important to manage dropdown
         const { email } = await getUser();
@@ -42,17 +42,22 @@ export default function UserLoginButtonOrProfile() {
   const handleLogin = () => {
     router.push("/login");
   };
+  const handleLogout = async () => {
+    try {
+      await logout(); // Call the logout function
+      setIsLoggedIn(false); // Update the state to reflect logout
+      setRole(null); // Clear the user role
+      router.push("/"); // Redirect to the home page
 
-  const handleLogout = () => {
-    logout();
-    setIsLoggedIn(false);
-    setRole(null);
-    router.push("/");
-
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000); // 2000 milliseconds = 2 seconds
+      // Optionally reload the page after a brief delay
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error) {
+      console.error("Logout failed:", error); // Handle any errors during logout
+    }
   };
+
   if (loading) {
     return null;
   }

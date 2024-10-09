@@ -41,6 +41,7 @@ export const registerUser = async (userData: registerData) => {
 
 export const getUser = async () => {
   const user = await getDecodedData();
+  if (user === undefined) return;
   let userid;
   console.log("usergetdecoded", user);
   if (user) {

@@ -9,7 +9,7 @@ export const getDecodedData = async () => {
   // console.log("TOKEN:", token);
 
   if (!token) {
-    return null;
+    return undefined;
   }
 
   const decoded = jwt.verify(
