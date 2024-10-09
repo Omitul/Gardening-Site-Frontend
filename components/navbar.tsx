@@ -66,7 +66,6 @@ export const Navbar = () => {
 
         <div className="flex justify-end">
           <NavbarContent className="flex gap-x-8">
-            <ThemeSwitch />
             <UserLoginButtonOrProfile />
           </NavbarContent>
         </div>

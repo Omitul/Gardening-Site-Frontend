@@ -261,9 +261,8 @@ export default function PostCard({ post }: { post: Tpost }) {
     } catch (error) {
       console.error("Error adding to favourites:", error);
       Swal.fire({
-        title: "Error",
-        text: "Error adding to favourites!",
-        icon: "error",
+        title: "Already Added",
+        text: `Error adding to favourites or the post is already added!`,
       });
     }
   };
