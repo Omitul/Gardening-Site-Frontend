@@ -8,6 +8,10 @@ export const getDecodedData = async () => {
   const token = (await getAccessToken()) as string;
   console.log("TOKEN:", token);
 
+  if (!token) {
+    return null;
+  }
+
   const decoded = jwt.verify(
     token,
     envConfig.jwt_access_secret as string

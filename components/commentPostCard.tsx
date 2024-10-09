@@ -5,6 +5,8 @@ import { TComment } from "@/types";
 import { handleCommentSubmit } from "./handleCommentSubmit";
 import { useRouter } from "next/navigation";
 import { FaLocationArrow } from "react-icons/fa";
+import { getUser } from "@/src/services/authService";
+import { getDecodedData } from "@/src/lib/jwtDecode";
 const CommentPostCard = ({
   postId,
   userId,
@@ -18,7 +20,18 @@ const CommentPostCard = ({
 }) => {
   const router = useRouter();
   const [newComment, setNewComment] = useState("");
+  const [cookies, setCookies] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchCookies = async () => {
+      const decodedData = await getDecodedData();
+      setCookies(decodedData);
+    };
+    fetchCookies();
+  }, []);
+
   const handleSubmit = async () => {
+    // console.log("user in comment", user);
     if (newComment.trim()) {
       const commentData: TComment = {
         content: newComment,
@@ -44,24 +57,26 @@ const CommentPostCard = ({
 
   return (
     <div>
-      <Card className="mx-auto max-w-[1000px] mt-5 mb-5">
-        <CardBody className="flex flex-row gap-x-3 justify-center items-center">
-          <Input
-            label="Add a comment"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            className="my-2"
-          />
-          <Button
-            size="sm"
-            variant="solid"
-            onPress={handleSubmit}
-            className="mx-auto w-24 bg-yellow-400 hover:bg-orange-300"
-          >
-            <FaLocationArrow />
-          </Button>
-        </CardBody>
-      </Card>
+      {cookies && (
+        <Card className="mx-auto max-w-[1000px] mt-5 mb-5">
+          <CardBody className="flex flex-row gap-x-3 justify-center items-center">
+            <Input
+              label="Add a comment"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              className="my-2"
+            />
+            <Button
+              size="sm"
+              variant="solid"
+              onPress={handleSubmit}
+              className="mx-auto w-24 bg-yellow-400 hover:bg-orange-300"
+            >
+              <FaLocationArrow />
+            </Button>
+          </CardBody>
+        </Card>
+      )}
     </div>
   );
 };
