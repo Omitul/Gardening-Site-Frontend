@@ -429,7 +429,7 @@ export default function PostCard({ post }: { post: Tpost }) {
 
           <div>
             <span
-              className="cursor-pointer text-orange-600 ml-96 font-semi-bold"
+              className="cursor-pointer text-orange-600 ml-96 font-semi-bold hover:text-orange-900"
               onClick={() => handleAddtoFavourite()}
             >
               Add to favourites

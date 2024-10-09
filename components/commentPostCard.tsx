@@ -56,7 +56,7 @@ const CommentPostCard = ({
             size="sm"
             variant="solid"
             onPress={handleSubmit}
-            className="mx-auto w-24 bg-yellow-400"
+            className="mx-auto w-24 bg-yellow-400 hover:bg-orange-300"
           >
             <FaLocationArrow />
           </Button>
