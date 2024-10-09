@@ -257,7 +257,9 @@ export default function UserProfileCard() {
             <p className="text-yellow-500 font-bold">
               <TiStarFullOutline />
             </p>
-            <p className="text-xl">Favourites</p>
+            <p className="text-xl font-serif font-semibold text-blue-500">
+              Favourites
+            </p>
           </Link>
         </Card>
       </div>

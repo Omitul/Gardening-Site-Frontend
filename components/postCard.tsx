@@ -69,7 +69,7 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [newCategory, setnewCategory] = useState(category);
 
   useEffect(() => {
-    const setUser = async () => {
+    const SetStates = async () => {
       try {
         const User = await getUser();
         const Author = await getAuthor(author);
@@ -96,7 +96,7 @@ export default function PostCard({ post }: { post: Tpost }) {
       }
     };
 
-    setUser();
+    SetStates();
   }, []);
 
   const handleFollow = async () => {
@@ -231,6 +231,40 @@ export default function PostCard({ post }: { post: Tpost }) {
       );
     } catch (error) {
       console.error("Failed to update:", error);
+    }
+  };
+
+  const handleAddtoFavourite = async () => {
+    const User = await getUser();
+    console.log("User", User);
+
+    try {
+      // data update koro in database to add favourites to the database
+      // part: after getting postId, Send an API request or update states as necessary, jodi states thake
+
+      const updatedFavourites = User.favourites.includes(postId)
+        ? User.favourites
+        : [...User.favourites, postId];
+
+      const res = await updateUser(userId as string, {
+        favourites: updatedFavourites,
+      });
+
+      console.log("res", res);
+      if (res.success) {
+        Swal.fire({
+          title: "Success",
+          text: "Post added to favourites!",
+          icon: "success",
+        });
+      }
+    } catch (error) {
+      console.error("Error adding to favourites:", error);
+      Swal.fire({
+        title: "Error",
+        text: "Error adding to favourites!",
+        icon: "error",
+      });
     }
   };
 
@@ -396,6 +430,15 @@ export default function PostCard({ post }: { post: Tpost }) {
               </button>
             </div>
           )}
+
+          <div>
+            <span
+              className="cursor-pointer text-orange-600 ml-96 font-semi-bold"
+              onClick={() => handleAddtoFavourite()}
+            >
+              Add to favourites
+            </span>
+          </div>
         </CardFooter>
       </Card>
       {comments.length > 0 ? (

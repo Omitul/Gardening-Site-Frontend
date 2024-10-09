@@ -26,6 +26,7 @@ export type TUser = {
   followers?: string[];
   verified?: boolean;
   posts?: string[];
+  favourites: string[];
   accountType?: "basic" | "premium";
 };
 
