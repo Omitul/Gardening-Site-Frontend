@@ -58,6 +58,7 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [following, setFollowing] = useState<string[]>([]);
   const [followers, setFollowers] = useState<string[]>([]);
   const [userId, setUserId] = useState("");
+  const [userProfilePic, setuserProfilePic] = useState("");
   const [visibleComments, setVisibleComments] = useState(false);
   const [comments, setComments] = useState<TComment[]>([]);
   const [Upvoted, setUpvoted] = useState(false);
@@ -72,6 +73,7 @@ export default function PostCard({ post }: { post: Tpost }) {
     const SetStates = async () => {
       try {
         const User = await getUser();
+        setuserProfilePic(User.profilePicture);
         const Author = await getAuthor(author);
         const res = await getComments(postId as string);
         const data = await getPostById(author as string);
@@ -325,12 +327,7 @@ export default function PostCard({ post }: { post: Tpost }) {
       <Card className="mx-auto max-w-[1000px] mt-10 p-8">
         <CardHeader className="justify-between">
           <div className="flex gap-5">
-            <Avatar
-              isBordered
-              radius="full"
-              size="md"
-              src="https://nextui.org/avatars/avatar-1.png"
-            />
+            <Avatar isBordered radius="full" size="md" src={userProfilePic} />
             <div className="flex flex-col gap-1 items-start justify-center">
               <h4 className="text-small font-semibold leading-none text-default-600">
                 {Authorname}

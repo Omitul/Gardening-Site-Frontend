@@ -4,6 +4,7 @@ import { Card, CardBody, Input } from "@nextui-org/react";
 import { TComment } from "@/types";
 import { handleCommentSubmit } from "./handleCommentSubmit";
 import { useRouter } from "next/navigation";
+import { FaLocationArrow } from "react-icons/fa";
 const CommentPostCard = ({
   postId,
   userId,
@@ -44,7 +45,7 @@ const CommentPostCard = ({
   return (
     <div>
       <Card className="mx-auto max-w-[1000px] mt-5 mb-5">
-        <CardBody>
+        <CardBody className="flex flex-row gap-x-3 justify-center items-center">
           <Input
             label="Add a comment"
             value={newComment}
@@ -57,7 +58,7 @@ const CommentPostCard = ({
             onPress={handleSubmit}
             className="mx-auto w-24 bg-yellow-400"
           >
-            POST
+            <FaLocationArrow />
           </Button>
         </CardBody>
       </Card>

@@ -10,9 +10,11 @@ import {
   Button,
   Input,
   useDisclosure,
+  Avatar,
 } from "@nextui-org/react";
 import { TComment } from "@/types";
 import { useState } from "react";
+import Image from "next/image";
 
 interface CommentCardProps {
   comment: TComment;
@@ -29,6 +31,10 @@ export const CommentCard = ({
 }: CommentCardProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [newContent, setNewContent] = useState(comment.content);
+
+  console.log("commentauthor", comment.author);
+  const author: any = comment.author;
+  const { profilePicture, username } = author;
 
   const handleEdit = (id: string) => {
     /////calling  postcard edit function
@@ -48,6 +54,17 @@ export const CommentCard = ({
       {visibleComments && comment.content ? (
         <Card className="mx-auto max-w-[1000px] mt-5">
           <CardBody onClick={onOpen} className="cursor-pointer">
+            <div>
+              <div className="flex flex-row gap-x-3 items-center mb-2">
+                <Avatar
+                  isBordered
+                  radius="full"
+                  size="md"
+                  src={profilePicture}
+                />
+                <div>{username}</div>
+              </div>
+            </div>
             <div className="border-b py-2">
               <p>{comment.content}</p>
             </div>
