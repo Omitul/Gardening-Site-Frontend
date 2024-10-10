@@ -86,7 +86,7 @@ export default function PostCard({ post }: { post: Tpost }) {
         if (User !== undefined) {
           userId = User._id;
         }
-        console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", userId);
+        // console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", userId);
         setUserId(userId);
         setFollowers(User.followers);
         setFollowing(User.followers);
