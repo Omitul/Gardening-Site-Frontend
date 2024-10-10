@@ -251,6 +251,29 @@ export default function UserProfileCard() {
             />
           )}
 
+          <div className="flex flex-col">
+            <div>
+              <Link href="/change-password">
+                <Button
+                  variant="solid"
+                  className="w-1/4 px-20 mt-2 bg-gray-900 text-white rounded-md"
+                >
+                  Change Password
+                </Button>
+              </Link>
+            </div>
+            <div>
+              <Link href="/change-password">
+                <Button
+                  variant="solid"
+                  className="w-1/4 px-20 mt-2 bg-orange-500 text-white rounded-md font-semibold"
+                >
+                  Get Verified
+                </Button>
+              </Link>
+            </div>
+          </div>
+
           <Link
             href="/favourite"
             className="flex flex-row  items-center mt-5 gap-x-1"
@@ -262,16 +285,6 @@ export default function UserProfileCard() {
             <p className="text-xl font-serif font-semibold text-blue-500">
               Favourites
             </p>
-          </Link>
-
-          <Link href="/change-password">
-            <Button
-              href="/change-password"
-              variant="solid"
-              className="w-1/4 px-20 mt-2 bg-gray-900 text-white rounded-md"
-            >
-              Change Password
-            </Button>
           </Link>
         </Card>
       </div>
