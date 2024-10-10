@@ -194,7 +194,7 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   const handleUpvote = async () => {
-    if (userId === AuthorId) {
+    if (userId === author._id) {
       Swal.fire({
         text: "You can't upvote your post!",
         icon: "error",
@@ -229,7 +229,7 @@ export default function PostCard({ post }: { post: Tpost }) {
       });
       return;
     }
-    if (userId === AuthorId) {
+    if (userId === author._id) {
       Swal.fire({
         text: "You can't downvote your post!",
         icon: "error",
@@ -369,24 +369,26 @@ export default function PostCard({ post }: { post: Tpost }) {
               </h5>
             </div>
           </div>
-          {userId && author && userId.toString() !== author.toString() && (
-            <div>
-              <Button
-                className={
-                  !isFollowed
-                    ? "bg-blue-500 text-foreground border-default-200"
-                    : "bg-gray-500 text-foreground border-default-200"
-                }
-                color="primary"
-                radius="full"
-                size="sm"
-                variant={isFollowed ? "bordered" : "solid"}
-                onPress={handleFollow}
-              >
-                {isFollowed ? "Unfollow" : "Follow"}
-              </Button>
-            </div>
-          )}
+          {userId &&
+            author._id &&
+            userId.toString() !== author._id.toString() && (
+              <div>
+                <Button
+                  className={
+                    !isFollowed
+                      ? "bg-blue-500 text-foreground border-default-200"
+                      : "bg-gray-500 text-foreground border-default-200"
+                  }
+                  color="primary"
+                  radius="full"
+                  size="sm"
+                  variant={isFollowed ? "bordered" : "solid"}
+                  onPress={handleFollow}
+                >
+                  {isFollowed ? "Unfollow" : "Follow"}
+                </Button>
+              </div>
+            )}
         </CardHeader>
         <CardBody className="px-3 py-0 text-small text-default-400">
           <h4 className="text-black font-semi-bold text-3xl">{newTitle}</h4>

@@ -5,8 +5,11 @@ import React from "react";
 
 const FavouritePosts = async () => {
   const User = await getUser();
-  const { favourites } = User;
-  console.log(favourites);
+  let favourites = [];
+  if (User) favourites = User.favourites;
+  // console.log(favourites);
+
+  console.log("FAVOURITES", favourites);
   return (
     <div>
       <div>
