@@ -268,7 +268,7 @@ export default function PostCard({ post }: { post: Tpost }) {
     }
     const User = await getUser();
     console.log("User", User);
-    if (!User) {
+    if (!User._id) {
       Swal.fire({
         text: "User not found!",
         icon: "error",
