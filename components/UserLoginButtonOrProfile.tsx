@@ -25,6 +25,7 @@ export default function UserLoginButtonOrProfile() {
   useEffect(() => {
     const checkToken = async () => {
       const token = await getAccessToken();
+      console.log("TOKEN", token);
       setIsLoggedIn(!!token);
       setLoading(false);
 
@@ -44,17 +45,16 @@ export default function UserLoginButtonOrProfile() {
   };
   const handleLogout = async () => {
     try {
-      await logout(); // Call the logout function
-      setIsLoggedIn(false); // Update the state to reflect logout
-      setRole(null); // Clear the user role
-      router.push("/"); // Redirect to the home page
+      await logout();
+      setIsLoggedIn(false);
+      setRole(null);
+      router.push("/");
 
-      // Optionally reload the page after a brief delay
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     } catch (error) {
-      console.error("Logout failed:", error); // Handle any errors during logout
+      console.error("Logout failed:", error);
     }
   };
 

@@ -41,13 +41,16 @@ export const registerUser = async (userData: registerData) => {
 
 export const getUser = async () => {
   const user = await getDecodedData();
-  if (user === undefined) return;
+  console.log("userGetuser", user);
+
+  if (!user || Object.keys(user).length === 0) return undefined;
+
   let userid;
   console.log("usergetdecoded", user);
-  if (user) {
-    const { userId } = user;
-    userid = userId;
-  }
+
+  const { userId } = user;
+  userid = userId;
+
   console.log("UserId", userid);
   const { data } = await axiosInstance.get(`api/user/${userid}`);
   console.log("data etai:", data?.data);

@@ -71,6 +71,7 @@ export default function PostCard({ post }: { post: Tpost }) {
     const SetStates = async () => {
       try {
         const User = await getUser();
+        console.log("eire eitai user", User);
         const Author = await getAuthor(author._id as string);
         const res = await getComments(postId as string);
         const data = await getPostById(author._id as string);
@@ -83,7 +84,7 @@ export default function PostCard({ post }: { post: Tpost }) {
         // console.log("upvoted", Upvoted);
         // console.log("Author", Author.username);
         let userId;
-        if (User !== undefined) {
+        if (User) {
           userId = User._id;
         }
         // console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", userId);
@@ -257,6 +258,7 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   const handleAddtoFavourite = async () => {
+    console.log("userId", userId);
     if (!userId) {
       Swal.fire({
         text: `Login first or Get registered!`,
@@ -266,19 +268,33 @@ export default function PostCard({ post }: { post: Tpost }) {
     }
     const User = await getUser();
     console.log("User", User);
+    if (!User) {
+      Swal.fire({
+        text: "User not found!",
+        icon: "error",
+      });
+      return;
+    }
+
+    // data update koro in database to add favourites to the database
+    // part: after getting postId, Send an API request or update states as necessary, jodi states thake
+
+    ///object entry nicchilo as i populated
+    const favouriteIds = Array.isArray(User?.favourites)
+      ? User.favourites.map((favourite: Tpost) =>
+          typeof favourite === "string" ? favourite : favourite._id
+        )
+      : [];
+    const updatedFavourites = favouriteIds.includes(postId)
+      ? favouriteIds
+      : [...favouriteIds, postId];
+
+    console.log("FAVOURITES", updatedFavourites);
 
     try {
-      // data update koro in database to add favourites to the database
-      // part: after getting postId, Send an API request or update states as necessary, jodi states thake
-
-      const updatedFavourites = User.favourites.includes(postId)
-        ? User.favourites
-        : [...User.favourites, postId];
-
-      const res = await updateUser(userId as string, {
+      const res = await updateUser(userId, {
         favourites: updatedFavourites,
       });
-
       console.log("res", res);
       if (res.success) {
         Swal.fire({
@@ -286,12 +302,14 @@ export default function PostCard({ post }: { post: Tpost }) {
           text: "Post added to favourites!",
           icon: "success",
         });
+      } else {
+        throw new Error("Failed to update favourites");
       }
-    } catch (error) {
-      console.error("Error adding to favourites:", error);
+    } catch (error: any) {
+      console.error("API request error:", error.message);
       Swal.fire({
-        title: "Already Added",
-        text: `Error adding to favourites or the post is already added!`,
+        text: "Failed to add post to favourites.",
+        icon: "error",
       });
     }
   };

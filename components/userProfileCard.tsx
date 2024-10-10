@@ -42,11 +42,12 @@ export default function UserProfileCard() {
     const loader = async () => {
       try {
         const fetchedUser: FetchedUserData = await getUser();
+        console.log("FEEEEEEEEEEEEEED", fetchedUser);
         setUser(fetchedUser);
         // console.log("Fetched user", fetchedUser);
         const userId = fetchedUser?._id;
-        if (userId) {
-          const MyPosts = await getPostById(userId);
+        if (!userId) {
+          const MyPosts = await getPostById(userId as string);
           // console.log("user", user?._id);
           // console.log("MYPOSTSSSSSS", MyPosts);
           setPosts(MyPosts.data);
@@ -188,12 +189,12 @@ export default function UserProfileCard() {
           </h4>
           <h4 className="font-bold text-xl mb-2">
             {user?.email}
-            <Button
+            {/* <Button
               onClick={() => setIsEmailModalOpen(true)}
               className="ml-10 text-sm w-13 h-7 bg-black text-white"
             >
               Change Email
-            </Button>
+            </Button> */}
           </h4>
           <p className="text-white-600 font-bold mt-2 bg-amber-400 p-2 rounded-md">
             Followers: {user.followers?.length || 0}
@@ -299,21 +300,21 @@ export default function UserProfileCard() {
         {isEmailModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-30">
             <div className="bg-white p-6 rounded-lg">
-              <h4 className="font-bold text-xl mb-4">Change Email</h4>
+              {/* <h4 className="font-bold text-xl mb-4">Change Email</h4>
               <input
                 type="email"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
                 className="border p-2 rounded mb-4 w-full"
                 placeholder="Enter new email"
-              />
-              <Button
+              /> */}
+              {/* <Button
                 onClick={() => setIsEmailModalOpen(false)}
                 className="mr-2"
-              >
-                Cancel
-              </Button>
-              <Button onClick={handleUpdateEmail}>Confirm</Button>
+              > */}
+              Cancel
+              {/* </Button>
+              <Button onClick={handleUpdateEmail}>Confirm</Button> */}
             </div>
           </div>
         )}
