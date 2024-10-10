@@ -317,7 +317,10 @@ export default function PostCard({ post }: { post: Tpost }) {
   const handleEditPost = async () => {
     console.log(newContent);
     try {
-      const res = await UpdatePost({ content: newContent }, postId as string);
+      const res = await UpdatePost(
+        { content: newContent, title: newTitle, category: newCategory },
+        postId as string
+      );
       console.log("res ekhanei?", res);
 
       if (res?.success) {

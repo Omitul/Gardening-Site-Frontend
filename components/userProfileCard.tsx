@@ -42,14 +42,15 @@ export default function UserProfileCard() {
     const loader = async () => {
       try {
         const fetchedUser: FetchedUserData = await getUser();
-        console.log("FEEEEEEEEEEEEEED", fetchedUser);
+        console.log("fetched", fetchedUser);
         setUser(fetchedUser);
         // console.log("Fetched user", fetchedUser);
         const userId = fetchedUser?._id;
-        if (!userId) {
+        console.log("user", userId);
+        if (userId) {
           const MyPosts = await getPostById(userId as string);
           // console.log("user", user?._id);
-          // console.log("MYPOSTSSSSSS", MyPosts);
+          console.log("MYPOSTSSSSSS", MyPosts);
           setPosts(MyPosts.data);
           setFollowingCount(fetchedUser.following?.length as number);
         }
@@ -79,23 +80,23 @@ export default function UserProfileCard() {
     }
   };
 
-  const handleUpdateEmail = async () => {
-    if (user && newEmail.trim()) {
-      try {
-        await updateUser(user._id as string, { email: newEmail });
-        setUser((prev) => (prev ? { ...prev, email: newEmail } : null));
-        setIsEmailModalOpen(false);
-        Swal.fire({
-          icon: "success",
-          title: "Email updated successfully!",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-      } catch (error) {
-        console.error("Error updating email:", error);
-      }
-    }
-  };
+  // const handleUpdateEmail = async () => {
+  //   if (user && newEmail.trim()) {
+  //     try {
+  //       await updateUser(user._id as string, { email: newEmail });
+  //       setUser((prev) => (prev ? { ...prev, email: newEmail } : null));
+  //       setIsEmailModalOpen(false);
+  //       Swal.fire({
+  //         icon: "success",
+  //         title: "Email updated successfully!",
+  //         showConfirmButton: false,
+  //         timer: 2000,
+  //       });
+  //     } catch (error) {
+  //       console.error("Error updating email:", error);
+  //     }
+  //   }
+  // };
 
   const uploadProfilePic = async () => {
     if (profilePic && user) {
@@ -267,8 +268,10 @@ export default function UserProfileCard() {
       <div>
         <CreatePostSection />
       </div>
+
+      {/*posts"*/}
       <div className="mb-5">
-        {posts.map((post: any) => (
+        {posts.map((post: Tpost) => (
           <PostCard key={post._id} post={post} />
         ))}
       </div>

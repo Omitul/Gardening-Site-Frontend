@@ -66,6 +66,7 @@ export async function getPostById(id: string) {
       }
     );
     const data = await res.json();
+    console.log("data", data);
     return data;
   } catch (error: any) {
     console.log("Error occurred:", error.message || error);
