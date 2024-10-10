@@ -97,14 +97,6 @@ export default function UserLoginButtonOrProfile() {
                 </Link>
               </DropdownItem>
 
-              <DropdownItem key="dashboard" textValue="Dashboard">
-                Dashboard
-              </DropdownItem>
-
-              <DropdownItem key="setting" textValue="Settings">
-                Settings
-              </DropdownItem>
-
               <DropdownItem
                 key="logout"
                 color="danger"
@@ -154,10 +146,6 @@ export default function UserLoginButtonOrProfile() {
 
               <DropdownItem key="dashboard" textValue="Dashboard">
                 Dashboard
-              </DropdownItem>
-
-              <DropdownItem key="setting" textValue="Settings">
-                Settings
               </DropdownItem>
 
               <DropdownItem
