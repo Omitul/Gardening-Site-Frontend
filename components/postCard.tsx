@@ -94,7 +94,7 @@ export default function PostCard({ post }: { post: Tpost }) {
         // console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", userId);
         setUserId(userId);
         setFollowers(User.followers);
-        setFollowing(User.followers);
+        setFollowing(User.following);
         // console.log("USERID", _id);
         // console.log("AUTHORID", author);
       } catch (error) {
@@ -106,6 +106,30 @@ export default function PostCard({ post }: { post: Tpost }) {
   }, []);
 
   const handleFollow = async () => {
+    if (userId === author._id) {
+      Swal.fire({
+        text: "You can't follow yourself!",
+        icon: "error",
+      });
+      return;
+    }
+
+    const isAuthorFollowed = following.some(
+      (following_) => following_ === author._id
+    );
+
+    if (isAuthorFollowed) {
+      Swal.fire({
+        text: "You are following him already!",
+      });
+      return;
+    }
+
+    Swal.fire({
+      text: "You are following him!",
+      icon: "success",
+    });
+
     if (userId && userId !== author._id) {
       const FollowOrNot = !isFollowed;
       setIsFollowed(FollowOrNot);
@@ -433,18 +457,14 @@ export default function PostCard({ post }: { post: Tpost }) {
             userId.toString() !== author._id.toString() && (
               <div>
                 <Button
-                  className={
-                    !isFollowed
-                      ? "bg-blue-500 text-foreground border-default-200"
-                      : "bg-gray-500 text-foreground border-default-200"
-                  }
+                  className="bg-blue-500 text-foreground border-default-200"
                   color="primary"
                   radius="full"
                   size="sm"
                   variant={isFollowed ? "bordered" : "solid"}
                   onPress={handleFollow}
                 >
-                  {isFollowed ? "Unfollow" : "Follow"}
+                  Follow
                 </Button>
               </div>
             )}
