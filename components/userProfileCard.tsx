@@ -263,6 +263,16 @@ export default function UserProfileCard() {
               Favourites
             </p>
           </Link>
+
+          <Link href="/change-password">
+            <Button
+              href="/change-password"
+              variant="solid"
+              className="w-1/4 px-20 mt-2 bg-gray-900 text-white rounded-md"
+            >
+              Change Password
+            </Button>
+          </Link>
         </Card>
       </div>
       <div>
