@@ -9,14 +9,15 @@ import React, { useEffect, useState } from "react";
 const Home = () => {
   const [posts, setPosts] = useState<Tpost[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
-      setLoading(true); // Set loading state to true before fetching
+      setLoading(true);
       const data = await getPosts();
+      console.log(data); // Log the fetched data
       setPosts(data?.data || []);
-      setLoading(false); // Set loading state to false after fetching
+      setLoading(false);
     };
     fetchPosts();
   }, []);
@@ -25,13 +26,13 @@ const Home = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredPosts = posts.filter((post: Tpost) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPosts = posts.filter(
+    (post: Tpost) =>
+      post && post.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  // .sort((a: Tpost, b: Tpost) => b.upvoted - a.downvoted); // Sort by upvote count
 
   if (loading) {
-    return <p>Loading...</p>; // Display loading state
+    return <p>Loading...</p>;
   }
 
   return (
@@ -48,7 +49,7 @@ const Home = () => {
         className="mt-5 mb-5 ml-4 p-2 border border-gray-300 rounded"
       />
       <div className="mt-32 mb-5">
-        {filteredPosts && filteredPosts.length > 0 ? (
+        {filteredPosts.length > 0 ? (
           filteredPosts.map((post: Tpost) => (
             <PostCard key={post._id} post={post} />
           ))

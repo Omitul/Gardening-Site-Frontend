@@ -44,6 +44,8 @@ export type Tpost = {
   upvoted: boolean;
   downvoted: boolean;
   comments: TComment[];
+  upvotes: string[];
+  downvotes: string[];
 };
 
 export type TComment = {

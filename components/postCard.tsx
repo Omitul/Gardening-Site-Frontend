@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { FaArrowUp, FaArrowDown, FaEllipsisV } from "react-icons/fa";
+import { BiSolidAddToQueue } from "react-icons/bi";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Card,
@@ -59,8 +60,8 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [userId, setUserId] = useState("");
   const [visibleComments, setVisibleComments] = useState(false);
   const [comments, setComments] = useState<TComment[]>([]);
-  const [Upvoted, setUpvoted] = useState(false);
-  const [Downvoted, setDownvoted] = useState(false);
+  const [upvotes, setUpvotes] = useState<string[]>([]);
+  const [downvotes, setDownvotes] = useState<string[]>([]);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [newContent, setNewContent] = useState(post.content);
@@ -75,10 +76,13 @@ export default function PostCard({ post }: { post: Tpost }) {
         const Author = await getAuthor(author._id as string);
         const res = await getComments(postId as string);
         const data = await getPostById(author._id as string);
+        const matchedPost = data.data.find((post: any) => post._id === postId);
         // console.log("voter jnno", data.data[0]); // data te array wise data ache tai
-        setCurrentVotes(data?.data[0].votes);
-        setDownvoted(data?.data[0].downvoted);
-        setUpvoted(data?.data[0].upvoted);
+        console.log("etaire bhai", data);
+        console.log("matchedpost", matchedPost);
+        setCurrentVotes(matchedPost.votes);
+        setDownvotes(matchedPost.downvotes);
+        setUpvotes(matchedPost.upvotes);
         setComments(res.data);
         // console.log("asche comments:", res);
         // console.log("upvoted", Upvoted);
@@ -195,28 +199,48 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   const handleUpvote = async () => {
-    if (userId === author._id) {
-      Swal.fire({
-        text: "You can't upvote your post!",
-        icon: "error",
-      });
+    if (!userId) {
+      Swal.fire({ text: "Log in first!", icon: "error" });
       return;
     }
-    const newVoteCount = Upvoted ? currentVotes - 1 : currentVotes + 1;
-    let updatedVoteCount = Math.max(newVoteCount, 0);
-    setCurrentVotes(updatedVoteCount);
-    setUpvoted(!Upvoted);
-    if (Downvoted) {
-      setDownvoted(false);
-      updatedVoteCount += 1;
-      setCurrentVotes(updatedVoteCount);
+    if (userId === author._id) {
+      Swal.fire({ text: "You can't upvote your own post!", icon: "error" });
+      return;
     }
+
+    let updatedUpvotes = Array.isArray(upvotes) ? [...upvotes] : [];
+    let updatedDownvotes = Array.isArray(downvotes) ? [...downvotes] : [];
+
+    let newVotes = currentVotes;
+
+    if (updatedUpvotes.includes(userId)) {
+      console.log("ase");
+      updatedUpvotes = updatedUpvotes.filter((id) => id !== userId); //age click kore thakle
+      newVotes -= 1;
+    } else {
+      updatedUpvotes.push(userId);
+      newVotes += 1;
+
+      if (updatedDownvotes.includes(userId)) {
+        console.log("??");
+        updatedDownvotes = updatedDownvotes.filter((id) => id !== userId); // if downvote button is pressed
+        newVotes += 1;
+      }
+    }
+    setCurrentVotes(newVotes);
+    setUpvotes(updatedUpvotes);
+    setDownvotes(updatedDownvotes);
 
     try {
       await UpdatePost(
-        { votes: updatedVoteCount, upvoted: !Upvoted, downvoted: false },
+        {
+          votes: newVotes,
+          upvotes: updatedUpvotes,
+          downvotes: updatedDownvotes,
+        } as Partial<Tpost>,
         postId as string
       );
+      setCurrentVotes(newVotes);
     } catch (error) {
       console.error("Failed to update:", error);
     }
@@ -224,34 +248,47 @@ export default function PostCard({ post }: { post: Tpost }) {
 
   const handleDownvote = async () => {
     if (!userId) {
-      Swal.fire({
-        text: "You can't downvote! login first!",
-        icon: "error",
-      });
+      Swal.fire({ text: "Log in first!", icon: "error" });
       return;
     }
     if (userId === author._id) {
-      Swal.fire({
-        text: "You can't downvote your post!",
-        icon: "error",
-      });
+      Swal.fire({ text: "You can't downvote your own post!", icon: "error" });
       return;
     }
-    const newVoteCount = Downvoted ? currentVotes + 1 : currentVotes - 1;
-    let updatedVoteCount = newVoteCount;
-    setCurrentVotes(updatedVoteCount);
-    setDownvoted(!Downvoted);
-    if (Upvoted) {
-      setUpvoted(false);
-      updatedVoteCount -= 1;
-      setCurrentVotes(updatedVoteCount);
+
+    let updatedUpvotes = Array.isArray(upvotes) ? [...upvotes] : [];
+    let updatedDownvotes = Array.isArray(downvotes) ? [...downvotes] : [];
+
+    let newVotes = currentVotes;
+
+    if (updatedDownvotes.includes(userId)) {
+      console.log("ase");
+      updatedDownvotes = updatedDownvotes.filter((id) => id !== userId); //age click kore thakle
+      newVotes += 1;
+    } else {
+      updatedDownvotes.push(userId);
+      newVotes -= 1;
+
+      if (updatedUpvotes.includes(userId)) {
+        console.log("??");
+        updatedUpvotes = updatedUpvotes.filter((id) => id !== userId); // if upvote button is pressed
+        newVotes -= 1;
+      }
     }
+    setCurrentVotes(newVotes);
+    setUpvotes(updatedUpvotes);
+    setDownvotes(updatedDownvotes);
 
     try {
       await UpdatePost(
-        { votes: updatedVoteCount, downvoted: !Downvoted, upvoted: false },
+        {
+          votes: newVotes,
+          upvotes: updatedUpvotes,
+          downvotes: updatedDownvotes,
+        } as Partial<Tpost>,
         postId as string
       );
+      setCurrentVotes(newVotes);
     } catch (error) {
       console.error("Failed to update:", error);
     }
@@ -274,7 +311,8 @@ export default function PostCard({ post }: { post: Tpost }) {
         icon: "error",
       });
       return;
-    }
+    } // console.log("Updated Following:", updatedFollowing);
+    // console.log("Updated Followers:", updatedFollowers);
 
     // data update koro in database to add favourites to the database
     // part: after getting postId, Send an API request or update states as necessary, jodi states thake
@@ -456,16 +494,16 @@ export default function PostCard({ post }: { post: Tpost }) {
             <Button
               size="sm"
               variant="bordered"
-              onPress={handleUpvote}
-              className={Upvoted ? "bg-orange-500" : ""}
+              onPress={() => handleUpvote()}
+              className="bg-orange-500"
             >
               <FaArrowUp />
             </Button>
             <Button
               size="sm"
               variant="bordered"
-              onPress={handleDownvote}
-              className={Downvoted ? "bg-blue-500" : ""}
+              onPress={() => handleDownvote()}
+              className="bg-blue-500"
             >
               <FaArrowDown />
             </Button>

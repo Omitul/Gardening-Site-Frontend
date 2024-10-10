@@ -84,6 +84,8 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
         createdAt: new Date(),
         category: category,
         comments: [],
+        upvotes: [],
+        downvotes: [],
         upvoted: false,
         downvoted: false,
         isPremium: false,
