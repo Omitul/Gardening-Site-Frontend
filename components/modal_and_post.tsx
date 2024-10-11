@@ -158,6 +158,18 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
                   <SelectItem value="Landscaping" key="Landscaping">
                     Landscaping
                   </SelectItem>
+                  <SelectItem value="Fruit Trees" key="Fruit Trees">
+                    Fruit Trees
+                  </SelectItem>
+                  <SelectItem value="Shade Trees" key="Shade Trees">
+                    Shade Trees
+                  </SelectItem>
+                  <SelectItem value="Deciduous Trees" key="Deciduous Trees">
+                    Deciduous Trees
+                  </SelectItem>
+                  <SelectItem value="Medicinal Trees" key="Medicinal Trees">
+                    Medicinal Trees
+                  </SelectItem>
                 </Select>
                 <input
                   type="file"

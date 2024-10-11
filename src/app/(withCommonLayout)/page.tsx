@@ -5,17 +5,18 @@ import QuoteDisplay from "@/components/quotesCard";
 import { getPosts } from "@/src/services/postService";
 import { Tpost } from "@/types";
 import React, { useEffect, useState } from "react";
+import { Select, SelectItem } from "@nextui-org/react";
 
 const Home = () => {
   const [posts, setPosts] = useState<Tpost[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
       const data = await getPosts();
-      console.log(data); // Log the fetched data
       setPosts(data?.data || []);
       setLoading(false);
     };
@@ -26,10 +27,27 @@ const Home = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredPosts = posts.filter(
-    (post: Tpost) =>
-      post && post.title?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
+  };
+
+  const filteredPosts = posts
+    .filter((post: Tpost) => {
+      const TitleSearch = post.title
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      const CategorySearch = post.category
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      const categoryMatch =
+        selectedCategory === "All" ||
+        post.category?.toLowerCase() === selectedCategory.toLowerCase();
+
+      return (TitleSearch || CategorySearch) && categoryMatch;
+    })
+    .sort((a, b) => b.votes - a.votes); ///search result or category result upvotes er upor sorted hoye ashbe
 
   if (loading) {
     return <p>Loading...</p>;
@@ -48,6 +66,41 @@ const Home = () => {
         onChange={handleSearchChange}
         className="mt-5 mb-5 ml-4 p-2 border border-gray-300 rounded"
       />
+      <h4 className="font-semibold font-serif ml-4 mt-4 text-xl">
+        Filter by Category
+      </h4>
+      <Select
+        value={selectedCategory}
+        onChange={(e) => handleCategoryChange(e.target.value)}
+        className="mt-2 w-1/6"
+        aria-label="Filter posts by category"
+      >
+        <SelectItem value="All" key="All">
+          All Categories
+        </SelectItem>
+        <SelectItem value="Vegetables" key="Vegetables">
+          Vegetables
+        </SelectItem>
+        <SelectItem value="Flowers" key="Flowers">
+          Flowers
+        </SelectItem>
+        <SelectItem value="Landscaping" key="Landscaping">
+          Landscaping
+        </SelectItem>
+        <SelectItem value="Fruit Trees" key="Fruit Trees">
+          Fruit Trees
+        </SelectItem>
+        <SelectItem value="Shade Trees" key="Shade Trees">
+          Shade Trees
+        </SelectItem>
+        <SelectItem value="Deciduous Trees" key="Deciduous Trees">
+          Deciduous Trees
+        </SelectItem>
+        <SelectItem value="Medicinal Trees" key="Medicinal Trees">
+          Medicinal Trees
+        </SelectItem>
+      </Select>
+
       <div className="mt-32 mb-5">
         {filteredPosts.length > 0 ? (
           filteredPosts.map((post: Tpost) => (
