@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import uploadImage from "@/src/lib/imageUpload";
 import { TiStarFullOutline } from "react-icons/ti";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export type FetchedUserData = Pick<
   TUser,
@@ -37,6 +38,8 @@ export default function UserProfileCard() {
   const [newName, setNewName] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     const loader = async () => {
@@ -97,6 +100,24 @@ export default function UserProfileCard() {
   //     }
   //   }
   // };
+
+  const handleGetVerified = () => {
+    //check if atleast one upvote is their in his posts
+
+    const isThereOneVote = posts.some((post: Tpost) => post.votes > 0);
+
+    console.log("usThereoneVote", isThereOneVote);
+    if (!isThereOneVote) {
+      Swal.fire({
+        icon: "error",
+        text: "You need at least one upvote to get verified in your posts!",
+        timer: 2000,
+      });
+      return;
+    } else {
+      router.push("/checkout");
+    }
+  };
 
   const uploadProfilePic = async () => {
     if (profilePic && user) {
@@ -263,14 +284,13 @@ export default function UserProfileCard() {
               </Link>
             </div>
             <div>
-              <Link href="/change-password">
-                <Button
-                  variant="solid"
-                  className="w-1/4 px-20 mt-2 bg-orange-500 text-white rounded-md font-semibold"
-                >
-                  Get Verified
-                </Button>
-              </Link>
+              <Button
+                variant="solid"
+                className="w-1/4 px-20 mt-2 bg-orange-500 text-white rounded-md font-semibold"
+                onClick={() => handleGetVerified()}
+              >
+                Get Verified
+              </Button>
             </div>
           </div>
 
