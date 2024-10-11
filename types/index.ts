@@ -55,3 +55,11 @@ export type TComment = {
   post: string;
   createdAt?: Date;
 };
+
+export type Torder = {
+  name: string;
+  email: string;
+  contactNo: string;
+  price: string;
+  address: string;
+};

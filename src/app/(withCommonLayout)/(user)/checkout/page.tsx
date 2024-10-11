@@ -1,41 +1,57 @@
 "use client";
+import { CreateOrder } from "@/src/services/OrderService";
+import { Torder } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [address, setAddress] = useState("");
   const [contactNo, setContactNo] = useState("");
+  const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
+    const order = {
+      name: username,
+      email: email,
+      contactNo: contactNo,
+      price: price,
+      address: address,
+    };
+
     try {
-      //   const response = await loginUser({ email, password });
-      //   if (response.success) {
-      //     toast.success("Login successful!", {
-      //       position: "top-center",
-      //     });
-      //     console.log("Login successful!", response);
-      //     setTimeout(() => {
-      //       router.push("/");
-      //     }, 2000);
-      //   } else {
-      //     toast.error(response.message || "Login failed", {
-      //       position: "top-center",
-      //     });
-      //   }
-    } catch (error) {
-      toast.error("Incorrect email or password!", {
+      const response = await CreateOrder(order as Torder);
+      if (response.success) {
+        Swal.fire({
+          title: "Success!",
+          text: "Your order has been successfully placed.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        console.log("Order successfully Created!", response);
+        setTimeout(() => {
+          router.push("/dashboard/profile");
+        }, 2000);
+      } else {
+        toast.error(response.message || "Failed to Create Order ", {
+          position: "top-center",
+        });
+      }
+    } catch (error: any) {
+      toast.error("Failed to Created Order", {
         position: "top-center",
       });
+      console.log(error.message);
     } finally {
       setLoading(false);
     }
@@ -50,6 +66,23 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
+              htmlFor="Username"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
@@ -60,38 +93,6 @@ export default function LoginForm() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="Username"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="address"
-              className="block text-sm font-medium text-gray-700"
-            >
-              address
-            </label>
-            <input
-              id="address"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
               className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               required
             />
@@ -112,6 +113,41 @@ export default function LoginForm() {
               required
             />
           </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="contactNo"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Price
+            </label>
+            <input
+              id="price"
+              type="text"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Address
+            </label>
+            <input
+              id="address"
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
+              required
+            />
+          </div>
+
           <button
             type="submit"
             className={`w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition ${
@@ -129,7 +165,7 @@ export default function LoginForm() {
           </p>
           <p>
             <span className="font-serif font-semibold">
-              1 month subscription
+              to get 1 month subscription
             </span>
           </p>
         </div>
