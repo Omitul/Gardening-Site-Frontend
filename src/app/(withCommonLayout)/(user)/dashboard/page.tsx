@@ -1,7 +1,12 @@
+import UserDashboardCard from "@/components/userDashboardCard";
 import React from "react";
 
 const UserDashboard = () => {
-  return <div>UserDashboard</div>;
+  return (
+    <div>
+      <UserDashboardCard />
+    </div>
+  );
 };
 
 export default UserDashboard;

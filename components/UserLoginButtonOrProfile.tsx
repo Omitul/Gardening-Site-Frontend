@@ -97,6 +97,12 @@ export default function UserLoginButtonOrProfile() {
                 </Link>
               </DropdownItem>
 
+              <DropdownItem key="Dashboard" textValue="Dashboard">
+                <Link href="/dashboard" passHref>
+                  Dashboard
+                </Link>
+              </DropdownItem>
+
               <DropdownItem
                 key="logout"
                 color="danger"
