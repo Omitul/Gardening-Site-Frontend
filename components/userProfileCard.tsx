@@ -233,7 +233,7 @@ export default function UserProfileCard() {
               className={
                 user.accountType === "basic"
                   ? "text-gray-700"
-                  : "text-orange-500"
+                  : "text-orange-700"
               }
             >
               {user.accountType}
