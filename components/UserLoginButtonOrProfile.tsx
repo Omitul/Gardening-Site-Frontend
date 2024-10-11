@@ -128,7 +128,7 @@ export default function UserLoginButtonOrProfile() {
     );
   else {
     return (
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4  lg:ml-44 md:ml-44">
         {isLoggedIn ? (
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
@@ -149,12 +149,22 @@ export default function UserLoginButtonOrProfile() {
                 <p className="font-semibold">{email}</p>
               </DropdownItem>
 
-              <DropdownItem key="Profile" textValue="Profile">
-                Profile
+              <DropdownItem key="Profile" textValue="My Profile">
+                {/* <DropdownItem key="followers" textValue="Followers">
+                  Followers
+                </DropdownItem>
+                <DropdownItem key="following" textValue="Following">
+                  Following
+                </DropdownItem> */}
+                <Link href="/dashboard/profile" passHref>
+                  Profile
+                </Link>
               </DropdownItem>
 
-              <DropdownItem key="dashboard" textValue="Dashboard">
-                Dashboard
+              <DropdownItem key="Dashboard" textValue="Dashboard">
+                <Link href="/admin-dashboard" passHref>
+                  Dashboard
+                </Link>
               </DropdownItem>
 
               <DropdownItem
