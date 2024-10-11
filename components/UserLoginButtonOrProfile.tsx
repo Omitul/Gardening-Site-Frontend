@@ -19,6 +19,7 @@ export default function UserLoginButtonOrProfile() {
   const [loading, setLoading] = useState<boolean>(true);
   const [role, setRole] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [profilePic, setProfilePic] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -32,8 +33,10 @@ export default function UserLoginButtonOrProfile() {
       if (token !== undefined) {
         const decodedData = await getDecodedData();
         setRole(decodedData?.role || null); ///important to manage dropdown
-        const { email } = await getUser();
+        const { email, profilePicture } = await getUser();
         setEmail(email);
+        setProfilePic(profilePicture);
+        console.log("profilePicture", profilePic);
       }
     };
 
@@ -72,7 +75,7 @@ export default function UserLoginButtonOrProfile() {
                 isBordered
                 as="button"
                 className="transition-transform"
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                src={profilePic!}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
@@ -133,7 +136,7 @@ export default function UserLoginButtonOrProfile() {
                 isBordered
                 as="button"
                 className="transition-transform"
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                src={profilePic!}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
