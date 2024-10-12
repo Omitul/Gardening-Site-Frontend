@@ -531,26 +531,24 @@ export default function PostCard({ post }: { post: Tpost }) {
             </Button>
           </div>
 
-          {userId === author._id ||
-            (role === "admin" &&
-              (role !== "admin" ? (
-                <div className="relative">
-                  <button
-                    className="p-2 rounded-full text-gray-600 hover:bg-gray-100 ml-auto"
-                    onClick={onOpen}
-                  >
-                    <FaEllipsisV />
-                  </button>
-                </div>
-              ) : (
-                <Button
-                  variant="flat"
-                  className="bg-red-500 font-bold"
-                  onPress={handleDeletePost}
-                >
-                  Delete
-                </Button>
-              )))}
+          {userId === author._id ? (
+            <div className="relative">
+              <button
+                className="p-2 rounded-full text-gray-600 hover:bg-gray-100 ml-auto"
+                onClick={onOpen}
+              >
+                <FaEllipsisV />
+              </button>
+            </div>
+          ) : role === "admin" ? (
+            <Button
+              variant="flat"
+              className="bg-red-500 font-bold"
+              onPress={handleDeletePost}
+            >
+              Delete
+            </Button>
+          ) : null}
           <div>
             <span
               className="cursor-pointer text-orange-600 ml-96 font-semi-bold hover:text-orange-900"
