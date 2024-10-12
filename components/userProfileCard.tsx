@@ -110,7 +110,7 @@ export default function UserProfileCard() {
     if (!isThereOneVote) {
       Swal.fire({
         icon: "error",
-        text: "You need at least one upvote to get verified in your posts!",
+        text: "You need at least one upvote in your posts to get verified!",
         timer: 2000,
       });
       return;
