@@ -67,7 +67,7 @@ export default function UserLoginButtonOrProfile() {
 
   if (role === "user")
     return (
-      <div className="flex items-center gap-4 lg:ml-44 md:ml-44">
+      <div className="flex items-center gap-4">
         {isLoggedIn ? (
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
@@ -128,7 +128,7 @@ export default function UserLoginButtonOrProfile() {
     );
   else {
     return (
-      <div className="flex items-center gap-4  lg:ml-44 md:ml-44">
+      <div className="flex items-center gap-4">
         {isLoggedIn ? (
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
