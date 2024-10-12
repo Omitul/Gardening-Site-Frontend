@@ -35,15 +35,15 @@ export function middleware(request: NextRequest) {
     console.log("eikhane");
 
     const routes = roleBasedRoutes[role as Role];
-    console.log("ROUTESSSSSSS", routes);
+    // console.log("ROUTESSSSSSS", routes);
 
     if (routes.some((route) => pathname.match(route))) {
-      console.log("dhukse re");
+      // console.log("dhukse");
       return NextResponse.next();
     }
   }
 
-  return NextResponse.redirect(new URL("/", request.url)); // Redirect to login if token is invalid
+  return NextResponse.redirect(new URL("/", request.url));
 }
 
 export const config = {
