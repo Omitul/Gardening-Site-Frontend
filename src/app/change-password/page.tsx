@@ -47,7 +47,7 @@ export default function NewPassword() {
       if (response) {
         toast.success("Password updated successfully.");
 
-        router.push("/dashboard/profile");
+        router.push("/profile");
       } else {
         toast.error("Failed to update password.");
       }
