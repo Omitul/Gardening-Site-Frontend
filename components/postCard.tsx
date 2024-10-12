@@ -80,8 +80,8 @@ export default function PostCard({ post }: { post: Tpost }) {
         const data = await getPostById(author._id as string);
         const matchedPost = data.data.find((post: any) => post._id === postId);
         // console.log("voter jnno", data.data[0]); // data te array wise data ache tai
-        console.log("etaire bhai", data);
-        console.log("matchedpost", matchedPost);
+        // console.log("etaire bhai", data);
+        // console.log("matchedpost", matchedPost);
         setCurrentVotes(matchedPost.votes);
         setDownvotes(matchedPost.downvotes);
         setUpvotes(matchedPost.upvotes);

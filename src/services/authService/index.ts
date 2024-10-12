@@ -8,7 +8,7 @@ export const loginUser = async (userData: LoginData) => {
   console.log(userData);
   try {
     const { data } = await axiosInstance.post("api/auth/login", userData);
-    console.log(data);
+    // console.log(data);
 
     if (data.success) {
       console.log(data?.token);
@@ -23,10 +23,10 @@ export const loginUser = async (userData: LoginData) => {
 };
 
 export const registerUser = async (userData: registerData) => {
-  console.log(userData);
+  // console.log(userData);
   try {
     const { data } = await axiosInstance.post("api/user/register", userData);
-    console.log(data);
+    // console.log(data);
 
     if (data.success) {
       console.log(data.success.message);
@@ -41,25 +41,25 @@ export const registerUser = async (userData: registerData) => {
 
 export const getUser = async () => {
   const user = await getDecodedData();
-  console.log("userGetuser", user);
+  // console.log("userGetuser", user);
 
   if (!user || Object.keys(user).length === 0) return undefined;
 
   let userid;
-  console.log("usergetdecoded", user);
+  // console.log("usergetdecoded", user);
 
   const { userId } = user;
   userid = userId;
 
-  console.log("UserId", userid);
+  // console.log("UserId", userid);
   const { data } = await axiosInstance.get(`api/user/${userid}`);
-  console.log("data etai:", data?.data);
+  // console.log("data etai:", data?.data);
   return data?.data;
 };
 
 export const getAuthor = async (id: string) => {
   const { data } = await axiosInstance.get(`api/user/${id}`);
-  console.log("Aauthor etai:", data?.data);
+  // console.log("Aauthor etai:", data?.data);
   return data?.data;
 };
 

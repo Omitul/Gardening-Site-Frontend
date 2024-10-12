@@ -42,7 +42,7 @@ export const getComments = async (id: string) => {
       }
     );
     const res = await response.json();
-    console.log("REEEEEEEEEEEEEEEEEES", res);
+    // console.log("REEEEEEEEEEEEEEEEEES", res);
     // res?.data?.sort((a: TComment, b: TComment) => {
     //   const dateA = new Date(a.createdAt as Date);
     //   const dateB = new Date(b.createdAt as Date);
@@ -86,7 +86,7 @@ export const updateComment = async (id: string, payload: Partial<TComment>) => {
       }
     );
     const res = await response.json();
-    console.log("response of update", res);
+    // console.log("response of update", res);
     return res;
   } catch (error) {
     console.error("Failed to delete comment:", error);
