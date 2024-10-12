@@ -39,9 +39,10 @@ export default function LoginForm() {
           confirmButtonText: "OK",
         });
         console.log("Order successfully Created!", response);
-        setTimeout(() => {
-          router.push("/dashboard/profile");
-        }, 2000);
+        window.location.href = response?.data?.payment_url;
+        // setTimeout(() => {
+        //   router.push("/dashboard/profile");
+        // }, 2000);
       } else {
         toast.error(response.message || "Failed to Create Order ", {
           position: "top-center",
