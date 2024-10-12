@@ -18,7 +18,7 @@ export const Post = async (Postdata: Tpost) => {
     } else {
       console.log("Success flag is false, no message to display.");
     }
-
+    console.log("postData", data);
     return data;
   } catch (error: any) {
     console.log("Error occurred:", error.message || error);

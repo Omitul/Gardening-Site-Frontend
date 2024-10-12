@@ -34,7 +34,7 @@ export default function LoginForm() {
       if (response.success) {
         Swal.fire({
           title: "Success!",
-          text: "Your order has been successfully placed.",
+          text: "Your order has been placed successfully.",
           icon: "success",
           confirmButtonText: "OK",
         });
@@ -49,7 +49,7 @@ export default function LoginForm() {
         });
       }
     } catch (error: any) {
-      toast.error("Failed to Created Order", {
+      toast.error("Failed to Create Order", {
         position: "top-center",
       });
       console.log(error.message);

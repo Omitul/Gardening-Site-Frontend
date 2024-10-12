@@ -58,6 +58,7 @@ export default function PostCard({ post }: { post: Tpost }) {
   const [following, setFollowing] = useState<string[]>([]);
   const [followers, setFollowers] = useState<string[]>([]);
   const [userId, setUserId] = useState("");
+  const [role, setRole] = useState("");
   const [visibleComments, setVisibleComments] = useState(false);
   const [comments, setComments] = useState<TComment[]>([]);
   const [upvotes, setUpvotes] = useState<string[]>([]);
@@ -73,6 +74,7 @@ export default function PostCard({ post }: { post: Tpost }) {
       try {
         const User = await getUser();
         console.log("eire eitai user", User);
+        setRole(User.role);
         const Author = await getAuthor(author._id as string);
         const res = await getComments(postId as string);
         const data = await getPostById(author._id as string);
@@ -529,17 +531,26 @@ export default function PostCard({ post }: { post: Tpost }) {
             </Button>
           </div>
 
-          {userId === author._id && (
-            <div className="relative">
-              <button
-                className="p-2 rounded-full text-gray-600 hover:bg-gray-100 ml-auto"
-                onClick={onOpen}
-              >
-                <FaEllipsisV />
-              </button>
-            </div>
-          )}
-
+          {userId === author._id ||
+            (role === "admin" &&
+              (role !== "admin" ? (
+                <div className="relative">
+                  <button
+                    className="p-2 rounded-full text-gray-600 hover:bg-gray-100 ml-auto"
+                    onClick={onOpen}
+                  >
+                    <FaEllipsisV />
+                  </button>
+                </div>
+              ) : (
+                <Button
+                  variant="flat"
+                  className="bg-red-500 font-bold"
+                  onPress={handleDeletePost}
+                >
+                  Delete
+                </Button>
+              )))}
           <div>
             <span
               className="cursor-pointer text-orange-600 ml-96 font-semi-bold hover:text-orange-900"
