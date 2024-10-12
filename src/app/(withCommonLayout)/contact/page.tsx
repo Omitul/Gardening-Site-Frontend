@@ -42,6 +42,12 @@ export default function ContactPage() {
         <h1 className="text-3xl font-bold text-center text-green-700 mb-6 animate-fadeIn">
           Contact Us
         </h1>
+        <p className="text-center text-lg text-gray-600 mb-4">
+          Email: <span className="font-semibold">admin@gmail.com</span>
+        </p>
+        <p className="text-center text-lg text-gray-600 mb-8">
+          Contact Number: <span className="font-semibold">(+88)0123456789</span>
+        </p>
         <p className="text-center text-lg text-gray-600 mb-8">
           We’d love to hear from you! Send us your feedback or questions.
         </p>
