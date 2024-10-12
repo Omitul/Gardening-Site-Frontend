@@ -2,7 +2,7 @@
 
 import UserProfileCard from "@/components/userProfileCard";
 
-const PostCreation = () => {
+const ProfilePage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="">
@@ -12,4 +12,4 @@ const PostCreation = () => {
   );
 };
 
-export default PostCreation;
+export default ProfilePage;

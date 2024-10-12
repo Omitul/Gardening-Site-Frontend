@@ -95,7 +95,7 @@ export default function UserLoginButtonOrProfile() {
                 <DropdownItem key="following" textValue="Following">
                   Following
                 </DropdownItem> */}
-                <Link href="/dashboard/profile" passHref>
+                <Link href="/profile" passHref>
                   Profile
                 </Link>
               </DropdownItem>
@@ -156,7 +156,7 @@ export default function UserLoginButtonOrProfile() {
                 <DropdownItem key="following" textValue="Following">
                   Following
                 </DropdownItem> */}
-                <Link href="/dashboard/profile" passHref>
+                <Link href="/profile" passHref>
                   Profile
                 </Link>
               </DropdownItem>
