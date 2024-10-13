@@ -26,7 +26,7 @@ export default function LoginForm() {
         });
         console.log("password reset link sent!", response);
         setTimeout(() => {
-          router.push("/forget-password/new-password");
+          router.push("/login/forget-password/new-password");
         }, 2000);
       } else {
         toast.error(response.message || "resetting failed", {

@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { getAccessToken } from "./services/authService/getCookie";
 import { jwtDecode } from "jwt-decode";
 
-const authRoutes = ["/login", "/register"];
+const authRoutes = ["/login", "/registration"];
 
 type Role = keyof typeof roleBasedRoutes;
 
@@ -51,7 +51,7 @@ export const config = {
     "/login",
     "/dashboard",
     "/admin-dashboard",
-    "/register",
+    "/registration",
     "/profile",
     "/checkout",
   ],
