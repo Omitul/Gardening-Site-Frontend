@@ -1,4 +1,4 @@
-export default function adminLayout({
+export default function registrationLayout({
   children,
 }: {
   children: React.ReactNode;
