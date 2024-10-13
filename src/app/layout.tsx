@@ -2,12 +2,13 @@
 
 import "@/styles/globals.css";
 import clsx from "clsx";
-
-import { Providers } from "./providers";
-import { siteConfig } from "../config/site";
-import { fontSans } from "../config/fonts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Metadata, Viewport } from "next";
+
+import { siteConfig } from "../config/site";
+import { fontSans } from "../config/fonts";
+
+import { Providers } from "./providers";
 
 const metadata: Metadata = {
   title: {
@@ -41,7 +42,7 @@ export default function RootLayout({
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          fontSans.variable,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>

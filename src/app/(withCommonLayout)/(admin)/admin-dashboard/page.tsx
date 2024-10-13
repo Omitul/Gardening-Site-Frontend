@@ -1,24 +1,27 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import AdminDashboardCard from "@/components/adminDashboardCard";
 import PostCard from "@/components/postCard";
 import { getPosts } from "@/src/services/postService";
 import { Tpost } from "@/types";
-import { useEffect, useState } from "react";
 
-const adminDashboard = () => {
+const AdminDashboard = () => {
   const [posts, setPosts] = useState<Tpost[]>([]);
 
   useEffect(() => {
     const loader = async () => {
       try {
         const res = await getPosts();
-        console.log("res", res);
+
+        // console.log("res", res);
         setPosts(res?.data);
       } catch (error) {
-        console.error("Failed to fetch user:", error);
+        // console.error("Failed to fetch user:", error);
       }
     };
+
     loader();
   }, []);
 
@@ -42,4 +45,4 @@ const adminDashboard = () => {
   );
 };
 
-export default adminDashboard;
+export default AdminDashboard;

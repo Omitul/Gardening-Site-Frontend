@@ -7,7 +7,8 @@ export const resetPassword = async (email: string) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email }),
-    }
+    },
   );
+
   return response.json();
 };

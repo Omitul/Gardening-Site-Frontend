@@ -1,7 +1,7 @@
 import { Torder } from "@/types";
 
 export const CreateOrder = async (payload: Torder) => {
-  console.log(payload);
+  // console.log(payload);
 
   try {
     const response = await fetch(
@@ -20,11 +20,12 @@ export const CreateOrder = async (payload: Torder) => {
     }
 
     const data = await response.json();
-    console.log("data", data);
+
+    // console.log("data", data);
 
     return data;
   } catch (error: any) {
-    console.log("Error occurred:", error.message || error);
+    // console.log("Error occurred:", error.message || error);
     throw new Error(error);
   }
 };

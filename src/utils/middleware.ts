@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   // Log the requested URL to verify the middleware is running
-  console.log("Request URL:", request.url);
+  // console.log("Request URL:", request.url);
 
   // Check if the request path is /dashboard
 

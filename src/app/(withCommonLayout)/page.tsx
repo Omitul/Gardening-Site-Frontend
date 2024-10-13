@@ -1,11 +1,12 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+import { Select, SelectItem } from "@nextui-org/react";
+
 import PostCard from "@/components/postCard";
 import QuoteDisplay from "@/components/quotesCard";
 import { getPosts } from "@/src/services/postService";
 import { Tpost } from "@/types";
-import React, { useEffect, useState } from "react";
-import { Select, SelectItem } from "@nextui-org/react";
 
 const Home = () => {
   const [posts, setPosts] = useState<Tpost[]>([]);
@@ -17,9 +18,11 @@ const Home = () => {
     const fetchPosts = async () => {
       setLoading(true);
       const data = await getPosts();
+
       setPosts(data?.data || []);
       setLoading(false);
     };
+
     fetchPosts();
   }, []);
 
@@ -60,43 +63,43 @@ const Home = () => {
         Search posts
       </h4>
       <input
-        type="text"
+        className="mt-5 mb-5 ml-4 p-2 border border-gray-300 rounded"
         placeholder="Search post here..."
+        type="text"
         value={searchTerm}
         onChange={handleSearchChange}
-        className="mt-5 mb-5 ml-4 p-2 border border-gray-300 rounded"
       />
       <h4 className="font-semibold font-serif ml-4 mt-4 text-xl">
         Filter by Category
       </h4>
       <Select
+        aria-label="Filter posts by category"
+        className="mt-2 w-1/6"
         value={selectedCategory}
         onChange={(e) => handleCategoryChange(e.target.value)}
-        className="mt-2 w-1/6"
-        aria-label="Filter posts by category"
       >
-        <SelectItem value="All" key="All">
+        <SelectItem key="All" value="All">
           All Categories
         </SelectItem>
-        <SelectItem value="Vegetables" key="Vegetables">
+        <SelectItem key="Vegetables" value="Vegetables">
           Vegetables
         </SelectItem>
-        <SelectItem value="Flowers" key="Flowers">
+        <SelectItem key="Flowers" value="Flowers">
           Flowers
         </SelectItem>
-        <SelectItem value="Landscaping" key="Landscaping">
+        <SelectItem key="Landscaping" value="Landscaping">
           Landscaping
         </SelectItem>
-        <SelectItem value="Fruit Trees" key="Fruit Trees">
+        <SelectItem key="Fruit Trees" value="Fruit Trees">
           Fruit Trees
         </SelectItem>
-        <SelectItem value="Shade Trees" key="Shade Trees">
+        <SelectItem key="Shade Trees" value="Shade Trees">
           Shade Trees
         </SelectItem>
-        <SelectItem value="Deciduous Trees" key="Deciduous Trees">
+        <SelectItem key="Deciduous Trees" value="Deciduous Trees">
           Deciduous Trees
         </SelectItem>
-        <SelectItem value="Medicinal Trees" key="Medicinal Trees">
+        <SelectItem key="Medicinal Trees" value="Medicinal Trees">
           Medicinal Trees
         </SelectItem>
       </Select>

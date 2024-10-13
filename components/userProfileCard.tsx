@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { getUser, updateUser } from "@/src/services/authService";
 import { Button, Card, Image } from "@nextui-org/react";
-import { Tpost, TUser } from "@/types";
-import { getPostById } from "@/src/services/postService";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import { TiStarFullOutline } from "react-icons/ti";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import PostCard from "./postCard";
 import CreatePostSection from "./createPostSection";
 import MyFollowers from "./MyFollowers";
 import MyFollowings from "./MyFollowings";
-import { toast } from "react-toastify";
-import Swal from "sweetalert2";
+
 import uploadImage from "@/src/lib/imageUpload";
-import { TiStarFullOutline } from "react-icons/ti";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { getPostById } from "@/src/services/postService";
+import { Tpost, TUser } from "@/types";
+import { getUser, updateUser } from "@/src/services/authService";
 
 export type FetchedUserData = Pick<
   TUser,
@@ -45,15 +47,18 @@ export default function UserProfileCard() {
     const loader = async () => {
       try {
         const fetchedUser: FetchedUserData = await getUser();
-        console.log("fetched", fetchedUser);
+
+        // console.log("fetched", fetchedUser);
         setUser(fetchedUser);
         // console.log("Fetched user", fetchedUser);
         const userId = fetchedUser?._id;
-        console.log("user", userId);
+
+        // console.log("user", userId);
         if (userId) {
           const MyPosts = await getPostById(userId as string);
+
           // console.log("user", user?._id);
-          console.log("MYPOSTSSSSSS", MyPosts);
+          // console.log("MYPOSTSSSSSS", MyPosts);
           setPosts(MyPosts.data);
           setFollowingCount(fetchedUser.following?.length as number);
         }
@@ -106,13 +111,14 @@ export default function UserProfileCard() {
 
     const isThereOneVote = posts.some((post: Tpost) => post.votes > 0);
 
-    console.log("usThereoneVote", isThereOneVote);
+    // console.log("usThereoneVote", isThereOneVote);
     if (!isThereOneVote) {
       Swal.fire({
         icon: "error",
         text: "You need at least one upvote in your posts to get verified!",
         timer: 2000,
       });
+
       return;
     } else {
       router.push("/checkout");
@@ -122,6 +128,7 @@ export default function UserProfileCard() {
   const uploadProfilePic = async () => {
     if (profilePic && user) {
       const uploadedUrl = await uploadImage(profilePic);
+
       if (uploadedUrl) {
         try {
           await updateUser(user._id as string, {
@@ -181,30 +188,30 @@ export default function UserProfileCard() {
           <Image
             alt="Profile background"
             className="object-cover rounded-lg mb-4"
+            height={350}
             src={user.profilePicture}
             width={600}
-            height={350}
           />
           <input
-            type="file"
             ref={fileInputRef}
+            type="file"
             onChange={(e) => {
               if (e.target.files) {
                 setProfilePic(e.target.files[0]);
               }
             }}
-          ></input>
+          />
           <Button
-            onClick={uploadProfilePic}
             className="mt-2 bg-blue-500 text-white p-2 rounded-md"
+            onClick={uploadProfilePic}
           >
             Upload Profile Picture
           </Button>
           <h4 className="font-bold text-xl mb-2">
             {user?.username}
             <Button
-              onClick={() => setIsNameModalOpen(true)}
               className="ml-10 text-sm w-13 h-7 bg-black text-white mt-5"
+              onClick={() => setIsNameModalOpen(true)}
             >
               Change Name
             </Button>
@@ -257,18 +264,18 @@ export default function UserProfileCard() {
           {showFollowers && (
             <MyFollowers
               // key={user?.followers[0]}
+              Propfollowers={(user.followers as unknown as TUser[]) || []}
               isOpen={showFollowers}
               onOpenChange={setShowFollowers}
-              Propfollowers={(user.followers as unknown as TUser[]) || []}
             />
           )}
           {showFollowings && (
             <MyFollowings
               // key={}
-              isOpen={showFollowings}
-              onOpenChange={setShowFollowings}
               Propfollowings={(user.following as unknown as TUser[]) || []}
               handleFollowingCount={handleFollowingCount}
+              isOpen={showFollowings}
+              onOpenChange={setShowFollowings}
             />
           )}
 
@@ -276,8 +283,8 @@ export default function UserProfileCard() {
             <div>
               <Link href="/change-password">
                 <Button
-                  variant="solid"
                   className="w-1/4 px-20 mt-2 bg-gray-900 text-white rounded-md"
+                  variant="solid"
                 >
                   Change Password
                 </Button>
@@ -285,8 +292,8 @@ export default function UserProfileCard() {
             </div>
             <div>
               <Button
-                variant="solid"
                 className="w-1/4 px-20 mt-2 bg-orange-500 text-white rounded-md font-semibold"
+                variant="solid"
                 onClick={() => handleGetVerified()}
               >
                 Get Verified
@@ -295,9 +302,9 @@ export default function UserProfileCard() {
           </div>
 
           <Link
-            href="/favourite"
-            className="flex flex-row  items-center mt-5 gap-x-1"
             passHref
+            className="flex flex-row  items-center mt-5 gap-x-1"
+            href="/favourite"
           >
             <p className="text-yellow-500 font-bold">
               <TiStarFullOutline />
@@ -326,15 +333,15 @@ export default function UserProfileCard() {
             <div className="bg-white p-6 rounded-lg">
               <h4 className="font-bold text-xl mb-4">Change Name</h4>
               <input
+                className="border p-2 rounded mb-4 w-full"
+                placeholder="Enter new name"
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className="border p-2 rounded mb-4 w-full"
-                placeholder="Enter new name"
               />
               <Button
-                onClick={() => setIsNameModalOpen(false)}
                 className="mr-2"
+                onClick={() => setIsNameModalOpen(false)}
               >
                 Cancel
               </Button>

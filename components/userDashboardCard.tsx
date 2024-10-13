@@ -1,13 +1,15 @@
 "use client";
 
 import { Button } from "@nextui-org/button";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+
 import MyFollowings from "./MyFollowings";
 import MyFollowers from "./MyFollowers";
-import { useEffect, useState } from "react";
+import PostCard from "./postCard";
+
 import { Tpost, TUser } from "@/types";
 import { getUser } from "@/src/services/authService";
-import Swal from "sweetalert2";
-import PostCard from "./postCard";
 import { getPostById } from "@/src/services/postService";
 
 export type FetchedUserData = Pick<TUser, "followers" | "following" | "_id">;
@@ -22,11 +24,14 @@ const UserDashboardCard = () => {
     const loader = async () => {
       try {
         const fetchedUser: FetchedUserData = await getUser();
-        console.log("fetched", fetchedUser);
+
+        // console.log("fetched", fetchedUser);
         setUser(fetchedUser);
         const userId = fetchedUser?._id;
+
         if (userId) {
           const MyPosts = await getPostById(userId as string);
+
           setPosts(MyPosts.data);
         }
       } catch (error) {
@@ -51,6 +56,7 @@ const UserDashboardCard = () => {
   const handleShowFollowings = () => {
     setShowFollowings(!showFollowings);
   };
+
   return (
     <div>
       <h2 className="text-3xl font-serif font-semibold text-center mt-5">
@@ -74,18 +80,18 @@ const UserDashboardCard = () => {
       {showFollowers && (
         <MyFollowers
           // key={user?.followers[0]}
+          Propfollowers={(user?.followers as unknown as TUser[]) || []}
           isOpen={showFollowers}
           onOpenChange={setShowFollowers}
-          Propfollowers={(user?.followers as unknown as TUser[]) || []}
         />
       )}
       {showFollowings && (
         <MyFollowings
           // key={}
-          isOpen={showFollowings}
-          onOpenChange={setShowFollowings}
           Propfollowings={(user?.following as unknown as TUser[]) || []}
           handleFollowingCount={handleFollowingCount}
+          isOpen={showFollowings}
+          onOpenChange={setShowFollowings}
         />
       )}
 

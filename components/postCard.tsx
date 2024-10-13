@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { FaArrowUp, FaArrowDown, FaEllipsisV } from "react-icons/fa";
-import { BiSolidAddToQueue } from "react-icons/bi";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Card,
@@ -19,26 +18,28 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
-import { TComment, Tpost, TUser } from "@/types";
+import Swal from "sweetalert2";
+
+import { CommentCard } from "./commentCard";
+import CommentPostCard from "./commentPostCard";
+
+import { TComment, Tpost } from "@/types";
 import {
   getAuthor,
   getUser,
   updateAuthor,
   updateUser,
 } from "@/src/services/authService";
-import { CommentCard } from "./commentCard";
 import {
   deleteComment,
   getComments,
   updateComment,
 } from "@/src/services/commentService";
-import CommentPostCard from "./commentPostCard";
 import {
   deletePost,
   getPostById,
   UpdatePost,
 } from "@/src/services/postService";
-import Swal from "sweetalert2";
 
 export default function PostCard({ post }: { post: Tpost }) {
   const {
@@ -73,12 +74,14 @@ export default function PostCard({ post }: { post: Tpost }) {
     const SetStates = async () => {
       try {
         const User = await getUser();
-        console.log("eire eitai user", User);
+
+        // console.log("eire eitai user", User);
         setRole(User.role);
         const Author = await getAuthor(author._id as string);
         const res = await getComments(postId as string);
         const data = await getPostById(author._id as string);
         const matchedPost = data.data.find((post: any) => post._id === postId);
+
         // console.log("voter jnno", data.data[0]); // data te array wise data ache tai
         // console.log("etaire bhai", data);
         // console.log("matchedpost", matchedPost);
@@ -90,6 +93,7 @@ export default function PostCard({ post }: { post: Tpost }) {
         // console.log("upvoted", Upvoted);
         // console.log("Author", Author.username);
         let userId;
+
         if (User) {
           userId = User._id;
         }
@@ -113,6 +117,7 @@ export default function PostCard({ post }: { post: Tpost }) {
         text: "You can't follow yourself!",
         icon: "error",
       });
+
       return;
     }
 
@@ -124,6 +129,7 @@ export default function PostCard({ post }: { post: Tpost }) {
       Swal.fire({
         text: "You are following him already!",
       });
+
       return;
     }
 
@@ -134,6 +140,7 @@ export default function PostCard({ post }: { post: Tpost }) {
 
     if (userId && userId !== author._id) {
       const FollowOrNot = !isFollowed;
+
       setIsFollowed(FollowOrNot);
 
       let updatedFollowing: string[];
@@ -169,18 +176,20 @@ export default function PostCard({ post }: { post: Tpost }) {
       setFollowing(updatedFollowing);
       setFollowers(updatedFollowers);
     } else {
-      console.log("You cannot follow yourself."); //actually don't need this karon nijer post e user button e dekhbena
+      // console.log("You cannot follow yourself."); //actually don't need this karon nijer post e user button e dekhbena
     }
   };
   const toggleCommentsVisibility = async () => {
     const res = await getComments(postId as string);
-    console.log("asche comment?", res);
+
+    // console.log("asche comment?", res);
     setVisibleComments((prev) => !prev);
   };
 
   const handleEdit = async (commentId: string, newContent: string) => {
     const res = await updateComment(commentId, { content: newContent });
-    console.log(res);
+
+    // console.log(res);
 
     if (res.success)
       ///setting newly added comment, id check kore
@@ -204,6 +213,7 @@ export default function PostCard({ post }: { post: Tpost }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await deleteComment(commentId);
+
         if (res.success) {
           Swal.fire({
             title: "Success",
@@ -227,10 +237,12 @@ export default function PostCard({ post }: { post: Tpost }) {
   const handleUpvote = async () => {
     if (!userId) {
       Swal.fire({ text: "Log in first!", icon: "error" });
+
       return;
     }
     if (userId === author._id) {
       Swal.fire({ text: "You can't upvote your own post!", icon: "error" });
+
       return;
     }
 
@@ -240,7 +252,7 @@ export default function PostCard({ post }: { post: Tpost }) {
     let newVotes = currentVotes;
 
     if (updatedUpvotes.includes(userId)) {
-      console.log("ase");
+      // console.log("ase");
       updatedUpvotes = updatedUpvotes.filter((id) => id !== userId); //age click kore thakle
       newVotes -= 1;
     } else {
@@ -248,7 +260,7 @@ export default function PostCard({ post }: { post: Tpost }) {
       newVotes += 1;
 
       if (updatedDownvotes.includes(userId)) {
-        console.log("??");
+        // console.log("??");
         updatedDownvotes = updatedDownvotes.filter((id) => id !== userId); // if downvote button is pressed
         newVotes += 1;
       }
@@ -275,10 +287,12 @@ export default function PostCard({ post }: { post: Tpost }) {
   const handleDownvote = async () => {
     if (!userId) {
       Swal.fire({ text: "Log in first!", icon: "error" });
+
       return;
     }
     if (userId === author._id) {
       Swal.fire({ text: "You can't downvote your own post!", icon: "error" });
+
       return;
     }
 
@@ -288,7 +302,7 @@ export default function PostCard({ post }: { post: Tpost }) {
     let newVotes = currentVotes;
 
     if (updatedDownvotes.includes(userId)) {
-      console.log("ase");
+      // console.log("ase");
       updatedDownvotes = updatedDownvotes.filter((id) => id !== userId); //age click kore thakle
       newVotes += 1;
     } else {
@@ -296,7 +310,7 @@ export default function PostCard({ post }: { post: Tpost }) {
       newVotes -= 1;
 
       if (updatedUpvotes.includes(userId)) {
-        console.log("??");
+        // console.log("??");
         updatedUpvotes = updatedUpvotes.filter((id) => id !== userId); // if upvote button is pressed
         newVotes -= 1;
       }
@@ -321,21 +335,24 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   const handleAddtoFavourite = async () => {
-    console.log("userId", userId);
+    // console.log("userId", userId);
     if (!userId) {
       Swal.fire({
         text: `Login first or Get registered!`,
         icon: "error",
       });
+
       return;
     }
     const User = await getUser();
-    console.log("User", User);
+
+    // console.log("User", User);
     if (!User._id) {
       Swal.fire({
         text: "User not found!",
         icon: "error",
       });
+
       return;
     } // console.log("Updated Following:", updatedFollowing);
     // console.log("Updated Followers:", updatedFollowers);
@@ -353,13 +370,14 @@ export default function PostCard({ post }: { post: Tpost }) {
       ? favouriteIds
       : [...favouriteIds, postId];
 
-    console.log("FAVOURITES", updatedFavourites);
+    // console.log("FAVOURITES", updatedFavourites);
 
     try {
       const res = await updateUser(userId, {
         favourites: updatedFavourites,
       });
-      console.log("res", res);
+
+      // console.log("res", res);
       if (res.success) {
         Swal.fire({
           title: "Success",
@@ -370,7 +388,7 @@ export default function PostCard({ post }: { post: Tpost }) {
         throw new Error("Failed to update favourites");
       }
     } catch (error: any) {
-      console.error("API request error:", error.message);
+      // console.error("API request error:", error.message);
       Swal.fire({
         text: "Failed to add post to favourites.",
         icon: "error",
@@ -379,13 +397,14 @@ export default function PostCard({ post }: { post: Tpost }) {
   };
 
   const handleEditPost = async () => {
-    console.log(newContent);
+    // console.log(newContent);
     try {
       const res = await UpdatePost(
         { content: newContent, title: newTitle, category: newCategory },
         postId as string
       );
-      console.log("res ekhanei?", res);
+
+      // console.log("res ekhanei?", res);
 
       if (res?.success) {
         Swal.fire({
@@ -414,7 +433,8 @@ export default function PostCard({ post }: { post: Tpost }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await deletePost(postId as string);
-        console.log(res);
+
+        // console.log(res);
         if (res.success) {
           Swal.fire({
             title: "Success",
@@ -481,12 +501,7 @@ export default function PostCard({ post }: { post: Tpost }) {
           {images.length > 0 && (
             <div className="my-4">
               {images.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={`Post image ${index + 1}`}
-                  className="w-full h-auto"
-                />
+                <img key={index} alt="" className="w-full h-auto" src={image} />
               ))}
             </div>
           )}
@@ -496,12 +511,12 @@ export default function PostCard({ post }: { post: Tpost }) {
             <p className="font-semibold text-default-500 text-small">
               {comments.length}
             </p>
-            <span
+            <button
               className="text-default-500 cursor-pointer"
               onClick={() => toggleCommentsVisibility()}
             >
               comments
-            </span>
+            </button>
           </div>
           <div className="flex gap-1">
             <p className="font-semibold text-default-500 text-small">
@@ -514,18 +529,18 @@ export default function PostCard({ post }: { post: Tpost }) {
           )}
           <div className="flex">
             <Button
+              className="bg-orange-500"
               size="sm"
               variant="bordered"
               onPress={() => handleUpvote()}
-              className="bg-orange-500"
             >
               <FaArrowUp />
             </Button>
             <Button
+              className="bg-blue-500"
               size="sm"
               variant="bordered"
               onPress={() => handleDownvote()}
-              className="bg-blue-500"
             >
               <FaArrowDown />
             </Button>
@@ -542,20 +557,20 @@ export default function PostCard({ post }: { post: Tpost }) {
             </div>
           ) : role === "admin" ? (
             <Button
-              variant="flat"
               className="bg-red-500 font-bold"
+              variant="flat"
               onPress={handleDeletePost}
             >
               Delete
             </Button>
           ) : null}
           <div>
-            <span
+            <button
               className="cursor-pointer text-orange-600 ml-96 font-semi-bold hover:text-orange-900"
               onClick={() => handleAddtoFavourite()}
             >
               Add to favourites
-            </span>
+            </button>
           </div>
         </CardFooter>
       </Card>
@@ -565,10 +580,10 @@ export default function PostCard({ post }: { post: Tpost }) {
             key={comment._id}
             comment={comment}
             visibleComments={visibleComments}
+            onDelete={() => handleDelete(comment._id as string)}
             onEdit={(newContent) =>
               handleEdit(comment._id as string, newContent)
             }
-            onDelete={() => handleDelete(comment._id as string)}
           />
         ))
       ) : (
@@ -580,20 +595,21 @@ export default function PostCard({ post }: { post: Tpost }) {
             post: "",
             createdAt: new Date(),
           }}
-          onEdit={() => {}}
-          onDelete={() => {}}
           visibleComments={visibleComments}
+          onDelete={() => {}}
+          onEdit={() => {}}
         />
       )}
       {visibleComments && (
         <CommentPostCard
-          userId={userId}
           postId={postId as string}
+          setComments={setComments}
           setVisibleComments={(visible: boolean) => {
             setVisibleComments(visible);
+
             return visible;
           }}
-          setComments={setComments}
+          userId={userId}
         />
       )}
 
@@ -603,28 +619,28 @@ export default function PostCard({ post }: { post: Tpost }) {
             <ModalHeader>Edit Post</ModalHeader>
             <ModalBody>
               <Input
-                value={newTitle}
-                onChange={(e) => setnewTitle(e.target.value)}
                 label="Title"
                 placeholder="Enter post title"
+                value={newTitle}
+                onChange={(e) => setnewTitle(e.target.value)}
               />
             </ModalBody>
 
             <ModalBody>
               <Input
-                value={newCategory}
-                onChange={(e) => setnewCategory(e.target.value)}
                 label="Category"
                 placeholder="Enter post category"
+                value={newCategory}
+                onChange={(e) => setnewCategory(e.target.value)}
               />
             </ModalBody>
 
             <ModalBody>
               <Input
-                value={newContent}
-                onChange={(e) => setNewContent(e.target.value)}
                 label="Content"
                 placeholder="Enter post content"
+                value={newContent}
+                onChange={(e) => setNewContent(e.target.value)}
               />
             </ModalBody>
 

@@ -12,14 +12,14 @@ import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 
-import { ThemeSwitch } from "@/components/theme-switch";
+import UserLoginButtonOrProfile from "./UserLoginButtonOrProfile";
+
 import { Logo } from "@/components/icons";
 import { siteConfig } from "@/src/config/site";
-import UserLoginButtonOrProfile from "./UserLoginButtonOrProfile";
 
 export const Navbar = () => {
   return (
-    <NextUINavbar position="sticky" className="bg-green-400 w-full z-50 flex">
+    <NextUINavbar className="bg-green-400 w-full z-50 flex" position="sticky">
       <div className="flex justify-end items-center gap-x-96">
         <div className="flex justify-around items-center gap-x-32">
           <div className="flex justify-evenly items-center gap-x-48">
@@ -42,7 +42,7 @@ export const Navbar = () => {
                     <NextLink
                       className={clsx(
                         linkStyles({ color: "foreground" }),
-                        "data-[active=true]:text-primary data-[active=true]:font-sans font-semibold"
+                        "data-[active=true]:text-primary data-[active=true]:font-sans font-semibold",
                       )}
                       color="foreground"
                       href={item.href}
@@ -56,7 +56,7 @@ export const Navbar = () => {
           </div>
 
           <NavbarContent className="flex justify-end">
-            <NavbarItem className="flex gap-2"></NavbarItem>
+            <NavbarItem className="flex gap-2" />
           </NavbarContent>
 
           <NavbarContent className="sm:hidden pl-4" justify="end">
@@ -80,8 +80,8 @@ export const Navbar = () => {
                   index === 2
                     ? "primary"
                     : index === siteConfig.navMenuItems.length - 1
-                    ? "danger"
-                    : "foreground"
+                      ? "danger"
+                      : "foreground"
                 }
                 href="#"
                 size="lg"

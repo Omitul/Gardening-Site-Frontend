@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { getAccessToken } from "./services/authService/getCookie";
 import { jwtDecode } from "jwt-decode";
+
+import { getAccessToken } from "./services/authService/getCookie";
 
 const authRoutes = ["/login", "/registration"];
 
@@ -18,6 +19,7 @@ export function middleware(request: NextRequest) {
   console.log("pathname", pathname);
 
   const token = getAccessToken();
+
   console.log("accesstoken", token);
 
   if (token === undefined) {

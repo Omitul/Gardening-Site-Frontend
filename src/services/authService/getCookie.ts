@@ -6,6 +6,7 @@ export const getAccessToken = () => {
   const accessToken = cookie.get("accessToken");
 
   let tokenValue;
+
   if (typeof accessToken === "object" && accessToken !== null) {
     tokenValue = accessToken.value;
   } else {

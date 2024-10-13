@@ -1,10 +1,12 @@
 import { startTransition, useEffect, useState } from "react";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, Input } from "@nextui-org/react";
-import { TComment } from "@/types";
-import { handleCommentSubmit } from "./handleCommentSubmit";
 import { useRouter } from "next/navigation";
 import { FaLocationArrow } from "react-icons/fa";
+
+import { handleCommentSubmit } from "./handleCommentSubmit";
+
+import { TComment } from "@/types";
 import { getDecodedData } from "@/src/lib/jwtDecode";
 const CommentPostCard = ({
   postId,
@@ -24,8 +26,10 @@ const CommentPostCard = ({
   useEffect(() => {
     const fetchCookies = async () => {
       const decodedData = await getDecodedData();
+
       setCookies(decodedData);
     };
+
     fetchCookies();
   }, []);
 
@@ -38,9 +42,11 @@ const CommentPostCard = ({
         author: userId,
         createdAt: new Date(),
       };
+
       setNewComment("");
       startTransition(async () => {
         const res = await handleCommentSubmit(commentData);
+
         if (res.success) {
           // window.location.reload(); ///finally its working!
           setComments((prev) => [...prev, commentData]); //just Add a new comment to the list
@@ -50,10 +56,10 @@ const CommentPostCard = ({
             window.location.reload();
           }, 2000);
         }
-        console.log("hmm", res);
+        // console.log("hmm", res);
       });
 
-      console.log("commentData", commentData);
+      // console.log("commentData", commentData);
     }
   };
 
@@ -63,16 +69,16 @@ const CommentPostCard = ({
         <Card className="mx-auto max-w-[1000px] mt-5 mb-5">
           <CardBody className="flex flex-row gap-x-3 justify-center items-center">
             <Input
+              className="my-2"
               label="Add a comment"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              className="my-2"
             />
             <Button
+              className="mx-auto w-24 bg-yellow-400 hover:bg-orange-300"
               size="sm"
               variant="solid"
               onPress={handleSubmit}
-              className="mx-auto w-24 bg-yellow-400 hover:bg-orange-300"
             >
               <FaLocationArrow />
             </Button>

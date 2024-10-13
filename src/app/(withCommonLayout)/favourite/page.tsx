@@ -1,10 +1,12 @@
+import React from "react";
+
 import PostCard from "@/components/postCard";
 import { getUser } from "@/src/services/authService";
-import { Tpost, TUser } from "@/types";
-import React from "react";
+import { Tpost } from "@/types";
 
 const FavouritePosts = async () => {
   const User = await getUser();
+
   console.log("USER", User);
   if (!User)
     return (
@@ -12,7 +14,9 @@ const FavouritePosts = async () => {
     );
 
   const favourites: Tpost[] = User.favourites || [];
+
   console.log("FAVOURITES", favourites);
+
   return (
     <div>
       <h4 className="text-center text-2xl font-semibold mt-10">

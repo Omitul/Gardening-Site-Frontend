@@ -1,11 +1,11 @@
 "use client";
 
-import { loginUser } from "@/src/services/authService";
-import { delay } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
+
+import { loginUser } from "@/src/services/authService";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function LoginForm() {
@@ -21,6 +21,7 @@ export default function LoginForm() {
 
     try {
       const response = await loginUser({ email, password });
+
       if (response.success) {
         toast.success("Login successful!", {
           position: "top-center",
@@ -50,58 +51,58 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
-              htmlFor="email"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="email"
             >
               Email
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
           <div className="mb-4">
             <label
-              htmlFor="password"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="password"
             >
               Password
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
           <button
-            type="submit"
             className={`w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition ${
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={loading}
+            type="submit"
           >
             {loading ? "Logging in..." : "Log in"}
           </button>
         </form>
         <div className="mt-4 text-center">
           <Link
-            href="/registration"
             className="text-blue-500 font-sans font-semibold hover:underline"
+            href="/registration"
           >
             Create an account
           </Link>
         </div>
         <div className="mt-4 text-center">
           <Link
-            href="/login/forget-password"
             className="text-blue-500 font-sans font-semibold hover:underline"
+            href="/login/forget-password"
           >
             Forget password?
           </Link>

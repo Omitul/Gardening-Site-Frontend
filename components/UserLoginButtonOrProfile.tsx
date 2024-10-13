@@ -8,11 +8,12 @@ import {
   DropdownItem,
   Avatar,
 } from "@nextui-org/react";
-import { getAccessToken } from "@/src/services/authService/getCookie";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+import { getAccessToken } from "@/src/services/authService/getCookie";
 import { getUser, logout } from "@/src/services/authService";
 import { getDecodedData } from "@/src/lib/jwtDecode";
-import Link from "next/link";
 
 export default function UserLoginButtonOrProfile() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -26,17 +27,20 @@ export default function UserLoginButtonOrProfile() {
   useEffect(() => {
     const checkToken = async () => {
       const token = await getAccessToken();
-      console.log("TOKEN", token);
+
+      // console.log("TOKEN", token);
       setIsLoggedIn(!!token);
       setLoading(false);
 
       if (token !== undefined) {
         const decodedData = await getDecodedData();
+
         setRole(decodedData?.role || null); ///important to manage dropdown
         const { email, profilePicture } = await getUser();
+
         setEmail(email);
         setProfilePic(profilePicture);
-        console.log("profilePicture", profilePic);
+        // console.log("profilePicture", profilePic);
       }
     };
 
@@ -81,8 +85,8 @@ export default function UserLoginButtonOrProfile() {
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem
                 key="profile"
-                textValue="Profile"
                 className="h-14 gap-2"
+                textValue="Profile"
               >
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">{email}</p>
@@ -95,13 +99,13 @@ export default function UserLoginButtonOrProfile() {
                 <DropdownItem key="following" textValue="Following">
                   Following
                 </DropdownItem> */}
-                <Link href="/profile" passHref>
+                <Link passHref href="/profile">
                   Profile
                 </Link>
               </DropdownItem>
 
               <DropdownItem key="Dashboard" textValue="Dashboard">
-                <Link href="/dashboard" passHref>
+                <Link passHref href="/dashboard">
                   Dashboard
                 </Link>
               </DropdownItem>
@@ -118,8 +122,8 @@ export default function UserLoginButtonOrProfile() {
           </Dropdown>
         ) : (
           <Button
-            onClick={handleLogin}
             className="flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md transition-transform transform hover:bg-blue-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            onClick={handleLogin}
           >
             Login
           </Button>
@@ -142,8 +146,8 @@ export default function UserLoginButtonOrProfile() {
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem
                 key="profile"
-                textValue="Profile"
                 className="h-14 gap-2"
+                textValue="Profile"
               >
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">{email}</p>
@@ -156,13 +160,13 @@ export default function UserLoginButtonOrProfile() {
                 <DropdownItem key="following" textValue="Following">
                   Following
                 </DropdownItem> */}
-                <Link href="/profile" passHref>
+                <Link passHref href="/profile">
                   Profile
                 </Link>
               </DropdownItem>
 
               <DropdownItem key="Dashboard" textValue="Dashboard">
-                <Link href="/admin-dashboard" passHref>
+                <Link passHref href="/admin-dashboard">
                   Dashboard
                 </Link>
               </DropdownItem>
@@ -179,8 +183,8 @@ export default function UserLoginButtonOrProfile() {
           </Dropdown>
         ) : (
           <Button
-            onClick={handleLogin}
             className="flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md transition-transform transform hover:bg-blue-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            onClick={handleLogin}
           >
             Login
           </Button>

@@ -1,10 +1,11 @@
 "use client";
 
-import { registerUser } from "@/src/services/authService";
 import { Button } from "@nextui-org/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
+
+import { registerUser } from "@/src/services/authService";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function RegistrationForm() {
@@ -21,6 +22,7 @@ export default function RegistrationForm() {
 
     try {
       const response = await registerUser({ username, email, password });
+
       if (response.success) {
         toast.success("Registration successful!", {
           position: "top-center",
@@ -49,58 +51,58 @@ export default function RegistrationForm() {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
-              htmlFor="username"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="username"
             >
               Username
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
           <div className="mb-4">
             <label
-              htmlFor="email"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="email"
             >
               Email
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
           <div className="mb-4">
             <label
-              htmlFor="password"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="password"
             >
               Password
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
           <Button
-            type="submit"
             className={`w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition ${
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={loading}
+            type="submit"
           >
             {loading ? "Registering..." : "Register"}
           </Button>

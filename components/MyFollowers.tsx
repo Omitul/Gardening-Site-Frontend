@@ -10,9 +10,10 @@ import {
   Button,
   Card,
 } from "@nextui-org/react";
-import { getUser, updateUser } from "@/src/services/authService";
-import { TUser } from "@/types";
 import Image from "next/image";
+
+import { getUser } from "@/src/services/authService";
+import { TUser } from "@/types";
 
 interface FollowerModalProps {
   isOpen: boolean;
@@ -30,8 +31,9 @@ const MyFollowers: React.FC<FollowerModalProps> = ({
     const fetchFollowers = async () => {
       try {
         const user = await getUser();
+
         setFollowers(user?.followers);
-        console.log("user my followers er vitore", user);
+        // console.log("user my followers er vitore", user);
       } catch (error) {
         console.error("Error fetching followers:", error);
       }
@@ -59,11 +61,11 @@ const MyFollowers: React.FC<FollowerModalProps> = ({
                       <div className="flex flex-row justify-evenly items-center gap-x-52">
                         <div className="flex flex-row  items-center">
                           <Image
-                            src="https://i.postimg.cc/xTzVk2wC/man-face-emotive-icon-smiling-male-character-in-blue-shirt-flat-illustration-isolated-on-white-happy.jpg" // Use the image URL here
                             alt={`${follower.username}'s profile picture`}
-                            width={40}
-                            height={40}
                             className="rounded-full"
+                            height={40}
+                            src="https://i.postimg.cc/xTzVk2wC/man-face-emotive-icon-smiling-male-character-in-blue-shirt-flat-illustration-isolated-on-white-happy.jpg" // Use the image URL here
+                            width={40}
                           />
                           <div className="ml-2">
                             <p>{follower.username}</p>

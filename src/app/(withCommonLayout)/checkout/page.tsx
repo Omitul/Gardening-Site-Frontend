@@ -1,6 +1,7 @@
 "use client";
 import { CreateOrder } from "@/src/services/OrderService";
 import { Torder } from "@/types";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
@@ -31,6 +32,7 @@ export default function LoginForm() {
 
     try {
       const response = await CreateOrder(order as Torder);
+
       if (response.success) {
         Swal.fire({
           title: "Success!",
@@ -38,7 +40,7 @@ export default function LoginForm() {
           icon: "success",
           confirmButtonText: "OK",
         });
-        console.log("Order successfully Created!", response);
+        // console.log("Order successfully Created!", response);
         window.location.href = response?.data?.payment_url;
         // setTimeout(() => {
         //   router.push("/dashboard/profile");
@@ -52,7 +54,7 @@ export default function LoginForm() {
       toast.error("Failed to Create Order", {
         position: "top-center",
       });
-      console.log(error.message);
+      // console.log(error.message);
     } finally {
       setLoading(false);
     }
@@ -67,94 +69,94 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
-              htmlFor="Username"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="Username"
             >
               Name
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="name"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
 
           <div className="mb-4">
             <label
-              htmlFor="email"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="email"
             >
               Email
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
           <div className="mb-4">
             <label
-              htmlFor="contactNo"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="contactNo"
             >
               ContactNo
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="contactNo"
               type="text"
               value={contactNo}
               onChange={(e) => setContactNo(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
 
           <div className="mb-4">
             <label
-              htmlFor="contactNo"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="contactNo"
             >
               Price
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="price"
               type="text"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
 
           <div className="mb-4">
             <label
-              htmlFor="address"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="address"
             >
               Address
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="address"
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
 
           <button
-            type="submit"
             className={`w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition ${
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={loading}
+            type="submit"
           >
             {loading ? "order placing..." : "place order"}
           </button>

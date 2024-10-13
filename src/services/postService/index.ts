@@ -1,13 +1,15 @@
 "use server";
+import { revalidateTag } from "next/cache";
+
 import axiosInstance from "@/src/lib/AxiosInstance";
 import { Tpost } from "@/types";
-import { revalidateTag } from "next/cache";
 
 export const Post = async (Postdata: Tpost) => {
   // console.log(Postdata);
   try {
     const { data } = await axiosInstance.post("api/post", Postdata);
-    console.log(data);
+
+    // console.log(data);
 
     if (data.success) {
       revalidateTag("posts");
@@ -16,25 +18,26 @@ export const Post = async (Postdata: Tpost) => {
       // );
       // console.log(data?.success.message);
     } else {
-      console.log("Success flag is false, no message to display.");
+      // console.log("Success flag is false, no message to display.");
     }
-    console.log("postData", data);
+    // console.log("postData", data);
+
     return data;
   } catch (error: any) {
-    console.log("Error occurred:", error.message || error);
+    // console.log("Error occurred:", error.message || error);
     throw new Error(error);
   }
 };
 
 export const UpdatePost = async (Postdata: Partial<Tpost>, postId: string) => {
-  console.log(Postdata);
+  // console.log(Postdata);
   try {
     const { data } = await axiosInstance.put(`api/post/${postId}`, Postdata);
     // console.log("updated:------", data);
 
     return data;
   } catch (error: any) {
-    console.log("Error occurred:", error.message || error);
+    // console.log("Error occurred:", error.message || error);
     throw new Error(error);
   }
 };
@@ -47,6 +50,7 @@ export async function getPosts() {
   });
 
   const data = await res.json();
+
   data.data.sort(
     (a: Tpost, b: Tpost) =>
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -66,10 +70,11 @@ export async function getPostById(id: string) {
       }
     );
     const data = await res.json();
+
     // console.log("data", data);
     return data;
   } catch (error: any) {
-    console.log("Error occurred:", error.message || error);
+    // console.log("Error occurred:", error.message || error);
     throw new Error(error);
   }
 }
@@ -86,10 +91,11 @@ export async function deletePost(id: string) {
       }
     );
     const data = await res.json();
+
     // console.log("post deleted resposne", data);
     return data;
   } catch (error: any) {
-    console.log("Error occurred:", error.message || error);
+    // console.log("Error occurred:", error.message || error);
     throw new Error(error);
   }
 }

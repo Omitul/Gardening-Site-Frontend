@@ -1,10 +1,12 @@
+import React from "react";
+
 import { getPosts } from "@/src/services/postService";
 import { Tpost } from "@/types";
-import React from "react";
 
 const ImageGalleryPage = async () => {
   const { data } = await getPosts();
-  console.log(data);
+
+  // console.log(data);
 
   if (data.length === 0) {
     return (
@@ -25,11 +27,12 @@ const ImageGalleryPage = async () => {
           <div key={post._id}>
             <div>
               {post.images.map((imageUrl, index) => (
+                // eslint-disable-next-line jsx-a11y/img-redundant-alt
                 <img
                   key={index}
-                  src={imageUrl}
                   alt={`Image ${index + 1}`}
                   className="image w-full h-96 object-cover"
+                  src=""
                 />
               ))}
             </div>

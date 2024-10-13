@@ -3,10 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
-import { updateUser } from "@/src/services/authService";
 import bcrypt from "bcryptjs";
 import { jwtDecode } from "jwt-decode";
+
+import { updateUser } from "@/src/services/authService";
 
 export default function NewPassword() {
   const router = useRouter();
@@ -24,6 +26,7 @@ export default function NewPassword() {
         position: "top-center",
       });
       setLoading(false);
+
       return;
     }
 
@@ -32,7 +35,8 @@ export default function NewPassword() {
       //   const userId = "6706aed504c0991bf5dec3f4"; // Replace with the actual user ID
 
       const decodedToken: any = jwtDecode(token as string);
-      console.log("decoded token", decodedToken);
+
+      // console.log("decoded token", decodedToken);
       const userId = decodedToken.id;
       const hashedPassword: string = await bcrypt.hash(newPassword, 10);
 
@@ -70,44 +74,44 @@ export default function NewPassword() {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
-              htmlFor="new-password"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="new-password"
             >
               New Password
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="new-password"
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
 
           <div className="mb-4">
             <label
-              htmlFor="confirm-password"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="confirm-password"
             >
               Confirm New Password
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="confirm-password"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
 
           <button
-            type="submit"
             className={`w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition ${
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={loading}
+            type="submit"
           >
             {loading ? "Updating..." : "Update Password"}
           </button>

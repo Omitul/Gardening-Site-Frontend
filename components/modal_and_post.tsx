@@ -12,15 +12,18 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import dynamic from "next/dynamic";
+
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
 // import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+
 import uploadImage from "@/src/lib/imageUpload";
 import { getDecodedData } from "@/src/lib/jwtDecode";
 import { Post } from "@/src/services/postService";
-import { toast } from "react-toastify";
 import { Tpost } from "@/types";
-import Swal from "sweetalert2";
 
 interface PostModalProps {
   isOpen: boolean;
@@ -36,17 +39,21 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
   const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      console.log("Selected files:", files);
+
+      // console.log("Selected files:", files);
 
       const uploadedURLs = await Promise.all(
         files.map(async (file) => {
-          console.log(`Uploading file: ${file.name}`);
+          // console.log(`Uploading file: ${file.name}`);
           try {
             const uploadedUrl = await uploadImage(file);
-            console.log("Uploaded image URL:", uploadedUrl); // checking url asche kina
+
+            // console.log("Uploaded image URL:", uploadedUrl); // checking url asche kina
+
             return uploadedUrl;
           } catch (error) {
             console.error("Error uploading to ImgBB:", error);
+
             return null;
           }
         })
@@ -56,10 +63,10 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
         (url): url is string => url !== null
       );
 
-      console.log("uploads:", successfulUploads);
+      // console.log("uploads:", successfulUploads);
       setImages((prevImages) => [...prevImages, ...successfulUploads]);
     } else {
-      console.log("No files selected man!");
+      // console.log("No files selected man!");
     }
   };
 
@@ -68,6 +75,7 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
 
     try {
       const data = await getDecodedData();
+
       if (!data || !data.userId) {
         throw new Error("Failed to fetch user data");
       }
@@ -93,10 +101,11 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
         isPremium: false,
       };
 
-      console.log("Post Data: ", postData);
+      // console.log("Post Data: ", postData);
 
       const res = await Post(postData as Tpost);
-      console.log(res);
+
+      // console.log(res);
       if (res.success) {
         Swal.fire({
           title: "Success",
@@ -108,7 +117,7 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
           window.location.reload();
         });
       } else {
-        console.log("there was a problem craeting post");
+        // console.log("there was a problem craeting post");
         Swal.fire({
           title: "Error",
           text: "Error creating post!",
@@ -128,7 +137,7 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
   };
 
   useEffect(() => {
-    console.log("Images state updated:", images);
+    // console.log("Images state updated:", images);
   }, [images]);
 
   return (
@@ -140,57 +149,57 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onOpenChange }) => {
               <ModalHeader>Create a New Post</ModalHeader>
               <ModalBody>
                 <input
-                  type="text"
+                  className="w-full mt-2 mb-4 border border-gray-300 rounded-lg p-2"
                   placeholder="Enter Post Title"
+                  type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full mt-2 mb-4 border border-gray-300 rounded-lg p-2"
                 />
                 <Select
                   placeholder="Select a category"
                   value={category}
                   onChange={(event) => setCategory(event.target.value)}
                 >
-                  <SelectItem value="Vegetables" key="Vegetables">
+                  <SelectItem key="Vegetables" value="Vegetables">
                     Vegetables
                   </SelectItem>
-                  <SelectItem value="Flowers" key="Flowers">
+                  <SelectItem key="Flowers" value="Flowers">
                     Flowers
                   </SelectItem>
-                  <SelectItem value="Landscaping" key="Landscaping">
+                  <SelectItem key="Landscaping" value="Landscaping">
                     Landscaping
                   </SelectItem>
-                  <SelectItem value="Fruit Trees" key="Fruit Trees">
+                  <SelectItem key="Fruit Trees" value="Fruit Trees">
                     Fruit Trees
                   </SelectItem>
-                  <SelectItem value="Shade Trees" key="Shade Trees">
+                  <SelectItem key="Shade Trees" value="Shade Trees">
                     Shade Trees
                   </SelectItem>
-                  <SelectItem value="Deciduous Trees" key="Deciduous Trees">
+                  <SelectItem key="Deciduous Trees" value="Deciduous Trees">
                     Deciduous Trees
                   </SelectItem>
-                  <SelectItem value="Medicinal Trees" key="Medicinal Trees">
+                  <SelectItem key="Medicinal Trees" value="Medicinal Trees">
                     Medicinal Trees
                   </SelectItem>
                 </Select>
                 <input
-                  type="file"
                   multiple
                   className="mt-2 border border-gray-300 rounded-lg p-2"
+                  type="file"
                   onChange={handleImageUpload}
                 />
                 <ReactQuill
+                  className="mt-4"
+                  placeholder="Write your gardening tips and guides here..."
                   value={content}
                   onChange={setContent}
-                  placeholder="Write your gardening tips and guides here..."
-                  className="mt-4"
                 />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="faded" onPress={onClose}>
                   Close
                 </Button>
-                <Button type="submit" color="primary">
+                <Button color="primary" type="submit">
                   Submit
                 </Button>
               </ModalFooter>

@@ -9,6 +9,7 @@ import {
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 import { TUser } from "@/types";
 import { updateUser } from "@/src/services/authService";
 
@@ -20,8 +21,9 @@ export default function App() {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://gardening-site-backend.vercel.app/api/user"
+        "https://gardening-site-backend.vercel.app/api/user",
       );
+
       setUsers(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -36,15 +38,15 @@ export default function App() {
 
   const handleRoleChange = async (
     userId: string,
-    newRole: "user" | "admin"
+    newRole: "user" | "admin",
   ) => {
     try {
       await updateUser(userId, { role: newRole });
       setUsers(
         (prevUsers) =>
           prevUsers.map((user: TUser) =>
-            user._id === userId ? { ...user, role: newRole } : user
-          ) as TUser[]
+            user._id === userId ? { ...user, role: newRole } : user,
+          ) as TUser[],
       );
     } catch (error) {
       setError("Failed to update role");
@@ -53,13 +55,13 @@ export default function App() {
 
   const handleStatusChange = async (
     userId: string,
-    newStatus: "basic" | "premium"
+    newStatus: "basic" | "premium",
   ) => {
     try {
       await updateUser(userId, { accountType: newStatus });
       setUsers([
         ...users.map((user) =>
-          user._id === userId ? { ...user, accountType: newStatus } : user
+          user._id === userId ? { ...user, accountType: newStatus } : user,
         ),
       ]);
     } catch (error) {
@@ -85,8 +87,8 @@ export default function App() {
               <TableCell>
                 <div className="flex flex-row gap-x-2">
                   <img
-                    src={user.profilePicture || "/default-profile.png"}
                     alt={user.username}
+                    src={user.profilePicture || "/default-profile.png"}
                     style={{
                       width: 40,
                       height: 40,
@@ -106,14 +108,14 @@ export default function App() {
                 <div className="flex flex-1 gap-10">
                   <div className="flex flex-col gap-y-4">
                     <Button
-                      onClick={() => handleRoleChange(user._id!, "admin")}
                       className="bg-red-400"
+                      onClick={() => handleRoleChange(user._id!, "admin")}
                     >
                       Change Role to Admin
                     </Button>
                     <Button
-                      onClick={() => handleRoleChange(user._id!, "user")}
                       className="bg-blue-400"
+                      onClick={() => handleRoleChange(user._id!, "user")}
                     >
                       Change Role to user
                     </Button>
@@ -121,14 +123,14 @@ export default function App() {
 
                   <div className="flex flex-col gap-y-4">
                     <Button
-                      onClick={() => handleStatusChange(user._id!, "basic")}
                       className="bg-gray-400"
+                      onClick={() => handleStatusChange(user._id!, "basic")}
                     >
                       Change Status to Basic
                     </Button>
                     <Button
-                      onClick={() => handleStatusChange(user._id!, "premium")}
                       className="bg-yellow-500"
+                      onClick={() => handleStatusChange(user._id!, "premium")}
                     >
                       Change Status to Premium
                     </Button>

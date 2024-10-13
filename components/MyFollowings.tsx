@@ -10,10 +10,10 @@ import {
   Button,
   Card,
 } from "@nextui-org/react";
-import { getAuthor, getUser, updateUser } from "@/src/services/authService";
-import { TUser } from "@/types";
 import Image from "next/image";
-import { toast } from "react-toastify";
+
+import { getUser, updateUser } from "@/src/services/authService";
+import { TUser } from "@/types";
 
 interface FollowingModalProps {
   isOpen: boolean;
@@ -35,12 +35,14 @@ const MyFollowings: React.FC<FollowingModalProps> = ({
     const fetchFollowings = async () => {
       try {
         const user = await getUser();
+
         setFollowings(user?.following);
         setUserId(user?._id);
-        console.log("followers of user", user?.followers);
+        // console.log("followers of user", user?.followers);
 
         const Following_him = user?.following;
-        console.log("following him", Following_him);
+
+        // console.log("following him", Following_him);
         // setPersonFollowed(Following_him);
 
         // console.log("Personfollowed", user?.following[0]);
@@ -48,7 +50,7 @@ const MyFollowings: React.FC<FollowingModalProps> = ({
         // const PersonFollowed = await getAuthor(Author);
         // console.log("Personfollowed", PersonFollowed);
 
-        console.log("user my following er vitore", user);
+        // console.log("user my following er vitore", user);
       } catch (error) {
         console.error("Error fetching followings:", error);
       }
@@ -59,15 +61,15 @@ const MyFollowings: React.FC<FollowingModalProps> = ({
     }
   }, [isOpen]);
 
-  console.log("ISOPEN", isOpen);
+  // console.log("ISOPEN", isOpen);
   const handleUnfollow = async (followingId: string) => {
-    console.log("HELLO", Following);
+    // console.log("HELLO", Following);
 
     const specificPersonFollowed = Following.find(
       (person) => person._id && person._id.toString() === followingId
     );
 
-    console.log(specificPersonFollowed?.following);
+    // console.log(specificPersonFollowed?.following);
     const person = specificPersonFollowed?.following;
 
     try {
@@ -120,11 +122,11 @@ const MyFollowings: React.FC<FollowingModalProps> = ({
                       <div className="flex flex-row justify-evenly items-center gap-x-52">
                         <div className="flex flex-row  items-center">
                           <Image
-                            src="https://i.postimg.cc/xTzVk2wC/man-face-emotive-icon-smiling-male-character-in-blue-shirt-flat-illustration-isolated-on-white-happy.jpg" // Use the image URL here
                             alt={`${following.username}'s profile picture`}
-                            width={40}
-                            height={40}
                             className="rounded-full"
+                            height={40}
+                            src="https://i.postimg.cc/xTzVk2wC/man-face-emotive-icon-smiling-male-character-in-blue-shirt-flat-illustration-isolated-on-white-happy.jpg" // Use the image URL here
+                            width={40}
                           />
                           <div className="ml-2">
                             {" "}
@@ -133,13 +135,13 @@ const MyFollowings: React.FC<FollowingModalProps> = ({
                         </div>
                         <div>
                           <Button
-                            onPress={() =>
-                              handleUnfollow(following._id as string)
-                            }
                             className={`bg-blue-700 rounded-full text-bold ${
                               unFollowed ? "bg-blue-500" : "bg-gray-500"
                             }`}
                             size="sm"
+                            onPress={() =>
+                              handleUnfollow(following._id as string)
+                            }
                           >
                             Unfollow
                           </Button>

@@ -11,10 +11,10 @@ import {
   useDisclosure,
   Avatar,
 } from "@nextui-org/react";
+import { useEffect, useState } from "react";
+
 import { TComment } from "@/types";
-import { useEffect, useRef, useState } from "react";
 import { getAuthor, getUser } from "@/src/services/authService";
-import { useRouter } from "next/navigation";
 
 interface CommentCardProps {
   comment: TComment;
@@ -54,11 +54,13 @@ export const CommentCard = ({
   useEffect(() => {
     const fetch = async () => {
       const user = await getUser();
+
       if (user) {
         setUserId(user._id);
       }
 
       let commentAuthor;
+
       //the thing is that: sometimes its not populating and sometimes not!!
       if (typeof comment.author === "object") {
         commentAuthor = comment.author;
@@ -67,12 +69,14 @@ export const CommentCard = ({
           commentAuthor = await getAuthor(comment.author);
         } catch (error) {
           console.error("Failed to fetch author:", error);
+
           return;
         }
       }
       setUsernameAuthor(commentAuthor?.username);
       setProfilePic(commentAuthor?.profilePicture);
     };
+
     fetch();
   }, []);
 
@@ -87,7 +91,7 @@ export const CommentCard = ({
     <>
       {visibleComments && comment.content ? (
         <Card className="mx-auto max-w-[1000px] mt-5">
-          <CardBody onClick={onOpen} className="cursor-pointer">
+          <CardBody className="cursor-pointer" onClick={onOpen}>
             <div>
               <div className="flex flex-row gap-x-3 items-center mb-2">
                 <Avatar isBordered radius="full" size="md" src={profilePic} />

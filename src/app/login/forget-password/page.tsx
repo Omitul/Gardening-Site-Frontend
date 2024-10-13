@@ -1,10 +1,10 @@
 "use client";
 
-import { resetPassword } from "@/src/services/passwordService";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
+
+import { resetPassword } from "@/src/services/passwordService";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function LoginForm() {
@@ -19,12 +19,13 @@ export default function LoginForm() {
 
     try {
       const response = await resetPassword(email);
-      console.log(response);
+
+      // console.log(response);
       if (response.success) {
         toast.success("password reset link sent!", {
           position: "top-center",
         });
-        console.log("password reset link sent!", response);
+        // console.log("password reset link sent!", response);
         setTimeout(() => {
           router.push("/login/forget-password/new-password");
         }, 2000);
@@ -51,27 +52,27 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
-              htmlFor="email"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="email"
             >
               Email
             </label>
             <input
+              required
+              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
 
           <button
-            type="submit"
             className={`w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition ${
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={loading}
+            type="submit"
           >
             {loading ? "Resetting..." : "Reset"}
           </button>

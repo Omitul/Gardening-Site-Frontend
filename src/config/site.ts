@@ -1,5 +1,3 @@
-import { logout } from "../services/authService";
-
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {

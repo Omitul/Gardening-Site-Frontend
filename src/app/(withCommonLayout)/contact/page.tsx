@@ -11,7 +11,7 @@ export default function ContactPage() {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -52,64 +52,64 @@ export default function ContactPage() {
           We’d love to hear from you! Send us your feedback or questions.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label
-              htmlFor="name"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="name"
             >
               Name
             </label>
             <input
-              type="text"
+              required
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300 transition"
               id="name"
               name="name"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300 transition"
+              type="text"
               value={formData.name}
               onChange={handleChange}
-              required
             />
           </div>
 
           <div>
             <label
-              htmlFor="email"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="email"
             >
               Email
             </label>
             <input
-              type="email"
+              required
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300 transition"
               id="email"
               name="email"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300 transition"
+              type="email"
               value={formData.email}
               onChange={handleChange}
-              required
             />
           </div>
 
           <div>
             <label
-              htmlFor="message"
               className="block text-sm font-medium text-gray-700"
+              htmlFor="message"
             >
               Message
             </label>
             <textarea
+              required
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300 transition"
               id="message"
               name="message"
               rows={4}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300 transition"
               value={formData.message}
               onChange={handleChange}
-              required
             />
           </div>
 
           <button
-            type="submit"
             className="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition transform hover:scale-105 focus:scale-95"
+            type="submit"
           >
             Submit
           </button>

@@ -1,6 +1,5 @@
 "use client";
 import { TComment } from "@/types";
-import { revalidateTag } from "next/cache";
 
 export const postComments = async (commentData: TComment) => {
   try {
@@ -14,6 +13,7 @@ export const postComments = async (commentData: TComment) => {
         body: JSON.stringify(commentData),
       }
     );
+
     if (!response.ok) {
       throw new Error("failed to post");
     }
@@ -22,7 +22,8 @@ export const postComments = async (commentData: TComment) => {
 
     const newComment = await response.json();
 
-    console.log("new comment:", newComment);
+    // console.log("new comment:", newComment);
+
     // if (newComment.success) {
     //   revalidateTag("comments");
     //   console.log("Revalidating...");
@@ -42,6 +43,7 @@ export const getComments = async (id: string) => {
       }
     );
     const res = await response.json();
+
     // console.log("REEEEEEEEEEEEEEEEEES", res);
     // res?.data?.sort((a: TComment, b: TComment) => {
     //   const dateA = new Date(a.createdAt as Date);
@@ -66,7 +68,9 @@ export const deleteComment = async (id: string) => {
       }
     );
     const res = await response.json();
-    console.log("response of delete", res);
+
+    // console.log("response of delete", res);
+
     return res;
   } catch (error) {
     console.error("Failed to delete comment:", error);
@@ -86,6 +90,7 @@ export const updateComment = async (id: string, payload: Partial<TComment>) => {
       }
     );
     const res = await response.json();
+
     // console.log("response of update", res);
     return res;
   } catch (error) {
