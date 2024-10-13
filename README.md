@@ -16,7 +16,7 @@ This is a website where user can post, comment & like to their favourite posts a
 ## How to Use
 
 
-##Backend
+## Backend
 
 ### At first clone the backend server for this or download the zip file for it & open this with vs code and run:
 
@@ -32,7 +32,7 @@ Now you are done with backend setup.
 
 
 
-##Frontend
+## Frontend
 
 ### clone the repository for frontEnd & open your terminal where give a command:
 
@@ -42,7 +42,7 @@ git clone https://github.com/Omitul/Gardening-Site-Frontend.git (if you have the
 ```
 
 
-###Install dependencies
+### Install dependencies
 
 You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
 
@@ -64,7 +64,7 @@ If you are using `pnpm`, you need to add the following code to your `.npmrc` fil
 public-hoist-pattern[]=*@nextui-org/*
 ```
 
-###Setup this for images in your next.config.js
+### Setup this for images in your next.config.js
 ```bash
 const nextConfig = {
   images: {
