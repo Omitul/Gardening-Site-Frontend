@@ -8,20 +8,8 @@ const authRoutes = ["/login", "/register"];
 type Role = keyof typeof roleBasedRoutes;
 
 const roleBasedRoutes = {
-  user: [
-    /^\/dashboard/,
-    /^\/profile/,
-    /^\/change-password/,
-    /^\/forget-password/,
-    /^\/checkout/,
-  ],
-  admin: [
-    /^\/admin-dashboard/,
-    /^\/profile/,
-    /^\/change-password/,
-    /^\/forget-password/,
-    /^\/checkout/,
-  ],
+  user: [/^\/dashboard/, /^\/profile/, /^\/checkout/],
+  admin: [/^\/admin-dashboard/, /^\/profile/, /^\/checkout/],
 };
 
 export function middleware(request: NextRequest) {
@@ -66,8 +54,5 @@ export const config = {
     "/register",
     "/profile",
     "/checkout",
-    "/change-password",
-    "/forget-password",
-    "/new-password",
   ],
 };
