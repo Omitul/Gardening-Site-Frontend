@@ -25,6 +25,11 @@ git clone https://github.com/Omitul/Gardening_Site_Backend.git ( if you have ins
 npm install ( to install all dependencies )
 ```
 
+### Install all dependencies by this command
+```bash
+  npm install
+```
+
 ### Run the following command to make sure the server is running:
 ```bash
 npm run start:dev
