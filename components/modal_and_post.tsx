@@ -11,7 +11,9 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
-import ReactQuill from "react-quill";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+// import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import uploadImage from "@/src/lib/imageUpload";
 import { getDecodedData } from "@/src/lib/jwtDecode";
