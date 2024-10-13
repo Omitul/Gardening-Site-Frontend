@@ -21,6 +21,7 @@ This is a website where user can post, comment & like to their favourite posts a
 ### At first clone the backend server for this or download the zip file for it & open this with vs code and run:
 
 ```bash
+git clone https://github.com/Omitul/Gardening_Site_Backend.git ( if you have installed git )
 npm install ( to install all dependencies )
 ```
 
