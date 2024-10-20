@@ -62,6 +62,8 @@ npm install
 npm run dev
 ```
 
+### Live Link: https://gardening-site-frontend-wheat.vercel.app/
+
 ### Setup pnpm (optional)
 
 If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
